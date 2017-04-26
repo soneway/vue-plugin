@@ -3,6 +3,8 @@
   "version": "0.0.1",
 
   "dependencies": {
+    "webpack": "^2.4.1",
+    "extract-text-webpack-plugin": "^2.1.0"
   },
   "devDependencies": {
     "eslint": "^3.19.0",
