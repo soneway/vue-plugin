@@ -5,7 +5,7 @@ module.exports = {
     node: true
   },
   plugins: [
-    // lint .vue文件(eslint-plugin-html)
+    // lint .vue文件
     'html'
   ],
   globals: {
