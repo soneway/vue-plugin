@@ -24,7 +24,9 @@ module.exports = merge(baseConf, {
           {
             loader: 'url-loader',
             query: {
-              name: 'img/[name].[ext]'
+              name: 'img/[name].[ext]',
+              // 禁用base64 inline
+              limit: Number.MAX_VALUE
             }
           }
         ]

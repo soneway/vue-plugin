@@ -3,7 +3,7 @@
   "version": "0.0.1",
 
   "scripts": {
-    "dev": "webpack --config ./build/webpack.conf.dev.js",
+    "dev": "webpack --watch --config ./build/webpack.conf.dev.js",
     "build": "webpack --config ./build/webpack.conf.prod.js"
   },
 
