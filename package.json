@@ -3,8 +3,9 @@
   "version": "0.0.1",
 
   "scripts": {
+    "clean": "rimraf prod",
     "dev": "webpack --watch --config ./build/webpack.conf.dev.js",
-    "build": "webpack --config ./build/webpack.conf.prod.js"
+    "build": "npm run clean && webpack --config ./build/webpack.conf.prod.js"
   },
 
   "dependencies": {
