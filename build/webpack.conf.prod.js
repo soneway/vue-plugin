@@ -3,16 +3,27 @@ const merge = require('webpack-merge');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const entryHelper = require('./entry-helper');
+const webpack = require('webpack');
 
 // html处理
 const templates = entryHelper.getTemplate();
-const templatePlugins = templates.map((item) => new HtmlWebpackPlugin(item));
+const templatePlugins = templates.map((item) => new HtmlWebpackPlugin(Object.assign(item, {
+  // html压缩配置
+  minify: {
+    minifyCSS: true,
+    minifyJS: true,
+    // 删除注释
+    removeComments: true,
+    // 换行和空格
+    collapseWhitespace: true
+  }
+})));
 
 module.exports = merge(baseConf, {
   output: {
     // 打包文件输出文件夹
-    path: path.join(__dirname, '../dev'),
-    filename: '[name].js'
+    path: path.join(__dirname, '../prod'),
+    filename: '[name].[chunkhash].js'
   },
   module: {
     loaders: [
@@ -24,7 +35,8 @@ module.exports = merge(baseConf, {
           {
             loader: 'url-loader',
             query: {
-              name: 'img/[name].[ext]'
+              name: 'img/[name].[hash:20].[ext]',
+              limit: 5000
             }
           }
         ]
@@ -32,6 +44,8 @@ module.exports = merge(baseConf, {
     ]
   },
   plugins: [
-    ...templatePlugins
+    ...templatePlugins,
+    // js压缩
+    new webpack.optimize.UglifyJsPlugin()
   ]
 });
