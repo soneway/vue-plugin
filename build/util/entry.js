@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const srcDir = path.join(__dirname, '../src');
+// 源代码文件夹
+const srcDir = path.join(__dirname, '../../src');
 
 // 获取entry函数
 function getEntry(entryDir = path.join(srcDir, '/entry')) {
