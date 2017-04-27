@@ -20,6 +20,10 @@ module.exports = {
     // 箭头函数用小括号括起来
     'arrow-parens': 0,
     // 禁止给参数重新赋值
-    'no-param-reassign': 1
+    'no-param-reassign': 1,
+    // 语句强制分号结束
+    'semi': [2, 'always'],
+    // 箭头函数中花括号样式(只有return语句时,不需要花括号)
+    'arrow-body-style': [2, 'as-needed']
   }
 };

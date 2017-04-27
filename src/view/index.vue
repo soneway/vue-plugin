@@ -9,7 +9,7 @@
 <script>
   import Carousel from '../component/carousel.vue';
 
-  const {a, b, c} = window;
+  const { a, b, c } = window;
 
   export default {
     components: {
