@@ -1,9 +1,11 @@
 <template>
-
+    <div class="wrapper">
+        <img src="../asset/img/title.png" />
+        <carousel></carousel>
+    </div>
 </template>
 
 <style scoped lang="scss">
-
 </style>
 
 <script>

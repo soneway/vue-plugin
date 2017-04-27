@@ -16,8 +16,18 @@ module.exports = merge(baseConf, {
   module: {
     loaders: [
       {
+        // 图片
         test: /\.(jpg|png|jpeg|gif)$/,
-        loaders: ['url-loader']
+        loaders: [
+          // 路径处理
+          {
+            loader: 'url-loader',
+            query: {
+              name: 'img/[name].[ext]',
+              limit: 10000
+            }
+          }
+        ]
       }
     ]
   },
