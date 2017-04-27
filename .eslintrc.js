@@ -24,6 +24,6 @@ module.exports = {
     // 语句强制分号结束
     'semi': [2, 'always'],
     // 箭头函数中花括号样式(只有return语句时,不需要花括号)
-    'arrow-body-style': [2, 'as-needed']
+    'arrow-body-style': 0
   }
 };
