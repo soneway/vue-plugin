@@ -76,6 +76,10 @@
       },
       swipSpanThreshold: {
         type: Number,
+        default: 10
+      },
+      swipThreshold: {
+        type: Number,
         default: 50
       }
     },
