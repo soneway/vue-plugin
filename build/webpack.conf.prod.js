@@ -36,7 +36,8 @@ module.exports = merge(baseConf, {
             loader: 'url-loader',
             query: {
               name: 'img/[name].[hash:20].[ext]',
-              limit: 5000
+              // 小于2k的图片base64 inline
+              limit: 2000
             }
           }
         ]
