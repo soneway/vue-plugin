@@ -9,7 +9,6 @@
 
   "dependencies": {
     "webpack": "^2.4.1",
-    "extract-text-webpack-plugin": "^2.1.0",
     "webpack-merge": "^4.1.0",
 
     "babel-loader": "^7.0.0",
