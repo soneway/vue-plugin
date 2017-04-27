@@ -2,11 +2,11 @@ const baseConf = require('./webpack.conf.base');
 const merge = require('webpack-merge');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const entryHelper = require('./entry-helper');
+const entryUtil = require('./util/entry');
 const webpack = require('webpack');
 
 // html处理
-const templates = entryHelper.getTemplate();
+const templates = entryUtil.getTemplate();
 const templatePlugins = templates.map((item) => new HtmlWebpackPlugin(Object.assign(item, {
   // html压缩配置
   minify: {

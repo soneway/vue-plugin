@@ -1,4 +1,4 @@
-const entryHelper = require('./entry-helper');
+const entryHelper = require('./util/entry');
 
 module.exports = {
   entry: entryHelper.getEntry(),

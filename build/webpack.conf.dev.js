@@ -2,10 +2,10 @@ const baseConf = require('./webpack.conf.base');
 const merge = require('webpack-merge');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const entryHelper = require('./entry-helper');
+const entryUtil = require('./util/entry');
 
 // html处理
-const templates = entryHelper.getTemplate();
+const templates = entryUtil.getTemplate();
 const templatePlugins = templates.map((item) => new HtmlWebpackPlugin(item));
 
 module.exports = merge(baseConf, {
