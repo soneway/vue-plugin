@@ -15,8 +15,8 @@ module.exports = merge(baseConf, {
   },
   module: {
     loaders: [
+      // 图片处理
       {
-        // 图片
         test: /\.(jpg|png|jpeg|gif)$/,
         loaders: [
           // 路径处理
