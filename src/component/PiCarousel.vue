@@ -10,6 +10,7 @@
             <div v-html="currentHtml"></div>
             <div v-html="nextHtml"></div>
         </div>
+        <div class="pi-pager" v-html="pagerHtml"></div>
     </div>
 </template>
 
@@ -17,6 +18,7 @@
     .pi-carousel {
         overflow: hidden;
         background: #000;
+        position: relative;
 
         &.notrans {
             .pi-wrap {
@@ -30,13 +32,33 @@
             margin-left: -100%;
             font-size: 0;
             transition: transform ease;
+
+            & > div {
+                width: 33.3334%;
+                height: 100%;
+                /*不能用float:left,会导致在ios safari下渲染问题*/
+                display: inline-block;
+            }
         }
 
-        .pi-wrap > div {
-            width: 33.3334%;
-            height: 100%;
-            /*不能用float:left,会导致在ios safari下渲染问题*/
-            display: inline-block;
+        .pi-pager {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            text-align: center;
+            font-size: 0;
+            line-height: 20px;
+
+            & > span {
+                border: 3px solid #bbb;
+                border-radius: 50%;
+                margin: 0 2px;
+
+                &.selected {
+                    border-color: #555;
+                }
+            }
         }
     }
 </style>
@@ -95,6 +117,11 @@
       index: {
         type: Number,
         default: 0
+      },
+      // 是否显示页脚
+      isShowPager: {
+        type: Boolean,
+        default: true
       }
     },
     data() {
@@ -152,6 +179,9 @@
           transform: `translate3d(${swipSpan},0,0)`,
           transitionDuration: `${this.duration / 1000}s`
         };
+      },
+      pagerHtml() {
+        return [...new Array(this.dataList.length)].map((d, i) => `<span class="${i === this.index ? 'selected' : null}"></span>`).join('');
       }
     },
     methods: {
