@@ -214,19 +214,29 @@
 
         const { swipSpan, swipThreshold } = this;
         let direction;
-        let index = this.index;
+        const index = this.index;
+
         // 向左
         if (swipSpan < -swipThreshold) {
-          if (this.isLoop) {
-            direction = -1;
+          // 不能循环滚动
+          if (!this.isLoop) {
+            // 不是最后一帧
+            index !== this.dataList.length - 1 && (direction = -1);
           }
           else {
-
+            direction = -1;
           }
         }
         // 向右
         else if (swipSpan > swipThreshold) {
-          direction = 1;
+          // 不能循环滚动
+          if (!this.isLoop) {
+            // 不是第一帧
+            index !== 0 && (direction = 1);
+          }
+          else {
+            direction = 1;
+          }
         }
 
         // 加上动画
