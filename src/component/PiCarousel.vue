@@ -233,10 +233,11 @@
           // 重置isAnimating
           this.isAnimating = false;
           // 计算index
+          const count = this.dataList.length;
           if (index < 0) {
-            index = this.dataList.length - 1;
+            index = count - 1;
           }
-          if (index === this.dataList.length) {
+          if (index === count) {
             index = 0;
           }
           // 更新index(更新内容)
