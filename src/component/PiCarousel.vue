@@ -1,14 +1,14 @@
 <template>
     <div class="pi-carousel"
          :class="classes"
-         :style="itemStyle"
+         :style="carouselStyle"
          @touchstart="__touchstart"
          @touchmove="__touchmove"
          @touchend="__touchend">
         <div class="pi-wrap" :style="wrapStyle">
-            <div :style="itemStyle" v-html="prevHtml"></div>
-            <div :style="itemStyle" v-html="currentHtml"></div>
-            <div :style="itemStyle" v-html="nextHtml"></div>
+            <div v-html="prevHtml"></div>
+            <div v-html="currentHtml"></div>
+            <div v-html="nextHtml"></div>
         </div>
     </div>
 </template>
@@ -25,12 +25,16 @@
         }
 
         .pi-wrap {
-            transition: transform ease;
+            width: 300%;
+            height: 100%;
             margin-left: -100%;
             font-size: 0;
+            transition: transform ease;
         }
 
         .pi-wrap > div {
+            width: 33.3334%;
+            height: 100%;
             /*不能用float:left,会导致在ios safari下渲染问题*/
             display: inline-block;
         }
@@ -40,33 +44,39 @@
 <script>
   export default {
     props: {
+      // 宽度
       width: {
-        type: Number,
-        default: 360
+        type: String,
+        default: '100%'
       },
+      // 高度
       height: {
-        type: Number,
-        default: 400
+        type: String,
+        default: '400px'
       },
+      // 列表数据
       dataList: {
         type: Array,
-        require: true,
-        default: ['http://img.gd.sohu.com/public/images/2014-07-05/75/53b79a22aa37f.jpg', 'http://img.gd.sohu.com/public/images/2014-07-05/78/53b7cf18a9dae.png', 'http://img.gd.sohu.com/public/images/2014-07-05/13/53b7aed8da8f7.jpg', 'http://img.gd.sohu.com/public/images/2014-07-05/76/53b7f58e12fb9.jpg', 'http://img.gd.sohu.com/public/images/2014-07-05/97/53b7f46f5488f.jpg', 'http://img.gd.sohu.com/public/images/2014-07-05/76/53b7f446e7fee.jpg', 'http://img.gd.sohu.com/public/images/2014-07-05/37/53b7f269dd1ff.jpg', 'http://img.gd.sohu.com/public/images/2014-07-05/58/53b7f62dc97ac.jpg', 'http://img.gd.sohu.com/public/images/2014-07-05/89/53b7f5f0398d2.jpg', 'http://img.gd.sohu.com/public/images/2014-07-05/98/53b7f5e7df185.jpg']
+        default: []
       },
+      // 返回内容函数
       contentFormate: {
         type: Function,
         default: (itemData) => {
           return itemData && `<div style='background: url(${itemData}) center center no-repeat; background-size: contain; width: 100%; height: 100%;'></div>`;
         }
       },
+      // 滑动距离阈值
       swipSpanThreshold: {
         type: Number,
         default: 10
       },
+      // 滑动阈值
       swipThreshold: {
         type: Number,
         default: 50
       },
+      // 动画时长
       duration: {
         type: Number,
         default: 300
@@ -109,17 +119,19 @@
           { notrans: this.notrans }
         ];
       },
-      wrapStyle() {
+      carouselStyle() {
         return {
-          transform: `translate3d(${this.swipSpan}px,0,0)`,
-          transitionDuration: `${this.duration / 1000}s`,
-          width: `${this.width * 3}px`
+          width: this.width,
+          height: this.height
         };
       },
-      itemStyle() {
+      wrapStyle() {
+        let { swipSpan } = this;
+        // 兼容像素
+        typeof swipSpan === 'number' && (swipSpan += 'px');
         return {
-          width: `${this.width}px`,
-          height: `${this.height}px`
+          transform: `translate3d(${swipSpan},0,0)`,
+          transitionDuration: `${this.duration / 1000}s`
         };
       }
     },
@@ -193,6 +205,8 @@
         // 滚动
         this.swipSpan !== 0 && this.slide(direction);
       },
+
+      // 滚动
       slide(direction) {
         // 判断滚动方向
         switch (direction) {
@@ -203,18 +217,10 @@
             // 开启动画
             this.isAnimating = true;
             // 作动画
-            this.swipSpan = this.width * direction;
-
+            this.swipSpan = `${(100 / 3) * direction}%`;
             // 复位操作,更新内容
             setTimeout(() => {
-              // 去掉动画
-              this.notrans = true;
-              // 复位
-              this.swipSpan = 0;
-              // 更新内容
-              this.htmlIndex = this.index;
-              // 重置isAnimating
-              this.isAnimating = false;
+              this.reset();
             }, this.duration);
             break;
           }
@@ -222,6 +228,17 @@
             this.swipSpan = 0;
           }
         }
+      },
+      // 复位
+      reset() {
+        // 去掉动画
+        this.notrans = true;
+        // 复位
+        this.swipSpan = 0;
+        // 更新内容
+        this.htmlIndex = this.index;
+        // 重置isAnimating
+        this.isAnimating = false;
       }
     }
   };
