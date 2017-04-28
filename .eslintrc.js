@@ -34,6 +34,8 @@ module.exports = {
     // 禁止switch穿透
     'no-fallthrough': 1,
     // 禁止操作符混用
-    'no-mixed-operators': 1
+    'no-mixed-operators': 1,
+    // function关键字后空格
+    'space-before-function-paren': 1
   }
 };
