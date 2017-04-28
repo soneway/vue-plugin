@@ -5,7 +5,8 @@
          @touchstart="__touchstart"
          @touchmove="__touchmove"
          @touchend="__touchend">
-        <div class="pi-wrap" :style="{transform: `translate3d(${swipSpan}px,0,0)`}" :data-test="swipSpan">
+        <div class="pi-wrap"
+             :style="{transform: `translate3d(${swipSpan}px,0,0)`, transitionDuration: `${duration/1000}s`}">
             <div class="pi-item pi-prev" v-html="prevHtml"></div>
             <div class="pi-item pi-current" v-html="currentHtml"></div>
             <div class="pi-item pi-next" v-html="nextHtml"></div>
@@ -31,7 +32,7 @@
             top: 0;
             right: 0;
             bottom: 0;
-            transition: transform 0.3s ease;
+            transition: transform ease;
         }
 
         .pi-item {
@@ -81,18 +82,44 @@
       swipThreshold: {
         type: Number,
         default: 50
+      },
+      duration: {
+        type: Number,
+        default: 300
       }
     },
     data() {
       return {
-        prevHtml: this.contentFormate(this.dataList[this.dataList.length - 1]),
-        currentHtml: this.contentFormate(this.dataList[0]),
-        nextHtml: this.contentFormate(this.dataList[1]),
+        // 禁用动画
         notrans: false,
-        swipSpan: 0
+        // 滑动距离
+        swipSpan: 0,
+        // 滚动索引
+        index: 0,
+        // html索引
+        htmlIndex: 0
       };
     },
     computed: {
+      prevHtml() {
+        const { dataList, htmlIndex } = this;
+        let index = htmlIndex - 1;
+        if (index < 0) {
+          index = dataList.length - 1;
+        }
+        return this.contentFormate(dataList[index]);
+      },
+      currentHtml() {
+        return this.contentFormate(this.dataList[this.htmlIndex]);
+      },
+      nextHtml() {
+        const { dataList, htmlIndex } = this;
+        let index = htmlIndex + 1;
+        if (index === dataList.length) {
+          index = 0;
+        }
+        return this.contentFormate(this.dataList[index]);
+      },
       classes() {
         return [
           { notrans: this.notrans }
@@ -135,12 +162,6 @@
           evt.preventDefault();
           evt.stopPropagation();
 
-//          // 第一张图或最后一张图
-//          if (index === 0 && swipSpanX > 0 || index === itemCount - 1 && swipSpanX < 0) {
-//            // 模拟拉不动操作体验
-//            swipSpanX /= pullRatio;
-//          }
-
           // 位移
           this.swipSpan = swipSpanX;
           // 已经满足滚动条件,且正在手指拖动
@@ -148,7 +169,62 @@
         }
       },
       __touchend() {
+        // 如果正在作动画,不作响应
+        if (this.isAnimating) {
+          return;
+        }
+
+        let direction;
+        const itemCount = this.dataList.length;
+        // 向左
+        if (this.swipSpan < -this.swipThreshold) {
+          if (++this.index === itemCount) {
+            this.index = 0;
+          }
+          direction = -1;
+        }
+        // 向右
+        else if (this.swipSpan > this.swipThreshold) {
+          if (--this.index < 0) {
+            this.index = itemCount - 1;
+          }
+          direction = 1;
+        }
+
+        // 加上动画
         this.notrans = false;
+        // 滚动
+        this.swipSpan !== 0 && this.slide(direction);
+      },
+      slide(direction) {
+        // 判断滚动方向
+        switch (direction) {
+          // 向右
+          case 1:
+          // 向左
+          case -1: {
+            // 开启动画
+            this.isAnimating = true;
+            // 作动画
+            this.swipSpan = this.width * direction;
+
+            // 复位操作,更新内容
+            setTimeout(() => {
+              // 去掉动画
+              this.notrans = true;
+              // 复位
+              this.swipSpan = 0;
+              // 更新内容
+              this.htmlIndex = this.index;
+              // 重置isAnimating
+              this.isAnimating = false;
+            }, this.duration);
+            break;
+          }
+          default: {
+            this.swipSpan = 0;
+          }
+        }
       }
     }
   };
