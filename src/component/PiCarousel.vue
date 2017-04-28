@@ -230,8 +230,6 @@
           this.notrans = true;
           // 复位
           this.swipSpan = 0;
-          // 重置isAnimating
-          this.isAnimating = false;
           // 计算index
           const count = this.dataList.length;
           if (index < 0) {
@@ -242,6 +240,8 @@
           }
           // 更新index(更新内容)
           this.index = index;
+          // 重置isAnimating
+          this.isAnimating = false;
         }, this.duration);
       }
     }
