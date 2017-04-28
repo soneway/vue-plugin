@@ -1,22 +1,20 @@
 <template>
     <div class="pi-carousel"
          :class="classes"
-         :style="{width: `${width}px`, height: `${height}px`}"
+         :style="itemStyle"
          @touchstart="__touchstart"
          @touchmove="__touchmove"
          @touchend="__touchend">
-        <div class="pi-wrap"
-             :style="{transform: `translate3d(${swipSpan}px,0,0)`, transitionDuration: `${duration/1000}s`}">
-            <div class="pi-item pi-prev" v-html="prevHtml"></div>
-            <div class="pi-item pi-current" v-html="currentHtml"></div>
-            <div class="pi-item pi-next" v-html="nextHtml"></div>
+        <div class="pi-wrap" :style="wrapStyle">
+            <div :style="itemStyle" v-html="prevHtml"></div>
+            <div :style="itemStyle" v-html="currentHtml"></div>
+            <div :style="itemStyle" v-html="nextHtml"></div>
         </div>
     </div>
 </template>
 
 <style lang="scss">
     .pi-carousel {
-        position: relative;
         overflow: hidden;
         background: #000;
 
@@ -27,28 +25,14 @@
         }
 
         .pi-wrap {
-            position: absolute;
-            left: 0;
-            top: 0;
-            right: 0;
-            bottom: 0;
             transition: transform ease;
+            margin-left: -100%;
+            font-size: 0;
         }
 
-        .pi-item {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-
-        /*第一帧*/
-        .pi-prev {
-            left: -100%;
-        }
-
-        /*第三帧*/
-        .pi-next {
-            left: 100%;
+        .pi-wrap > div {
+            /*不能用float:left,会导致在ios safari下渲染问题*/
+            display: inline-block;
         }
     }
 </style>
@@ -58,7 +42,7 @@
     props: {
       width: {
         type: Number,
-        default: 400
+        default: 360
       },
       height: {
         type: Number,
@@ -124,6 +108,19 @@
         return [
           { notrans: this.notrans }
         ];
+      },
+      wrapStyle() {
+        return {
+          transform: `translate3d(${this.swipSpan}px,0,0)`,
+          transitionDuration: `${this.duration / 1000}s`,
+          width: `${this.width * 3}px`
+        };
+      },
+      itemStyle() {
+        return {
+          width: `${this.width}px`,
+          height: `${this.height}px`
+        };
       }
     },
     methods: {
