@@ -136,6 +136,7 @@
       prevHtml() {
         const { dataList } = this;
         let index = this.index - 1;
+        // 第一帧前面
         if (index < 0) {
           // 不能循环滚动
           if (!this.isLoop) {
@@ -143,14 +144,16 @@
           }
           index = dataList.length - 1;
         }
-        return this.contentFormate(dataList[index]);
+        return this.contentFormate(dataList[index], index);
       },
       currentHtml() {
-        return this.contentFormate(this.dataList[this.index]);
+        const { index } = this;
+        return this.contentFormate(this.dataList[index], index);
       },
       nextHtml() {
         const { dataList } = this;
         let index = this.index + 1;
+        // 最后一帧后面
         if (index === dataList.length) {
           // 不能循环滚动
           if (!this.isLoop) {
@@ -158,7 +161,7 @@
           }
           index = 0;
         }
-        return this.contentFormate(dataList[index]);
+        return this.contentFormate(dataList[index], index);
       },
       classes() {
         return [
@@ -316,6 +319,8 @@
           this.index = index;
           // 重置isAnimating
           this.isAnimating = false;
+          // 触发slide事件
+          this.$emit('slide', index);
         }, this.duration);
       }
     }
