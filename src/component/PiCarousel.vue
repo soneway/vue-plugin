@@ -80,6 +80,11 @@
       duration: {
         type: Number,
         default: 300
+      },
+      // 滚动索引
+      index: {
+        type: Number,
+        default: 0
       }
     },
     data() {
@@ -87,32 +92,28 @@
         // 禁用动画
         notrans: false,
         // 滑动距离
-        swipSpan: 0,
-        // 滚动索引
-        index: 0,
-        // html索引
-        htmlIndex: 0
+        swipSpan: 0
       };
     },
     computed: {
       prevHtml() {
-        const { dataList, htmlIndex } = this;
-        let index = htmlIndex - 1;
+        const { dataList } = this;
+        let index = this.index - 1;
         if (index < 0) {
           index = dataList.length - 1;
         }
         return this.contentFormate(dataList[index]);
       },
       currentHtml() {
-        return this.contentFormate(this.dataList[this.htmlIndex]);
+        return this.contentFormate(this.dataList[this.index]);
       },
       nextHtml() {
-        const { dataList, htmlIndex } = this;
-        let index = htmlIndex + 1;
+        const { dataList } = this;
+        let index = this.index + 1;
         if (index === dataList.length) {
           index = 0;
         }
-        return this.contentFormate(this.dataList[index]);
+        return this.contentFormate(dataList[index]);
       },
       classes() {
         return [
@@ -183,27 +184,21 @@
           return;
         }
 
+        const { swipSpan, swipThreshold } = this;
         let direction;
-        const itemCount = this.dataList.length;
         // 向左
-        if (this.swipSpan < -this.swipThreshold) {
-          if (++this.index === itemCount) {
-            this.index = 0;
-          }
+        if (swipSpan < -swipThreshold) {
           direction = -1;
         }
         // 向右
-        else if (this.swipSpan > this.swipThreshold) {
-          if (--this.index < 0) {
-            this.index = itemCount - 1;
-          }
+        else if (swipSpan > swipThreshold) {
           direction = 1;
         }
 
         // 加上动画
         this.notrans = false;
         // 滚动
-        this.swipSpan !== 0 && this.slide(direction);
+        swipSpan !== 0 && this.slide(direction);
       },
 
       // 滚动
@@ -218,10 +213,8 @@
             this.isAnimating = true;
             // 作动画
             this.swipSpan = `${(100 / 3) * direction}%`;
-            // 复位操作,更新内容
-            setTimeout(() => {
-              this.reset();
-            }, this.duration);
+            // 复位
+            this.reset(this.index - direction);
             break;
           }
           default: {
@@ -230,15 +223,25 @@
         }
       },
       // 复位
-      reset() {
-        // 去掉动画
-        this.notrans = true;
-        // 复位
-        this.swipSpan = 0;
-        // 更新内容
-        this.htmlIndex = this.index;
-        // 重置isAnimating
-        this.isAnimating = false;
+      reset(index) {
+        // 复位操作,更新内容
+        setTimeout(() => {
+          // 去掉动画
+          this.notrans = true;
+          // 复位
+          this.swipSpan = 0;
+          // 重置isAnimating
+          this.isAnimating = false;
+          // 计算index
+          if (index < 0) {
+            index = this.dataList.length - 1;
+          }
+          if (index === this.dataList.length) {
+            index = 0;
+          }
+          // 更新index(更新内容)
+          this.index = index;
+        }, this.duration);
       }
     }
   };
