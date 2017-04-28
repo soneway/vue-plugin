@@ -30,8 +30,10 @@ module.exports = {
     // 禁止无用的表达式
     'no-unused-expressions': 1,
     // 大括号风格
-    "brace-style": 0,
+    'brace-style': 0,
     // 禁止switch穿透
-    "no-fallthrough": 1
+    'no-fallthrough': 1,
+    // 禁止操作符混用
+    'no-mixed-operators': 1
   }
 };

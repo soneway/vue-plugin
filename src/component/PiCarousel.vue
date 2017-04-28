@@ -81,6 +81,16 @@
         type: Number,
         default: 300
       },
+      // first和last拉不动的比率
+      pullRatio: {
+        type: Number,
+        default: 3
+      },
+      // 是否循环滚动
+      isLoop: {
+        type: Boolean,
+        default: false
+      },
       // 滚动索引
       index: {
         type: Number,
@@ -100,6 +110,10 @@
         const { dataList } = this;
         let index = this.index - 1;
         if (index < 0) {
+          // 不能循环滚动
+          if (!this.isLoop) {
+            return '';
+          }
           index = dataList.length - 1;
         }
         return this.contentFormate(dataList[index]);
@@ -111,6 +125,10 @@
         const { dataList } = this;
         let index = this.index + 1;
         if (index === dataList.length) {
+          // 不能循环滚动
+          if (!this.isLoop) {
+            return '';
+          }
           index = 0;
         }
         return this.contentFormate(dataList[index]);
@@ -161,7 +179,7 @@
 
         const touch = evt.targetTouches ? evt.targetTouches[0] : evt;
         // x轴滑动距离
-        const swipSpanX = touch.pageX - this.startX;
+        let swipSpanX = touch.pageX - this.startX;
         const absX = Math.abs(swipSpanX);
         // y轴滑动距离
         const swipSpanY = touch.pageY - this.startY;
@@ -171,6 +189,16 @@
         if (this.isMoving || absY < absX || absY < this.swipSpanThreshold) {
           evt.preventDefault();
           evt.stopPropagation();
+
+          // 不能循环滚动
+          if (!this.isLoop) {
+            // 第一张图或最后一张图
+            const count = this.dataList.length;
+            if (this.index === 0 && swipSpanX > 0 || this.index === count - 1 && swipSpanX < 0) {
+              // 模拟拉不动操作体验
+              swipSpanX /= this.pullRatio;
+            }
+          }
 
           // 位移
           this.swipSpan = swipSpanX;
@@ -186,9 +214,15 @@
 
         const { swipSpan, swipThreshold } = this;
         let direction;
+        let index = this.index;
         // 向左
         if (swipSpan < -swipThreshold) {
-          direction = -1;
+          if (this.isLoop) {
+            direction = -1;
+          }
+          else {
+
+          }
         }
         // 向右
         else if (swipSpan > swipThreshold) {

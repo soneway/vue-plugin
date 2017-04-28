@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <pi-carousel ref="carousel" width="100%"></pi-carousel>
+        <pi-carousel ref="carousel"></pi-carousel>
     </div>
 </template>
 
