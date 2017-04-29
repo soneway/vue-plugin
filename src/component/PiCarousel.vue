@@ -189,6 +189,11 @@
     },
     methods: {
       __touchstart(evt) {
+        // 如果正在作动画,不作响应
+        if (this.isAnimating) {
+          return;
+        }
+
         const touch = evt.targetTouches ? evt.targetTouches[0] : evt;
 
         // 记录触摸开始位置
