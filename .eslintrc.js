@@ -24,7 +24,7 @@ module.exports = {
     // 语句强制分号结束
     'semi': [2, 'always'],
     // 箭头函数中花括号样式(只有return语句时,不需要花括号)
-    'arrow-body-style': 0,
+    'arrow-body-style': 1,
     // 自增自减
     'no-plusplus': 0,
     // 禁止无用的表达式
@@ -36,6 +36,8 @@ module.exports = {
     // 禁止操作符混用
     'no-mixed-operators': 1,
     // function关键字后空格
-    'space-before-function-paren': 1
+    'space-before-function-paren': [2, 'never'],
+    // 最大长度
+    'max-len': 1
   }
 };
