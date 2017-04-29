@@ -5,7 +5,9 @@
          @touchstart="__touchstart"
          @touchmove="__touchmove"
          @touchend="__touchend">
-        <div class="pi-wrap" :style="wrapStyle">
+        <div class="pi-wrap"
+             :style="wrapStyle"
+             @click="__wrapClick">
             <div v-html="prevHtml" ref="prev"></div>
             <div v-html="currentHtml"></div>
             <div v-html="nextHtml" ref="next"></div>
@@ -187,13 +189,9 @@
         };
       },
       pagerHtml() {
-        return [...new Array(this.dataList.length)].map((item, index) => {
-          // 当前项
-          if (index === this.currentIndex) {
-            return `<span class="selected" data-index="${index}"></span>`;
-          }
-          return `<span data-index="${index}"></span>`;
-        }).join('');
+        return [...new Array(this.dataList.length)]
+          .map((item, index) => `<span ${index === this.currentIndex ? 'class="selected"' : ''} data-index="${index}"></span>`)
+          .join('');
       }
     },
     methods: {
@@ -294,6 +292,9 @@
         const { target } = evt;
         const index = +target.getAttribute('data-index');
         typeof index === 'number' && this.slideToIndex(index);
+      },
+      __wrapClick() {
+        this.$emit('click', this.currentIndex);
       },
 
       // 滚动
