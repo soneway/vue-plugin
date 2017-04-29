@@ -10,7 +10,7 @@
             <div v-html="currentHtml"></div>
             <div v-html="nextHtml"></div>
         </div>
-        <div class="pi-pager" v-html="pagerHtml"></div>
+        <div v-if="isShowPager" class="pi-pager" v-html="pagerHtml"></div>
     </div>
 </template>
 
@@ -111,7 +111,7 @@
       // 是否循环滚动
       isLoop: {
         type: Boolean,
-        default: false
+        default: true
       },
       // 滚动索引
       index: {
