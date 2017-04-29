@@ -6,11 +6,14 @@
          @touchmove="__touchmove"
          @touchend="__touchend">
         <div class="pi-wrap" :style="wrapStyle">
-            <div v-html="prevHtml"></div>
+            <div v-html="prevHtml" ref="prev"></div>
             <div v-html="currentHtml"></div>
-            <div v-html="nextHtml"></div>
+            <div v-html="nextHtml" ref="next"></div>
         </div>
-        <div v-if="isShowPager" class="pi-pager" v-html="pagerHtml"></div>
+        <div v-if="isShowPager"
+             class="pi-pager"
+             v-html="pagerHtml"
+             @click="__pagerClick"></div>
     </div>
 </template>
 
@@ -84,8 +87,8 @@
       // 返回内容函数
       contentFormate: {
         type: Function,
-        default: (itemData) => {
-          return itemData && `<div style='background: url(${itemData}) center center no-repeat; background-size: contain; width: 100%; height: 100%;'></div>`;
+        default: (itemData, index) => {
+          return itemData && `<div data-index="${index}" style='background: url(${itemData}) center center no-repeat; background-size: contain; width: 100%; height: 100%;'></div>`;
         }
       },
       // 滑动距离阈值
@@ -114,7 +117,7 @@
         default: true
       },
       // 滚动索引
-      index: {
+      currentIndex: {
         type: Number,
         default: 0
       },
@@ -135,7 +138,7 @@
     computed: {
       prevHtml() {
         const { dataList } = this;
-        let index = this.index - 1;
+        let index = this.currentIndex - 1;
         // 第一帧前面
         if (index < 0) {
           // 不能循环滚动
@@ -147,12 +150,12 @@
         return this.contentFormate(dataList[index], index);
       },
       currentHtml() {
-        const { index } = this;
+        const index = this.currentIndex;
         return this.contentFormate(this.dataList[index], index);
       },
       nextHtml() {
         const { dataList } = this;
-        let index = this.index + 1;
+        let index = this.currentIndex + 1;
         // 最后一帧后面
         if (index === dataList.length) {
           // 不能循环滚动
@@ -184,7 +187,13 @@
         };
       },
       pagerHtml() {
-        return [...new Array(this.dataList.length)].map((d, i) => `<span class="${i === this.index ? 'selected' : null}"></span>`).join('');
+        return [...new Array(this.dataList.length)].map((item, index) => {
+          // 当前项
+          if (index === this.currentIndex) {
+            return `<span class="selected" data-index="${index}"></span>`;
+          }
+          return `<span data-index="${index}"></span>`;
+        }).join('');
       }
     },
     methods: {
@@ -230,9 +239,9 @@
 
           // 不能循环滚动
           if (!this.isLoop) {
+            const { currentIndex } = this;
             // 第一张图或最后一张图
-            const count = this.dataList.length;
-            if (this.index === 0 && swipSpanX > 0 || this.index === count - 1 && swipSpanX < 0) {
+            if (currentIndex === 0 && swipSpanX > 0 || currentIndex === this.dataList.length - 1 && swipSpanX < 0) {
               // 模拟拉不动操作体验
               swipSpanX /= this.pullRatio;
             }
@@ -250,16 +259,15 @@
           return;
         }
 
-        const { swipSpan, swipThreshold } = this;
+        const { swipSpan, swipThreshold, currentIndex } = this;
         let direction;
-        const index = this.index;
 
         // 向左
         if (swipSpan < -swipThreshold) {
           // 不能循环滚动
           if (!this.isLoop) {
             // 不是最后一帧
-            index !== this.dataList.length - 1 && (direction = -1);
+            currentIndex !== this.dataList.length - 1 && (direction = -1);
           }
           else {
             direction = -1;
@@ -270,7 +278,7 @@
           // 不能循环滚动
           if (!this.isLoop) {
             // 不是第一帧
-            index !== 0 && (direction = 1);
+            currentIndex !== 0 && (direction = 1);
           }
           else {
             direction = 1;
@@ -282,21 +290,27 @@
         // 滚动
         swipSpan !== 0 && this.slide(direction);
       },
+      __pagerClick(evt) {
+        const { target } = evt;
+        const index = +target.getAttribute('data-index');
+        typeof index === 'number' && this.slideToIndex(index);
+      },
 
       // 滚动
-      slide(direction) {
+      slide(direction, index) {
         // 判断滚动方向
         switch (direction) {
-          // 向右
-          case 1:
           // 向左
-          case -1: {
+          case -1:
+          // 向右
+          case 1: {
             // 开启动画
             this.isAnimating = true;
             // 作动画
             this.swipSpan = `${(100 / 3) * direction}%`;
+
             // 复位
-            this.reset(this.index - direction);
+            this.reset(typeof index === 'number' ? index : this.currentIndex - direction);
             break;
           }
           default: {
@@ -312,6 +326,7 @@
           this.notrans = true;
           // 复位
           this.swipSpan = 0;
+
           // 计算index
           const count = this.dataList.length;
           if (index < 0) {
@@ -321,12 +336,38 @@
             index = 0;
           }
           // 更新index(更新内容)
-          this.index = index;
+          this.currentIndex = index;
+
           // 重置isAnimating
           this.isAnimating = false;
+
           // 触发slide事件
           this.$emit('slide', index);
         }, this.duration);
+      },
+      // 滑动到第几帧
+      slideToIndex(index) {
+        const { dataList, currentIndex, $refs } = this;
+        // index不符合条件
+        if (typeof index !== 'number' || index < 0 || index >= dataList.length || index === currentIndex) {
+          return;
+        }
+        let direction;
+        const html = this.contentFormate(dataList[index], index);
+        // 向左
+        if (index > currentIndex) {
+          direction = -1;
+          // 强制更改next容器的内容
+          $refs.next.innerHTML = html;
+        }
+        // 向右
+        else {
+          direction = 1;
+          // 强制更新prev容器的内容
+          $refs.prev.innerHTML = html;
+        }
+        // 滑动操作
+        this.slide(direction, index);
       }
     }
   };
