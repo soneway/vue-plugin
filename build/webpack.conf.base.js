@@ -1,7 +1,16 @@
 const entryHelper = require('./util/entry');
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
-  entry: entryHelper.getEntry(),
+  entry: Object.assign(
+    entryHelper.getEntry(),
+    {
+      vendor: [
+        path.join(__dirname, '../src/lib/vue.runtime.min.js')
+      ]
+    }
+  ),
   module: {
     loaders: [
       {
@@ -14,5 +23,13 @@ module.exports = {
         loader: 'vue-loader'
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin(
+      {
+        names: ['common', 'vendor'],
+        minChunks: 2
+      }
+    )
+  ]
 };
