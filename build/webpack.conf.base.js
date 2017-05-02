@@ -4,15 +4,7 @@ const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 
 module.exports = {
-  entry: Object.assign(
-    entryHelper.getEntry(),
-    {
-      // 公共库
-      vendor: [
-        path.join(__dirname, '../src/lib/vue.runtime.min.js')
-      ]
-    }
-  ),
+  entry: entryHelper.getEntry(),
   module: {
     loaders: [
       {
@@ -36,11 +28,6 @@ module.exports = {
   },
   plugins: [
     // 公共库
-    new webpack.optimize.CommonsChunkPlugin(
-      {
-        names: ['common', 'vendor'],
-        minChunks: 2
-      }
-    )
+    new webpack.optimize.CommonsChunkPlugin({ names: ['vendor'] })
   ]
 };

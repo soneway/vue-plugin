@@ -34,7 +34,8 @@ function getTemplate(templateDir = srcDir) {
       const pathInfo = path.parse(filePath);
       return {
         filename: pathInfo.base,
-        template: path.join(templateDir, pathInfo.base)
+        template: path.join(templateDir, pathInfo.base),
+        chunks: ['vendor', pathInfo.name]
       };
     });
 }
