@@ -1,6 +1,7 @@
 const entryHelper = require('./util/entry');
 const path = require('path');
 const webpack = require('webpack');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
   entry: Object.assign(
@@ -21,7 +22,15 @@ module.exports = {
       },
       {
         test: /\.vue$/,
-        loader: 'vue-loader'
+        loader: 'vue-loader',
+        options: {
+          postcss: [
+            // css前缀处理
+            autoprefixer({
+              browsers: ['ios 7', 'android 4']
+            })
+          ]
+        }
       }
     ]
   },

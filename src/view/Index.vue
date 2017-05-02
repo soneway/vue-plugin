@@ -5,6 +5,12 @@
 </template>
 
 <style lang="scss">
+    @import "../lib/var";
+
+    .wrapper {
+        background: $color;
+    }
+
     * {
         margin: 0;
         padding: 0;
