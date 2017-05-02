@@ -186,6 +186,12 @@
       isShowLoading: {
         type: Boolean,
         default: true
+      },
+      // 自动播放间隔
+      autoPlayTimeout: {
+        type: Number,
+        // 默认为0,表示禁用自动播放
+        default: 0
       }
     },
     data() {
@@ -254,6 +260,9 @@
           .join('');
       }
     },
+    created() {
+      this.startInter();
+    },
     methods: {
       __touchstart(evt) {
         // 如果正在作动画,不作响应
@@ -273,6 +282,9 @@
         this.isMoving = false;
         // 禁用动画
         this.notrans = true;
+
+        // 停止定时器
+        this.stopInter();
       },
       __touchmove(evt) {
         // 如果正在作动画,不作响应
@@ -342,11 +354,11 @@
             direction = 1;
           }
         }
-
-        // 加上动画
-        this.notrans = false;
         // 滚动
         swipSpan !== 0 && this.slide(direction);
+
+        // 开始定时器
+        this.startInter();
       },
       __pagerClick(evt) {
         const { target } = evt;
@@ -365,8 +377,10 @@
           case -1:
           // 向右
           case 1: {
-            // 开启动画
+            // 动画状态
             this.isAnimating = true;
+            // 开启动画
+            this.notrans = false;
             // 作动画
             this.swipSpan = `${(100 / 3) * direction}%`;
 
@@ -386,7 +400,7 @@
       },
       // 复位
       reset(index) {
-        // 去掉动画
+        // 禁用动画
         this.notrans = true;
         // 复位
         this.swipSpan = 0;
@@ -428,6 +442,19 @@
         }
         // 滑动操作
         this.slide(direction, index);
+      },
+      // 开始定时器
+      startInter() {
+        const { autoPlayTimeout } = this;
+        if (autoPlayTimeout) {
+          this.inter = setInterval(() => {
+            this.slide(-1);
+          }, autoPlayTimeout);
+        }
+      },
+      // 停止定定时器
+      stopInter() {
+        clearInterval(this.inter);
       }
     }
   };
