@@ -61,6 +61,7 @@
             height: 100%;
             /*不能用float:left,会导致在ios safari下渲染问题*/
             display: inline-block;
+            vertical-align: top;
             overflow: hidden;
         }
 
