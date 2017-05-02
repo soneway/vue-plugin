@@ -1,31 +1,31 @@
 <template>
     <div class="pi-carousel"
-         :class="carouselClass"
-         :style="carouselStyle"
-         @touchstart="__touchstart"
-         @touchmove="__touchmove"
-         @touchend="__touchend">
+        :class="carouselClass"
+        :style="carouselStyle"
+        @touchstart="__touchstart"
+        @touchmove="__touchmove"
+        @touchend="__touchend">
 
         <div class="pi-wrap"
-             :style="wrapStyle"
-             @click="__wrapClick">
+            :style="wrapStyle"
+            @click="__wrapClick">
             <div class="pi-item"
-                 v-html="prevHtml"
-                 ref="prev">
+                v-html="prevHtml"
+                ref="prev">
             </div>
             <div class="pi-item"
-                 v-html="currentHtml">
+                v-html="currentHtml">
             </div>
             <div class="pi-item"
-                 v-html="nextHtml"
-                 ref="next">
+                v-html="nextHtml"
+                ref="next">
             </div>
         </div>
 
         <div class="pi-pager"
-             v-if="isShowPager"
-             v-html="pagerHtml"
-             @click="__pagerClick">
+            v-if="isShowPager"
+            v-html="pagerHtml"
+            @click="__pagerClick">
         </div>
     </div>
 </template>
@@ -61,6 +61,7 @@
             height: 100%;
             /*不能用float:left,会导致在ios safari下渲染问题*/
             display: inline-block;
+            overflow: hidden;
         }
 
         .pi-pager {
@@ -150,7 +151,7 @@
       // 滑动距离阈值
       swipSpanThreshold: {
         type: Number,
-        default: 10
+        default: 5
       },
       // 滑动阈值
       swipThreshold: {
