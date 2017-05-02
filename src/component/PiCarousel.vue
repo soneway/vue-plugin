@@ -144,7 +144,7 @@
       contentFormate: {
         type: Function,
         default: (itemData, index) => {
-          return itemData && `<div data-index="${index}" style='background: url(${itemData}) center center no-repeat; background-size: contain; width: 100%; height: 100%;'></div>`;
+          return itemData && `<div data-index="${index}" style="background: url(${itemData}) center center no-repeat; background-size: contain; width: 100%; height: 100%;"></div>`;
         }
       },
       // 滑动距离阈值
