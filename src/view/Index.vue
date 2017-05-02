@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <pi-carousel ref="carousel" :isShowPager="true" :isLoop="true" :autoPlayTimeout="4000"></pi-carousel>
+        <pi-carousel ref="carousel" :isShowPager="true" :isLoop="true" :autoPlayTimeout="4000" height="100%"></pi-carousel>
     </div>
 </template>
 
@@ -9,6 +9,11 @@
 
     .wrapper {
         background: $color;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
     }
 
     * {
