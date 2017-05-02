@@ -371,6 +371,8 @@
 
       // 滚动
       slide(direction, index) {
+        // 开启动画
+        this.notrans = false;
         // 判断滚动方向
         switch (direction) {
           // 向左
@@ -379,8 +381,6 @@
           case 1: {
             // 动画状态
             this.isAnimating = true;
-            // 开启动画
-            this.notrans = false;
             // 作动画
             this.swipSpan = `${(100 / 3) * direction}%`;
 
@@ -393,6 +393,7 @@
             }, this.duration);
             break;
           }
+          // 没有direction值(说明滑动没有超过swipSpanThreshold)
           default: {
             this.swipSpan = 0;
           }
