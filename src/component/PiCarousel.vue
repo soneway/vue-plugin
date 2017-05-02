@@ -370,8 +370,13 @@
             // 作动画
             this.swipSpan = `${(100 / 3) * direction}%`;
 
-            // 复位
-            this.reset(typeof index === 'number' ? index : this.currentIndex - direction);
+            index = typeof index === 'number' ? index : this.currentIndex - direction;
+            setTimeout(() => {
+              // 复位(更新内容)
+              this.reset(index);
+              // 触发slide事件
+              this.$emit('slide', index, direction);
+            }, this.duration);
             break;
           }
           default: {
@@ -381,30 +386,24 @@
       },
       // 复位
       reset(index) {
-        // 复位操作,更新内容
-        setTimeout(() => {
-          // 去掉动画
-          this.notrans = true;
-          // 复位
-          this.swipSpan = 0;
+        // 去掉动画
+        this.notrans = true;
+        // 复位
+        this.swipSpan = 0;
 
-          // 计算index
-          const count = this.dataList.length;
-          if (index < 0) {
-            index = count - 1;
-          }
-          if (index === count) {
-            index = 0;
-          }
-          // 更新index(更新内容)
-          this.currentIndex = index;
+        // 计算index
+        const count = this.dataList.length;
+        if (index < 0) {
+          index = count - 1;
+        }
+        if (index === count) {
+          index = 0;
+        }
+        // 更新index(更新内容)
+        this.currentIndex = index;
 
-          // 重置isAnimating
-          this.isAnimating = false;
-
-          // 触发slide事件
-          this.$emit('slide', index);
-        }, this.duration);
+        // 重置isAnimating
+        this.isAnimating = false;
       },
       // 滑动到第几帧
       slideToIndex(index) {
