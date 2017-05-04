@@ -24,9 +24,9 @@ const dataList = figures.map((item) => {
     desc: item.querySelector('figcaption>p').textContent.trim()
   };
 });
-UcGallery.data = {
+Object.assign(UcGallery.data || (UcGallery.data = {}), {
   dataList,
   titleInfo
-};
+});
 
 export default new Vue(UcGallery);

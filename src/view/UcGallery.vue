@@ -1,9 +1,17 @@
 <template>
     <div class="wrapper">
-        <pi-carousel ref="carousel"
-            :isShowPager="false"
-            :isLoop="false"
-            height="100%"></pi-carousel>
+        <div class="carouselWrap">
+            <pi-carousel ref="carousel"
+                :isShowPager="false"
+                :isLoop="false"
+                height="100%"></pi-carousel>
+        </div>
+        <div class="thumbWrap">
+            <div class="thumb" v-for="(itemData, index) in dataList"
+                :class="[{selected: index === thumbIndex}]"
+                :style="{backgroundImage:`url(${itemData.img})`}"
+                @click="thumbClick(index)"></div>
+        </div>
     </div>
 </template>
 
@@ -21,15 +29,20 @@
 
     .wrapper {
         position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
 
         // 复写loading的top位置
         .pi-carousel.loading .pi-item:before {
             top: 100px;
         }
+    }
+
+    .carouselWrap {
+        overflow: hidden;
+        flex: 1;
     }
 
     .imgWrap {
@@ -93,8 +106,26 @@
 
         /*描述信息*/
         .desc {
-            padding: $padding 0;
+            padding-top: $padding;
             text-indent: 2em;
+        }
+    }
+
+    .thumbWrap {
+        height: 50px;
+        white-space: nowrap;
+        overflow: auto;
+    }
+
+    .thumb {
+        width: 70px;
+        height: 100%;
+        background: center center;
+        background-size: cover;
+        display: inline-block;
+
+        &.selected {
+            border: 1px solid #00f;
         }
     }
 </style>
@@ -105,6 +136,9 @@
   export default {
     components: {
       PiCarousel
+    },
+    data: {
+      thumbIndex: 0
     },
     mounted() {
       const { dataList, titleInfo } = this;
@@ -121,6 +155,15 @@
             </div>`;
       };
       carousel.dataList = dataList;
+      carousel.$on('slide', (index) => {
+        this.thumbClick(index);
+      });
+    },
+    methods: {
+      thumbClick(index) {
+        this.thumbIndex = index;
+        this.$refs.carousel.slideToIndex(index);
+      }
     }
   };
 </script>
