@@ -9,7 +9,7 @@
         <div class="thumbWrap">
             <div class="thumb" v-for="(itemData, index) in dataList"
                 :class="[{selected: index === thumbIndex}]"
-                :style="{backgroundImage:`url(${itemData.img})`}"
+                :style="{backgroundImage: `url(${itemData.img})`}"
                 @click="thumbClick(index)"></div>
         </div>
     </div>
@@ -163,6 +163,12 @@
       thumbClick(index) {
         this.thumbIndex = index;
         this.$refs.carousel.slideToIndex(index);
+        this.center(index);
+      },
+      center(index) {
+        const thumbWrap = document.querySelector('.thumbWrap');
+        const thumbEl = document.querySelector(`.thumb:nth-of-type(${index + 1})`);
+        debugger;
       }
     }
   };
