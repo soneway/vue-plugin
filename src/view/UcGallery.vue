@@ -6,7 +6,7 @@
                 :isLoop="false"
                 height="100%"></pi-carousel>
         </div>
-        <div class="thumbWrap">
+        <div class="thumbWrap" ref="thumbWrap">
             <div class="thumb" v-for="(itemData, index) in dataList"
                 :class="[{selected: index === thumbIndex}]"
                 :style="{backgroundImage: `url(${itemData.img})`}"
@@ -27,22 +27,18 @@
         font-family: sans-serif;
     }
 
-    .wrapper {
+    $height: 42px;
+    .carouselWrap {
         position: absolute;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: $height;
 
         // 复写loading的top位置
         .pi-carousel.loading .pi-item:before {
             top: 100px;
         }
-    }
-
-    .carouselWrap {
-        overflow: hidden;
-        flex: 1;
     }
 
     .imgWrap {
@@ -112,20 +108,31 @@
     }
 
     .thumbWrap {
-        height: 50px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: $height;
         white-space: nowrap;
         overflow: auto;
     }
 
     .thumb {
-        width: 70px;
+        width: 60px;
         height: 100%;
         background: center center;
         background-size: cover;
         display: inline-block;
+        &:not(:last-of-type) {
+            border-left: 1px solid #fff;
+        }
 
         &.selected {
-            border: 1px solid #00f;
+            border: 2px solid #00f;
+
+            & + .thumb {
+                border: none;
+            }
         }
     }
 </style>
@@ -166,9 +173,24 @@
         this.center(index);
       },
       center(index) {
-        const thumbWrap = document.querySelector('.thumbWrap');
+        const { thumbWrap } = this.$refs;
         const thumbEl = document.querySelector(`.thumb:nth-of-type(${index + 1})`);
-        debugger;
+        const toScroll = thumbEl.offsetLeft - (thumbWrap.offsetWidth - thumbEl.offsetWidth) / 2;
+        this.thumbWrapScroll(toScroll);
+      },
+      thumbWrapScroll(toScroll) {
+        const { thumbWrap } = this.$refs;
+        let { scrollLeft } = thumbWrap;
+
+        function scroll() {
+          scrollLeft += (toScroll - scrollLeft) / 5;
+          thumbWrap.scrollLeft = scrollLeft;
+          if (scrollLeft !== toScroll) {
+            requestAnimationFrame(scroll);
+          }
+        }
+
+        scroll();
       }
     }
   };
