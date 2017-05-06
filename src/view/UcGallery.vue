@@ -114,7 +114,8 @@
         bottom: 0;
         height: $height;
         white-space: nowrap;
-        overflow: auto;
+        overflow-y: hidden;
+        overflow-x: auto;
     }
 
     .thumb {
@@ -163,34 +164,25 @@
       };
       carousel.dataList = dataList;
       carousel.$on('slide', (index) => {
-        this.thumbClick(index);
+        this.thumbSlide(index);
       });
     },
     methods: {
-      thumbClick(index) {
+      thumbSlide(index) {
+        if (index === this.thumbIndex) {
+          return;
+        }
         this.thumbIndex = index;
         this.$refs.carousel.slideToIndex(index);
         this.center(index);
       },
+      thumbClick(index) {
+        this.thumbSlide(index);
+      },
       center(index) {
         const { thumbWrap } = this.$refs;
         const thumbEl = document.querySelector(`.thumb:nth-of-type(${index + 1})`);
-        const toScroll = thumbEl.offsetLeft - (thumbWrap.offsetWidth - thumbEl.offsetWidth) / 2;
-        this.thumbWrapScroll(toScroll);
-      },
-      thumbWrapScroll(toScroll) {
-        const { thumbWrap } = this.$refs;
-        let { scrollLeft } = thumbWrap;
-
-        function scroll() {
-          scrollLeft += (toScroll - scrollLeft) / 5;
-          thumbWrap.scrollLeft = scrollLeft;
-          if (scrollLeft !== toScroll) {
-            requestAnimationFrame(scroll);
-          }
-        }
-
-        scroll();
+        thumbWrap.scrollLeft = thumbEl.offsetLeft - (thumbWrap.offsetWidth - thumbEl.offsetWidth) / 2;
       }
     }
   };
