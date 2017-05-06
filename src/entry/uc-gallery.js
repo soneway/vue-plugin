@@ -1,3 +1,4 @@
+import {} from '../lib/polyfill';
 import Vue from '../lib/vue.runtime.min';
 import UcGallery from '../view/UcGallery.vue';
 
