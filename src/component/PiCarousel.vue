@@ -35,13 +35,13 @@
         overflow: hidden;
         position: relative;
 
-        // 没有动画
+        /*没有动画*/
         &.notrans {
             .pi-wrap {
                 transition: none;
             }
         }
-        // loading
+        /*loading*/
         &.loading {
             .pi-item {
                 @extend .pi-loading;
