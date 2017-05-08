@@ -38,6 +38,8 @@ module.exports = {
     // function关键字后空格
     'space-before-function-paren': [2, 'never'],
     // 最大长度
-    'max-len': 1
+    'max-len': 1,
+    // import必须优先
+    'import/first': 0
   }
 };
