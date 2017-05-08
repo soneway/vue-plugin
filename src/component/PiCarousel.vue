@@ -152,7 +152,7 @@
       // 滑动距离阈值
       swipSpanThreshold: {
         type: Number,
-        default: 5
+        default: 6
       },
       // 滑动阈值
       swipThreshold: {
