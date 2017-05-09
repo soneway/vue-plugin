@@ -1,6 +1,6 @@
 require('../lib/polyfill');
 
-import Vue from '../lib/vue.runtime.min';
+import Vue from '../lib/third/vue.runtime.min';
 import UcGallery from '../view/UcGallery.vue';
 
 // pc触摸事件兼容

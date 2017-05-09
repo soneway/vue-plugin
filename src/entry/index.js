@@ -1,4 +1,4 @@
-import Vue from '../lib/vue.runtime.min';
+import Vue from '../lib/third/vue.runtime.min';
 import Index from '../view/Index.vue';
 
 Index.el = '#root';
