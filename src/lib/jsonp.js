@@ -1,5 +1,4 @@
 const { document, JSON, encodeURIComponent, Object } = window;
-const headEl = document.head;
 
 // 获取uid函数
 const getUid = (() => {
@@ -8,23 +7,28 @@ const getUid = (() => {
 })();
 
 // 加载js函数
-function getScript(url, fn) {
-  const isJs = /(\.js)$/.test(url);
-  const scriptEl = document.createElement('script');
+const getScript = (() => {
+  const headEl = document.head;
+  const jsReg = /(\.js)$/;
 
-  // type
-  scriptEl.type = 'text/javascript';
+  return (url, fn) => {
+    const isJs = jsReg.test(url);
+    const scriptEl = document.createElement('script');
 
-  // onload
-  scriptEl.onload = () => {
-    typeof fn === 'function' && fn();
-    !isJs && headEl.removeChild(scriptEl);
+    // type
+    scriptEl.type = 'text/javascript';
+
+    // onload
+    scriptEl.onload = () => {
+      typeof fn === 'function' && fn();
+      !isJs && headEl.removeChild(scriptEl);
+    };
+
+    // 请求
+    scriptEl.src = url;
+    headEl.appendChild(scriptEl);
   };
-
-  // 请求
-  scriptEl.src = url;
-  headEl.appendChild(scriptEl);
-}
+})();
 
 // 回调函数
 function jsonpcb(rs, opts = {}) {
