@@ -1,5 +1,4 @@
-require('../lib/polyfill');
-
+import 'core-js/es6/object';
 import Vue from '../lib/third/vue.runtime.min';
 import UcGallery from '../view/UcGallery.vue';
 
