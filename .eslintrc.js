@@ -20,7 +20,7 @@ module.exports = {
     // 箭头函数用小括号括起来
     'arrow-parens': 0,
     // 禁止给参数重新赋值
-    'no-param-reassign': 1,
+    'no-param-reassign': 0,
     // 语句强制分号结束
     'semi': [2, 'always'],
     // 箭头函数中花括号样式(只有return语句时,不需要花括号)
@@ -28,7 +28,7 @@ module.exports = {
     // 自增自减
     'no-plusplus': 0,
     // 禁止无用的表达式
-    'no-unused-expressions': 1,
+    'no-unused-expressions': 0,
     // 大括号风格
     'brace-style': 0,
     // 禁止switch穿透
@@ -40,6 +40,8 @@ module.exports = {
     // 最大长度
     'max-len': 1,
     // 禁用arguments
-    'prefer-rest-params': 1
+    'prefer-rest-params': 1,
+    // 函数必须有返回值
+    'consistent-return': 0
   }
 };
