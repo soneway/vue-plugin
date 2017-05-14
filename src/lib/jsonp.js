@@ -9,6 +9,11 @@ function getSymbol(url) {
   return url.indexOf('?') < 0 ? '?' : '&';
 }
 
+// 判断是否为function函数
+function isFunction(fn) {
+  return typeof fn === 'function';
+}
+
 // 加载js函数
 const getScript = (() => {
   const headEl = document.head;
@@ -23,13 +28,13 @@ const getScript = (() => {
 
     // onload
     scriptEl.onload = () => {
-      typeof fn === 'function' && fn();
+      isFunction(fn) && fn();
       isJs || headEl.removeChild(scriptEl);
     };
 
     // onerror
     scriptEl.onerror = (err) => {
-      typeof fn === 'function' && fn(err);
+      isFunction(fn) && fn(err);
     };
 
     // 请求
@@ -43,7 +48,7 @@ function get(opts) {
   // 配置项
   opts = Object.assign({}, get.defaults, opts);
   let { url, data } = opts;
-  const { success, error } = opts;
+  const { success, error, callback } = opts;
 
   // url判断
   if (!url) {
@@ -56,7 +61,8 @@ function get(opts) {
   // 将回调函数添加到全局变量
   window[cbName] = (rs) => {
     // 回调
-    typeof success === 'function' && success(rs);
+    isFunction(success) && success(rs);
+    isFunction(callback) && callback(rs);
     // 释放回调函数
     window[cbName] = null;
   };
@@ -76,7 +82,8 @@ function get(opts) {
     // js加载出错
     if (err) {
       // 回调
-      typeof error === 'function' && error(err);
+      isFunction(error) && error(err);
+      isFunction(callback) && callback(err);
       // 释放回调函数
       window[cbName] = null;
     }
@@ -103,13 +110,13 @@ const post = (() => {
 
     // 回调函数
     const callback = msgcb[data.id];
-    typeof callback === 'function' && callback(data.rs);
+    typeof isFunction(callback) && callback(data.rs);
   });
 
   return (opts) => {
     // 配置项
     opts = Object.assign({}, post.defaults, opts);
-    const { success, formSelector, url, method, data, enctype, error } = opts;
+    const { success, error, callback, formSelector, url, method, data, enctype } = opts;
 
     // iframe元素
     const ifrId = `postifr${getUid()}`;
@@ -143,7 +150,8 @@ const post = (() => {
     // message事件响应函数
     msgcb[ifrId] = (rs) => {
       // 回调
-      typeof success === 'function' && success(rs);
+      isFunction(success) && success(rs);
+      isFunction(callback) && callback(rs);
       // 释放回调函数
       msgcb[ifrId] = null;
 
@@ -159,7 +167,8 @@ const post = (() => {
         // 如果回调还在,说明没有成功回调,即发生错误
         if (msgcb[ifrId]) {
           // 回调
-          typeof error === 'function' && error();
+          isFunction(error) && error();
+          isFunction(callback) && callback();
           // 释放回调函数
           msgcb[ifrId] = null;
 
