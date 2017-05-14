@@ -48,6 +48,7 @@ function get(opts) {
   // 配置项
   opts = Object.assign({}, get.defaults, opts);
   let { url, data } = opts;
+  // callback可用于统计
   const { success, error, callback } = opts;
 
   // url判断
@@ -62,7 +63,7 @@ function get(opts) {
   window[cbName] = (rs) => {
     // 回调
     isFunction(success) && success(rs);
-    isFunction(callback) && callback(rs);
+    isFunction(callback) && callback(opts, rs);
     // 释放回调函数
     window[cbName] = null;
   };
@@ -83,7 +84,7 @@ function get(opts) {
     if (err) {
       // 回调
       isFunction(error) && error(err);
-      isFunction(callback) && callback(err);
+      isFunction(callback) && callback(opts);
       // 释放回调函数
       window[cbName] = null;
     }
@@ -151,7 +152,7 @@ const post = (() => {
     msgcb[ifrId] = (rs) => {
       // 回调
       isFunction(success) && success(rs);
-      isFunction(callback) && callback(rs);
+      isFunction(callback) && callback(opts, rs);
       // 释放回调函数
       msgcb[ifrId] = null;
 
@@ -168,7 +169,7 @@ const post = (() => {
         if (msgcb[ifrId]) {
           // 回调
           isFunction(error) && error();
-          isFunction(callback) && callback();
+          isFunction(callback) && callback(opts);
           // 释放回调函数
           msgcb[ifrId] = null;
 
