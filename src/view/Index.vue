@@ -45,8 +45,8 @@
       },
       initEvent() {
         const carousel = this.$refs.carousel;
-        carousel.$on('slide', async (index, deriction) => {
-          if (index === carousel.dataList.length - 1 && deriction === -1) {
+        carousel.$on('slide', async (index, direction) => {
+          if (index === carousel.dataList.length - 1 && direction === -1) {
             const imgs = await request.getImgs();
             imgs.length && carousel.dataList.push(...imgs);
           }

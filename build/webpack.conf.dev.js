@@ -33,6 +33,7 @@ module.exports = merge(baseConf, {
       }
     ]
   },
+  devtool: 'source-map',
   plugins: [
     ...templatePlugins
   ]
