@@ -30,10 +30,14 @@
     components: {
       PiCarousel
     },
-    async mounted() {
-      const carousel = this.$refs.carousel;
-      const rs = await request.get('/iflow/api/v1/channel/100?method=new');
-      console.log(rs);
+    mounted() {
+      this.initImgs();
+    },
+    methods: {
+      async initImgs() {
+        const carousel = this.$refs.carousel;
+        carousel.dataList = await request.getImgs();
+      }
     }
   };
 </script>

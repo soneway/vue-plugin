@@ -1,4 +1,5 @@
 import '../lib/es6/object';
+
 import Vue from '../lib/third/vue.runtime.min';
 import UcGallery from '../view/UcGallery.vue';
 
