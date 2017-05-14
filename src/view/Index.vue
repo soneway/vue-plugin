@@ -32,6 +32,7 @@
     },
     mounted() {
       this.initImgs();
+      this.initEvent();
     },
     methods: {
       async initImgs() {
@@ -41,6 +42,15 @@
           return console.log('网络请求失败');
         }
         carousel.dataList = imgs;
+      },
+      initEvent() {
+        const carousel = this.$refs.carousel;
+        carousel.$on('slide', async (index, deriction) => {
+          if (index === carousel.dataList.length - 1 && deriction === -1) {
+            const imgs = await request.getImgs();
+            imgs.length && carousel.dataList.push(...imgs);
+          }
+        });
       }
     }
   };
