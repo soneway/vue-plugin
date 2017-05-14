@@ -36,7 +36,11 @@
     methods: {
       async initImgs() {
         const carousel = this.$refs.carousel;
-        carousel.dataList = await request.getImgs();
+        const imgs = await request.getImgs();
+        if (!imgs) {
+          return console.log('网络请求失败');
+        }
+        carousel.dataList = imgs;
       }
     }
   };

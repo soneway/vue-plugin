@@ -1,6 +1,4 @@
 import jsonp from './jsonp';
-import Promise from 'promise-polyfill';
-import 'regenerator-runtime/runtime';
 
 const origin = 'https://m.uczzd.cn';
 
