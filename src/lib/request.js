@@ -2,7 +2,7 @@ import jsonp from './jsonp';
 import Promise from 'promise-polyfill';
 import 'regenerator-runtime/runtime';
 
-const origin = 'http://m.uczzd.cn';
+const origin = 'https://m.uczzd.cn';
 
 function get(pathname, data) {
   return new Promise((resolve) => {
