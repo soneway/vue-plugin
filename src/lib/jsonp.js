@@ -111,7 +111,7 @@ const post = (() => {
 
     // 回调函数
     const callback = msgcb[data.id];
-    typeof isFunction(callback) && callback(data.rs);
+    isFunction(callback) && callback(data.rs);
   });
 
   return (opts) => {
