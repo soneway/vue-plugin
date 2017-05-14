@@ -24,7 +24,7 @@ const getScript = (() => {
     // onload
     scriptEl.onload = () => {
       typeof fn === 'function' && fn();
-      !isJs && headEl.removeChild(scriptEl);
+      isJs || headEl.removeChild(scriptEl);
     };
 
     // onerror
@@ -43,7 +43,7 @@ function get(opts) {
   // 配置项
   opts = Object.assign({}, get.defaults, opts);
   let { url, data } = opts;
-  const { callback, error } = opts;
+  const { success, error } = opts;
 
   // url判断
   if (!url) {
@@ -56,7 +56,7 @@ function get(opts) {
   // 将回调函数添加到全局变量
   window[cbName] = (rs) => {
     // 回调
-    typeof callback === 'function' && callback(rs);
+    typeof success === 'function' && success(rs);
     // 释放回调函数
     window[cbName] = null;
   };
@@ -109,7 +109,7 @@ const post = (() => {
   return (opts) => {
     // 配置项
     opts = Object.assign({}, post.defaults, opts);
-    const { callback, formSelector, url, method, data, enctype, error } = opts;
+    const { success, formSelector, url, method, data, enctype, error } = opts;
 
     // iframe元素
     const ifrId = `postifr${getUid()}`;
@@ -143,13 +143,13 @@ const post = (() => {
     // message事件响应函数
     msgcb[ifrId] = (rs) => {
       // 回调
-      typeof callback === 'function' && callback(rs);
+      typeof success === 'function' && success(rs);
       // 释放回调函数
       msgcb[ifrId] = null;
 
       // 删除节点
       bodyEl.removeChild(ifrEl);
-      !formSelector && bodyEl.removeChild(formEl);
+      formSelector || bodyEl.removeChild(formEl);
     };
 
     // iframe onload事件,主要处理请求失败
@@ -165,13 +165,13 @@ const post = (() => {
 
           // 删除节点
           bodyEl.removeChild(ifrEl);
-          !formSelector && bodyEl.removeChild(formEl);
+          formSelector || bodyEl.removeChild(formEl);
         }
       }, 100);
     };
 
     // 提交
-    !formSelector && bodyEl.appendChild(formEl);
+    formSelector || bodyEl.appendChild(formEl);
     formEl.submit();
   };
 })();
