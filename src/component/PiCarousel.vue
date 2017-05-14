@@ -91,7 +91,7 @@
         &:before {
             $width: 40px;
             $border-width: 3px;
-            $border-color: #333;
+            $border-color: #888;
             content: '';
             position: absolute;
             left: 50%;
