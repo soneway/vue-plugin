@@ -3,8 +3,7 @@
         <div class="carouselWrap">
             <pi-carousel ref="carousel"
                 :isShowPager="false"
-                :isLoop="false"
-                height="100%"></pi-carousel>
+                :isLoop="false"></pi-carousel>
         </div>
         <div class="thumbWrap" ref="thumbWrap">
             <div class="thumb" v-for="(itemData, index) in dataList"
