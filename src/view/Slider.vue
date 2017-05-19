@@ -1,13 +1,13 @@
 <template>
     <div class="wrapper">
         <pi-slider ref="slider">
-            <div>1</div>
-            <div>2</div>
-            <div>3</div>
-            <div>4</div>
-            <div>5</div>
-            <div>6</div>
-            <div>7</div>
+            <div>1ksfdk dfads fa dfkalp fdaf d;afd afep gjieofp ajie fdka fdk;f a; fdfadf</div>
+            <div>2ksfdk dfads fa dfkalp fdaf d;afd afep gjieofp ajie fdka fdk;f a; fdfadf</div>
+            <div>3ksfdk dfads fa dfkalp fdaf d;afd afep gjieofp ajie fdka fdk;f a; fdfadf</div>
+            <div>4ksfdk dfads fa dfkalp fdaf d;afd afep gjieofp ajie fdka fdk;f a; fdfadf</div>
+            <div>5ksfdk dfads fa dfkalp fdaf d;afd afep gjieofp ajie fdka fdk;f a; fdfadf</div>
+            <div>6ksfdk dfads fa dfkalp fdaf d;afd afep gjieofp ajie fdka fdk;f a; fdfadf</div>
+            <div>7ksfdk dfads fa dfkalp fdaf d;afd afep gjieofp ajie fdka fdk;f a; fdfadf</div>
         </pi-slider>
     </div>
 </template>

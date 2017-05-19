@@ -39,20 +39,14 @@
         }
 
         .pi-wrap {
-            width: 300%;
-            height: 100%;
-            margin-left: -100%;
-            font-size: 0;
             transition: transform ease;
         }
 
         .pi-item {
-            width: 33.3334%;
-            height: 100%;
-            /*不能用float:left,会导致在ios safari下渲染问题*/
-            display: inline-block;
-            vertical-align: top;
+            height: 200px;
+            float: left;
             overflow: hidden;
+            position: relative;
         }
 
         .pi-pager {
@@ -119,25 +113,20 @@
     props: {
       // 宽度
       width: {
-        type: String,
         default: '100%'
       },
       // 高度
       height: {
-        type: String,
-        default: '400px'
+        default: '100%'
+      },
+      // 是否水平方向滚动
+      isHorizontal: {
+        default: true
       },
       // 列表数据
       dataList: {
         type: Array,
         default: []
-      },
-      // 返回内容函数
-      contentFormate: {
-        type: Function,
-        default: (itemData, index) => {
-          return itemData && `<div data-index="${index}" style="background: url(${itemData}) center center no-repeat; background-size: contain; width: 100%; height: 100%;"></div>`;
-        }
       },
       // 滑动距离阈值
       swipSpanThreshold: {
@@ -195,35 +184,8 @@
       };
     },
     computed: {
-      prevHtml() {
-        const { dataList } = this;
-        let index = this.currentIndex - 1;
-        // 第一帧前面
-        if (index < 0) {
-          // 不能循环滚动
-          if (!this.isLoop) {
-            return '';
-          }
-          index = dataList.length - 1;
-        }
-        return this.contentFormate(dataList[index], index);
-      },
-      currentHtml() {
-        const index = this.currentIndex;
-        return this.contentFormate(this.dataList[index], index);
-      },
-      nextHtml() {
-        const { dataList } = this;
-        let index = this.currentIndex + 1;
-        // 最后一帧后面
-        if (index === dataList.length) {
-          // 不能循环滚动
-          if (!this.isLoop) {
-            return '';
-          }
-          index = 0;
-        }
-        return this.contentFormate(dataList[index], index);
+      items() {
+        return this.$slots.default.filter((item) => item.tag);
       },
       carouselClass() {
         return [
@@ -243,7 +205,8 @@
         typeof swipSpan === 'number' && (swipSpan += 'px');
         return {
           transform: `translate3d(${swipSpan},0,0)`,
-          transitionDuration: `${this.duration / 1000}s`
+          transitionDuration: `${this.duration / 1000}s`,
+          width: `${this.items.length * 100}%`
         };
       },
       pagerHtml() {
@@ -255,7 +218,22 @@
     created() {
       this.startInter();
     },
+    mounted() {
+      this.formateSlots();
+    },
     methods: {
+      formateSlots() {
+        const { items } = this;
+        const itemCount = items.length;
+
+        items.forEach((item) => {
+          const itemEl = item.elm;
+          itemEl.className = 'pi-item';
+          if (this.isHorizontal) {
+            itemEl.style.cssText = `width: ${1 / itemCount * 100}%;`;
+          }
+        });
+      },
       __touchstart(evt) {
         // 如果正在作动画,不作响应
         if (this.isAnimating) {
