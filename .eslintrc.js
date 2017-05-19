@@ -42,6 +42,8 @@ module.exports = {
     // 禁用arguments
     'prefer-rest-params': 1,
     // 函数必须有返回值
-    'consistent-return': 0
+    'consistent-return': 0,
+    //
+    'no-lonely-if': 1
   }
 };
