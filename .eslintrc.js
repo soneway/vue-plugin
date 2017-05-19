@@ -43,7 +43,7 @@ module.exports = {
     'prefer-rest-params': 1,
     // 函数必须有返回值
     'consistent-return': 0,
-    //
+    // 禁止else语句内只有if语句
     'no-lonely-if': 1
   }
 };
