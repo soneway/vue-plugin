@@ -52,16 +52,14 @@
             width: 300%;
             height: 100%;
             margin-left: -100%;
-            font-size: 0;
             transition: transform ease;
+            display: flex;
+            flex-direction: row;
         }
 
         .pi-item {
-            width: 33.3334%;
             height: 100%;
-            /*不能用float:left,会导致在ios safari下渲染问题*/
-            display: inline-block;
-            vertical-align: top;
+            flex: 1;
             overflow: hidden;
         }
 
@@ -129,17 +127,14 @@
     props: {
       // 宽度
       width: {
-        type: String,
         default: '100%'
       },
       // 高度
       height: {
-        type: String,
         default: '100%'
       },
       // 列表数据
       dataList: {
-        type: Array,
         default: []
       },
       // 返回内容函数
@@ -151,47 +146,38 @@
       },
       // 滑动距离阈值
       swipSpanThreshold: {
-        type: Number,
         default: 6
       },
       // 滑动阈值
       swipThreshold: {
-        type: Number,
         default: 50
       },
       // 动画时长
       duration: {
-        type: Number,
         default: 300
       },
       // first和last拉不动的比率
       pullRatio: {
-        type: Number,
         default: 3
       },
       // 是否循环滚动
       isLoop: {
-        type: Boolean,
         default: true
       },
       // 滚动索引
       currentIndex: {
-        type: Number,
         default: 0
       },
       // 是否显示页脚
       isShowPager: {
-        type: Boolean,
         default: true
       },
       // 是否显示loading
       isShowLoading: {
-        type: Boolean,
         default: true
       },
       // 自动播放间隔
       autoPlayTimeout: {
-        type: Number,
         // 默认为0,表示禁用自动播放
         default: 0
       }
@@ -212,7 +198,7 @@
         if (index < 0) {
           // 不能循环滚动
           if (!this.isLoop) {
-            return '';
+            return;
           }
           index = dataList.length - 1;
         }
