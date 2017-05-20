@@ -39,21 +39,26 @@
         }
         /*水平方向*/
         &.horizontal {
-            .pi-wrap > * {
-                float: left;
+            .pi-wrap {
+                height: 100%;
+                flex-direction: row;
+
+                & > * {
+                    float: left;
+                    height: 100%;
+                }
             }
         }
 
         .pi-wrap {
             width: 100%;
-            height: 100%;
             transition: transform ease;
+            display: flex;
+            flex-direction: column;
 
             & > * {
                 display: block;
-                width: 100%;
-                height: 100%;
-                float: left;
+                flex: 1;
                 overflow: hidden;
                 position: relative;
             }
@@ -195,9 +200,9 @@
         };
       },
       wrapStyle() {
-        const { currentTranslate, currentIndex, isHorizontal, $el } = this;
+        const { currentTranslate, currentIndex, isHorizontal, $el, items } = this;
         let { swipSpan } = this;
-        const itemCount = this.items.length;
+        const itemCount = items.length;
 
         let translate;
         // touchmove跟手指滚动
@@ -214,14 +219,21 @@
           // 计算出滑动值
           const itemSpan = isHorizontal ? $el.offsetWidth : $el.offsetHeight;
           translate = this.currentTranslate = -currentIndex * itemSpan;
+
+          // items的状态
+          items.forEach((item, index) => {
+            const itemEl = item.elm;
+            index === currentIndex ? itemEl.setAttribute('current', '') : itemEl.removeAttribute('current');
+          });
         }
 
         // 样式对象
         const style = {
-          transform: `translate3d(${isHorizontal ? `${translate}px,0` : `0,${translate}px`},0)`,
+          transform: `translate3d(${isHorizontal ? `${translate}px,0,0` : `0,${translate}px,0`})`,
           transitionDuration: `${this.duration / 1000}s`
         };
 
+        // 容器的高度或宽度
         const size = `${itemCount * 100}%`;
         // 水平方向
         if (isHorizontal) {
@@ -235,9 +247,9 @@
         return style;
       },
       pagerHtml() {
-        return [...new Array(this.items.length)]
-          .map((item, index) => `<span ${index === this.currentIndex ? 'class="selected"' : ''} data-index="${index}"></span>`)
-          .join('');
+        return this.isShowPager && [...new Array(this.items.length)]
+            .map((item, index) => `<span ${index === this.currentIndex ? 'class="selected"' : ''} data-index="${index}"></span>`)
+            .join('');
       }
     },
     created() {
@@ -250,30 +262,23 @@
     methods: {
       // 初始化slots
       initSlots() {
-        const { items } = this;
-        const itemCount = items.length;
+        const { $el, currentIndex } = this;
 
-        items.forEach((item) => {
+        // 遍历
+        this.items.forEach((item, index) => {
           const itemEl = item.elm;
-          const itemStyle = itemEl.style;
-          const size = `${1 / itemCount * 100}%`;
 
-          // 水平方向
-          if (this.isHorizontal) {
-            itemStyle.width = size;
-          }
-          // 竖直方向
-          else {
-            itemStyle.height = size;
+          // current状态
+          index === currentIndex && (itemEl.setAttribute('current', ''));
+
+          // 计算出初始滑动值
+          if (currentIndex > 0) {
+            const itemSpan = this.isHorizontal ? $el.offsetWidth : $el.offsetHeight;
+            this.currentTranslate = -currentIndex * itemSpan;
           }
         });
       },
       __touchstart(evt) {
-        // 如果正在作动画,不作响应
-        if (this.isAnimating) {
-          return;
-        }
-
         const touch = evt.targetTouches ? evt.targetTouches[0] : evt;
 
         // 记录触摸开始位置
@@ -291,13 +296,6 @@
         this.stopInter();
       },
       __touchmove(evt) {
-        // 如果正在作动画,不作响应
-        if (this.isAnimating) {
-          evt.preventDefault();
-          evt.stopPropagation();
-          return;
-        }
-
         const touch = evt.targetTouches ? evt.targetTouches[0] : evt;
         // x轴滑动距离
         const swipSpanX = touch.pageX - this.startX;
@@ -330,11 +328,6 @@
         }
       },
       __touchend() {
-        // 如果正在作动画,不作响应
-        if (this.isAnimating) {
-          return;
-        }
-
         const { swipSpan, swipThreshold, items } = this;
         const itemCount = items.length;
 
@@ -353,6 +346,7 @@
 
         // 加上动画
         this.notrans = false;
+        // 重置swipSpan
         this.swipSpan = 0;
 
         // 开始定时器
@@ -368,9 +362,8 @@
 
       // 滑动到第几帧
       slideToIndex(index) {
-        const { currentIndex } = this;
         // index不符合条件
-        if (typeof index !== 'number' || index < 0 || index >= this.items.length || index === currentIndex) {
+        if (typeof index !== 'number' || index < 0 || index >= this.items.length || index === this.currentIndex) {
           return;
         }
         this.currentIndex = index;
@@ -379,6 +372,8 @@
       startInter() {
         const { autoPlayTimeout } = this;
         const itemCount = this.items.length;
+
+        // 自动播放开启
         if (autoPlayTimeout) {
           this.inter = setInterval(() => {
             // 最后一帧
