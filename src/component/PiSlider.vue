@@ -247,17 +247,16 @@
         return style;
       },
       pagerHtml() {
-        return this.isShowPager && [...new Array(this.items.length)]
-            .map((item, index) => `<span ${index === this.currentIndex ? 'class="selected"' : ''} data-index="${index}"></span>`)
-            .join('');
+        return [...new Array(this.items.length)]
+          .map((item, index) => `<span ${index === this.currentIndex ? 'class="selected"' : ''} data-index="${index}"></span>`)
+          .join('');
       }
-    },
-    created() {
-      this.startInter();
     },
     mounted() {
       // 初始化slots
       this.initSlots();
+      // 初始化timer
+      this.startInter();
     },
     methods: {
       // 初始化slots
@@ -333,12 +332,14 @@
 
         // 向右,下
         if (swipSpan > swipThreshold) {
+          // 非起点
           if (this.currentIndex !== 0) {
             --this.currentIndex;
           }
         }
         // 向左,上
         else if (swipSpan < -swipThreshold) {
+          // 非终点
           if (this.currentIndex !== itemCount - 1) {
             ++this.currentIndex;
           }
@@ -363,7 +364,7 @@
       // 滑动到第几帧
       slideToIndex(index) {
         // index不符合条件
-        if (typeof index !== 'number' || index < 0 || index >= this.items.length || index === this.currentIndex) {
+        if (typeof index !== 'number' || index < 0 || index >= this.items.length) {
           return;
         }
         this.currentIndex = index;

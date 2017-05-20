@@ -1,6 +1,10 @@
 <template>
     <div class="wrapper">
-        <pi-slider ref="slider" :isHorizontal="true" :autoPlayTimeout="0" :currentIndex="0">
+        <pi-slider ref="slider"
+            :isHorizontal="true"
+            :autoPlayTimeout="0"
+            :currentIndex="0"
+            :isShowPager="true">
             <div class="img" style="background-image: url(https://soneway.github.io/jq/example/dist/img/1.jpg)"></div>
             <div class="img" style="background-image: url(https://soneway.github.io/jq/example/dist/img/2.jpg)"></div>
             <div class="img" style="background-image: url(https://soneway.github.io/jq/example/dist/img/3.jpg)"></div>
