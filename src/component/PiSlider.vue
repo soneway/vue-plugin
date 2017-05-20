@@ -147,7 +147,7 @@
       },
       // first和last拉不动的比率
       pullRatio: {
-        default: 3
+        default: 2
       },
       // 滚动索引
       currentIndex: {
