@@ -2,8 +2,11 @@
     <div class="wrapper">
         <pi-carousel ref="carousel"
             :isShowPager="true"
-            :isLoop="true"
+            :isLoop="false"
             :autoPlayTimeout="0">
+            <!--<template scope="props">-->
+                <!--<div :data="props.index"></div>-->
+            <!--</template>-->
         </pi-carousel>
     </div>
 </template>

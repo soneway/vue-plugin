@@ -9,23 +9,38 @@
         <div class="pi-wrap"
             :style="wrapStyle"
             @click="__wrapClick">
-            <div class="pi-item"
-                v-html="prevHtml"
-                ref="prev">
+            <div class="pi-item">
+                <slot :itemData="prevData">
+                    <div v-show="prevData"
+                        class="img"
+                        :style="imgStyle(prevData)">
+                    </div>
+                </slot>
             </div>
-            <div class="pi-item"
-                v-html="currentHtml">
+            <div class="pi-item">
+                <slot :itemData="currentData">
+                    <div class="img"
+                        :style="imgStyle(currentData)">
+                    </div>
+                </slot>
             </div>
-            <div class="pi-item"
-                v-html="nextHtml"
-                ref="next">
+            <div class="pi-item">
+                <slot :itemData="nextData">
+                    <div v-show="nextData"
+                        class="img"
+                        :style="imgStyle(nextData)">
+                    </div>
+                </slot>
             </div>
         </div>
 
         <div class="pi-pager"
-            v-if="isShowPager"
-            v-html="pagerHtml"
-            @click="__pagerClick">
+            v-if="isShowPager">
+            <slot name="pager">
+                <span v-for="(_, index) in dataList"
+                    @click="__pagerClick(index)"
+                    :class="{selected: index === currentIndex}"></span>
+            </slot>
         </div>
     </div>
 </template>
@@ -61,6 +76,13 @@
             height: 100%;
             flex: 1;
             overflow: hidden;
+
+            .img {
+                background: center center no-repeat;
+                background-size: contain;
+                width: 100%;
+                height: 100%;
+            }
         }
 
         .pi-pager {
@@ -137,13 +159,6 @@
       dataList: {
         default: []
       },
-      // 返回内容函数
-      contentFormate: {
-        type: Function,
-        default: (itemData, index) => {
-          return itemData && `<div data-index="${index}" style="background: url(${itemData}) center center no-repeat; background-size: contain; width: 100%; height: 100%;"></div>`;
-        }
-      },
       // 滑动距离阈值
       swipSpanThreshold: {
         default: 6
@@ -191,7 +206,7 @@
       };
     },
     computed: {
-      prevHtml() {
+      prevData() {
         const { dataList } = this;
         let index = this.currentIndex - 1;
         // 第一帧前面
@@ -202,13 +217,12 @@
           }
           index = dataList.length - 1;
         }
-        return this.contentFormate(dataList[index], index);
+        return dataList[index];
       },
-      currentHtml() {
-        const index = this.currentIndex;
-        return this.contentFormate(this.dataList[index], index);
+      currentData() {
+        return this.dataList[this.currentIndex];
       },
-      nextHtml() {
+      nextData() {
         const { dataList } = this;
         let index = this.currentIndex + 1;
         // 最后一帧后面
@@ -219,7 +233,7 @@
           }
           index = 0;
         }
-        return this.contentFormate(dataList[index], index);
+        return dataList[index];
       },
       carouselClass() {
         return [
@@ -241,11 +255,6 @@
           transform: `translate3d(${swipSpan},0,0)`,
           transitionDuration: `${this.duration / 1000}s`
         };
-      },
-      pagerHtml() {
-        return [...new Array(this.dataList.length)]
-          .map((item, index) => `<span ${index === this.currentIndex ? 'class="selected"' : ''} data-index="${index}"></span>`)
-          .join('');
       }
     },
     mounted() {
@@ -348,10 +357,8 @@
         // 开始定时器
         this.startInter();
       },
-      __pagerClick(evt) {
-        const { target } = evt;
-        const index = +target.getAttribute('data-index');
-        typeof index === 'number' && this.slideToIndex(index);
+      __pagerClick(index) {
+        this.slideToIndex(index);
       },
       __wrapClick() {
         this.$emit('click', this.currentIndex);
@@ -372,8 +379,8 @@
             // 作动画
             this.swipSpan = `${(100 / 3) * direction}%`;
 
-            // index值为空
-            index || (index = this.currentIndex - direction);
+            // index值为undefined
+            index === undefined && (index = this.currentIndex - direction);
             setTimeout(() => {
               // 复位(更新内容)
               this.reset(index);
@@ -411,24 +418,22 @@
       },
       // 滑动到第几帧
       slideToIndex(index) {
-        const { dataList, currentIndex, $refs } = this;
+        const { dataList, currentIndex } = this;
         // index不符合条件
         if (typeof index !== 'number' || index < 0 || index >= dataList.length || index === currentIndex) {
           return;
         }
         let direction;
-        const html = this.contentFormate(dataList[index], index);
+        const data = dataList[index];
         // 向左
         if (index > currentIndex) {
           direction = -1;
-          // 强制更改next容器的内容
-          $refs.next.innerHTML = html;
+          // this.nextData = data;
         }
         // 向右
         else {
           direction = 1;
-          // 强制更新prev容器的内容
-          $refs.prev.innerHTML = html;
+          // this.prevData = data;
         }
         // 滑动操作
         this.slide(direction, index);
@@ -445,6 +450,10 @@
       // 停止定定时器
       stopInter() {
         clearInterval(this.inter);
+      },
+      // 获取图片样式
+      imgStyle(data) {
+        return data && { backgroundImage: `url(${data})` };
       }
     }
   };
