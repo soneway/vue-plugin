@@ -158,7 +158,7 @@
       },
       // first和last拉不动的比率
       pullRatio: {
-        default: 3
+        default: 2
       },
       // 是否循环滚动
       isLoop: {
@@ -215,7 +215,7 @@
         if (index === dataList.length) {
           // 不能循环滚动
           if (!this.isLoop) {
-            return '';
+            return;
           }
           index = 0;
         }
@@ -248,7 +248,7 @@
           .join('');
       }
     },
-    created() {
+    mounted() {
       this.startInter();
     },
     methods: {
@@ -372,7 +372,8 @@
             // 作动画
             this.swipSpan = `${(100 / 3) * direction}%`;
 
-            index = typeof index === 'number' ? index : this.currentIndex - direction;
+            // index值为空
+            index || (index = this.currentIndex - direction);
             setTimeout(() => {
               // 复位(更新内容)
               this.reset(index);
