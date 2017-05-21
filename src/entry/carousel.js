@@ -3,9 +3,9 @@ import 'promise-polyfill';
 import 'regenerator-runtime/runtime';
 
 import Vue from '../lib/third/vue.runtime.min';
-import Index from '../view/Index.vue';
+import View from '../view/Carousel.vue';
 
-Index.el = '#root';
+View.el = '#root';
 // pc触摸事件兼容
 if (!('ontouchend' in document)) {
   const scriptEl = document.createElement('script');
@@ -13,4 +13,4 @@ if (!('ontouchend' in document)) {
   document.head.appendChild(scriptEl);
 }
 
-export default new Vue(Index);
+export default new Vue(View);

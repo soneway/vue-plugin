@@ -44,6 +44,8 @@ module.exports = {
     // 函数必须有返回值
     'consistent-return': 0,
     // 禁止else语句内只有if语句
-    'no-lonely-if': 1
+    'no-lonely-if': 1,
+    // import必须最先
+    'import/first': 0
   }
 };

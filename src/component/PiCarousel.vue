@@ -132,9 +132,7 @@
             /*如.loading元素中还有transform,:before内容将挡不住*/
             z-index: -1;
             /*圆环用border生成*/
-            border-top: $border-width solid rgba($border-color, 0.2);
-            border-right: $border-width solid rgba($border-color, 0.2);
-            border-bottom: $border-width solid rgba($border-color, 0.2);
+            border: $border-width solid rgba($border-color, 0.2);
             border-left: $border-width solid rgba($border-color, 1);
             /*动画*/
             animation: ani_circle 0.8s linear infinite;

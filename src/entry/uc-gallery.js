@@ -1,7 +1,7 @@
 import '../lib/es6/object';
 
 import Vue from '../lib/third/vue.runtime.min';
-import UcGallery from '../view/UcGallery.vue';
+import View from '../view/UcGallery.vue';
 
 // pc触摸事件兼容
 if (!('ontouchend' in document)) {
@@ -10,7 +10,7 @@ if (!('ontouchend' in document)) {
   document.head.appendChild(scriptEl);
 }
 
-UcGallery.el = '.uc-gallery';
+View.el = '.uc-gallery';
 
 // 从html中拿到数据
 const headerEl = document.querySelector('header');
@@ -26,9 +26,9 @@ const dataList = figures.map((item) => {
     desc: item.querySelector('figcaption>p').textContent.trim()
   };
 });
-Object.assign(UcGallery.data || (UcGallery.data = {}), {
+Object.assign(View.data || (View.data = {}), {
   dataList,
   titleInfo
 });
 
-export default new Vue(UcGallery);
+export default new Vue(View);
