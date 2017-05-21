@@ -36,7 +36,7 @@
 
         <div class="pi-pager"
             v-if="isShowPager">
-            <slot name="pager">
+            <slot name="pager" :dataList="dataList">
                 <span v-for="(_, index) in dataList"
                     @click="__pagerClick(index)"
                     :class="{selected: index === currentIndex}"></span>
@@ -202,38 +202,65 @@
         // 禁用动画
         notrans: false,
         // 滑动距离
-        swipSpan: 0
+        swipSpan: 0,
+        // 缓存数据
+        prevData$: null,
+        nextData$: null
       };
     },
     computed: {
-      prevData() {
-        const { dataList } = this;
-        let index = this.currentIndex - 1;
-        // 第一帧前面
-        if (index < 0) {
-          // 不能循环滚动
-          if (!this.isLoop) {
-            return;
+      prevData: {
+        set(data) {
+          this.prevData$ = data;
+        },
+        get() {
+          const { dataList, prevData$ } = this;
+
+          // 是否有缓存数据
+          if (prevData$) {
+            this.prevData$ = null;
+            return prevData$;
           }
-          index = dataList.length - 1;
+
+          let index = this.currentIndex - 1;
+          // 第一帧前面
+          if (index < 0) {
+            // 不能循环滚动
+            if (!this.isLoop) {
+              return;
+            }
+            index = dataList.length - 1;
+          }
+          return dataList[index];
         }
-        return dataList[index];
       },
       currentData() {
         return this.dataList[this.currentIndex];
       },
-      nextData() {
-        const { dataList } = this;
-        let index = this.currentIndex + 1;
-        // 最后一帧后面
-        if (index === dataList.length) {
-          // 不能循环滚动
-          if (!this.isLoop) {
-            return;
+      nextData: {
+        set(data) {
+          this.nextData$ = data;
+        },
+        get() {
+          const { dataList, nextData$ } = this;
+
+          // 是否有缓存数据
+          if (nextData$) {
+            this.nextData$ = null;
+            return nextData$;
           }
-          index = 0;
+
+          let index = this.currentIndex + 1;
+          // 最后一帧后面
+          if (index === dataList.length) {
+            // 不能循环滚动
+            if (!this.isLoop) {
+              return;
+            }
+            index = 0;
+          }
+          return dataList[index];
         }
-        return dataList[index];
       },
       carouselClass() {
         return [
@@ -381,6 +408,8 @@
 
             // index值为undefined
             index === undefined && (index = this.currentIndex - direction);
+
+            // 复位
             setTimeout(() => {
               // 复位(更新内容)
               this.reset(index);
@@ -423,17 +452,18 @@
         if (typeof index !== 'number' || index < 0 || index >= dataList.length || index === currentIndex) {
           return;
         }
+
+        // 滑动方向
         let direction;
-        const data = dataList[index];
         // 向左
         if (index > currentIndex) {
           direction = -1;
-          // this.nextData = data;
+          this.nextData = dataList[index];
         }
         // 向右
         else {
           direction = 1;
-          // this.prevData = data;
+          this.prevData = dataList[index];
         }
         // 滑动操作
         this.slide(direction, index);

@@ -3,9 +3,10 @@
         <pi-carousel ref="carousel"
             :isShowPager="true"
             :isLoop="false"
-            :autoPlayTimeout="0">
+            :autoPlayTimeout="0"
+            :duration="300">
             <!--<template scope="props">-->
-                <!--<div :data="props.index"></div>-->
+            <!--<div :data="props.index"></div>-->
             <!--</template>-->
         </pi-carousel>
     </div>
