@@ -146,7 +146,7 @@
       },
       // 动画时长
       duration: {
-        default: 300
+        default: 400
       },
       // first和last拉不动的比率
       pullRatio: {
