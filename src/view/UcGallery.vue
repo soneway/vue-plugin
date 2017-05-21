@@ -49,13 +49,16 @@
         font-family: sans-serif;
     }
 
-    $height: 42px;
+    /*缩略图高度*/
+    $thumbHeight: 42px;
+
+    /*焦点图*/
     .carouselWrap {
         position: absolute;
         left: 0;
         right: 0;
         top: 0;
-        bottom: $height;
+        bottom: $thumbHeight;
 
         // 复写loading的top位置
         .pi-carousel.loading .pi-item:before {
@@ -129,12 +132,13 @@
         }
     }
 
+    /*缩略图*/
     .thumbWrap {
         position: absolute;
         left: 0;
         right: 0;
         bottom: 0;
-        height: $height;
+        height: $thumbHeight;
         white-space: nowrap;
         overflow-y: hidden;
         overflow-x: auto;
@@ -149,7 +153,6 @@
         &:not(:last-of-type) {
             border-left: 1px solid #fff;
         }
-
         &.selected {
             border: 2px solid #00f;
 
