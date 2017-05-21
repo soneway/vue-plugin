@@ -220,7 +220,7 @@
           this.prevData$ = data;
         },
         get() {
-          const { dataList, prevData$ } = this;
+          const { dataList, prevData$, currentIndex } = this;
 
           // 是否有缓存数据
           if (prevData$) {
@@ -228,7 +228,7 @@
             return prevData$;
           }
 
-          let index = this.currentIndex - 1;
+          let index = currentIndex - 1;
           // 第一帧前面
           if (index < 0) {
             // 不能循环滚动
@@ -248,7 +248,7 @@
           this.nextData$ = data;
         },
         get() {
-          const { dataList, nextData$ } = this;
+          const { dataList, nextData$, currentIndex } = this;
 
           // 是否有缓存数据
           if (nextData$) {
@@ -256,7 +256,7 @@
             return nextData$;
           }
 
-          let index = this.currentIndex + 1;
+          let index = currentIndex + 1;
           // 最后一帧后面
           if (index === dataList.length) {
             // 不能循环滚动
