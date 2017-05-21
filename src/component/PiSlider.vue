@@ -152,8 +152,8 @@
       pullRatio: {
         default: 2
       },
-      // 滚动索引
-      currentIndex: {
+      // 默认滚动索引
+      index: {
         default: 0
       },
       // 是否显示页脚
@@ -176,6 +176,8 @@
         notrans: false,
         // 滑动距离
         swipSpan: 0,
+        // 滚动索引
+        currentIndex: this.index,
         // translate
         currentTranslate: 0
       };
@@ -325,20 +327,20 @@
         }
       },
       __touchend() {
-        const { swipSpan, swipThreshold, items } = this;
+        const { swipSpan, swipThreshold, items, currentIndex } = this;
         const itemCount = items.length;
 
         // 向右,下
         if (swipSpan > swipThreshold) {
           // 非起点
-          if (this.currentIndex !== 0) {
+          if (currentIndex !== 0) {
             --this.currentIndex;
           }
         }
         // 向左,上
         else if (swipSpan < -swipThreshold) {
           // 非终点
-          if (this.currentIndex !== itemCount - 1) {
+          if (currentIndex !== itemCount - 1) {
             ++this.currentIndex;
           }
         }
@@ -380,7 +382,7 @@
               this.currentIndex = 0;
             }
             else {
-              this.currentIndex++;
+              ++this.currentIndex;
             }
           }, autoPlayTimeout);
         }
