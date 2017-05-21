@@ -151,6 +151,9 @@
 </style>
 
 <script>
+  const FORWARD = -1;
+  const BACK = 1;
+
   export default {
     props: {
       // 宽度
@@ -207,8 +210,8 @@
       return {
         // 禁用动画
         notrans: false,
-        // 滑动距离
-        swipSpan: 0,
+        // 滑动值
+        translate: 0,
         // 缓存数据
         prevData$: null,
         nextData$: null
@@ -281,11 +284,8 @@
         };
       },
       wrapStyle() {
-        let { swipSpan } = this;
-        // 兼容像素
-        typeof swipSpan === 'number' && (swipSpan += 'px');
         return {
-          transform: `translate3d(${swipSpan},0,0)`,
+          transform: `translate3d(${this.translate},0,0)`,
           transitionDuration: `${this.duration / 1000}s`
         };
       }
@@ -341,14 +341,15 @@
           if (!this.isLoop) {
             const { currentIndex } = this;
             // 第一张图或最后一张图
-            if (currentIndex === 0 && swipSpanX > 0 || currentIndex === this.dataList.length - 1 && swipSpanX < 0) {
+            if (currentIndex === 0 && swipSpanX > 0 ||
+              currentIndex === this.dataList.length - 1 && swipSpanX < 0) {
               // 模拟拉不动操作体验
               swipSpanX /= this.pullRatio;
             }
           }
 
           // 位移
-          this.swipSpan = swipSpanX;
+          this.translate = `${this.swipSpan = swipSpanX}px`;
           // 已经满足滚动条件,且正在手指拖动
           this.isMoving = true;
         }
@@ -367,10 +368,10 @@
           // 不能循环滚动
           if (!this.isLoop) {
             // 不是最后一帧
-            currentIndex !== this.dataList.length - 1 && (direction = -1);
+            currentIndex !== this.dataList.length - 1 && (direction = FORWARD);
           }
           else {
-            direction = -1;
+            direction = FORWARD;
           }
         }
         // 向右
@@ -378,14 +379,14 @@
           // 不能循环滚动
           if (!this.isLoop) {
             // 不是第一帧
-            currentIndex !== 0 && (direction = 1);
+            currentIndex !== 0 && (direction = BACK);
           }
           else {
-            direction = 1;
+            direction = BACK;
           }
         }
         // 滚动
-        swipSpan !== 0 && this.slide(direction);
+        swipSpan && this.slide(direction);
 
         // 开始定时器
         this.startInter();
@@ -404,13 +405,13 @@
         // 判断滚动方向
         switch (direction) {
           // 向左
-          case -1:
+          case FORWARD:
           // 向右
-          case 1: {
+          case BACK: {
             // 动画状态
             this.isAnimating = true;
             // 作动画
-            this.swipSpan = `${(100 / 3) * direction}%`;
+            this.translate = `${(100 / 3) * direction}%`;
 
             // index值为undefined
             index === undefined && (index = this.currentIndex - direction);
@@ -426,7 +427,7 @@
           }
           // 没有direction值(说明滑动没有超过swipSpanThreshold)
           default: {
-            this.swipSpan = 0;
+            this.translate = 0;
           }
         }
       },
@@ -435,7 +436,7 @@
         // 禁用动画
         this.notrans = true;
         // 复位
-        this.swipSpan = 0;
+        this.translate = 0;
 
         // 计算index
         const count = this.dataList.length;
@@ -463,12 +464,12 @@
         let direction;
         // 向左
         if (index > currentIndex) {
-          direction = -1;
+          direction = FORWARD;
           this.nextData = dataList[index];
         }
         // 向右
         else {
-          direction = 1;
+          direction = BACK;
           this.prevData = dataList[index];
         }
         // 滑动操作
@@ -479,7 +480,7 @@
         const { autoPlayTimeout } = this;
         if (autoPlayTimeout) {
           this.inter = setInterval(() => {
-            this.slide(-1);
+            this.slide(FORWARD);
           }, autoPlayTimeout);
         }
       },
