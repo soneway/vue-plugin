@@ -6,6 +6,7 @@
         @touchmove="__touchmove"
         @touchend="__touchend">
 
+        <!--滚动容器-->
         <div class="pi-wrap"
             :style="wrapStyle"
             @click="__wrapClick">
@@ -37,7 +38,9 @@
                 </slot>
             </div>
         </div>
+        <!--滚动容器 end-->
 
+        <!--页脚-->
         <div class="pi-pager"
             v-if="isShowPager">
             <slot name="pager" :dataList="dataList">
@@ -46,6 +49,7 @@
                     :class="{selected: index === currentIndex}"></span>
             </slot>
         </div>
+        <!--页脚 end-->
     </div>
 </template>
 

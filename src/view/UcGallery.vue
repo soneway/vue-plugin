@@ -1,5 +1,7 @@
 <template>
     <div class="wrapper">
+
+        <!--焦点图容器-->
         <div class="carouselWrap">
             <pi-carousel ref="carousel"
                 :isShowPager="false"
@@ -9,7 +11,9 @@
                     <div class="imgWrap">
                         <img class="img" :src="props.itemData.img" />
                         <div class="imgInfo">
-                            <p class="indicator"><span>{{props.index}}</span>/{{dataList.length}}</p>
+                            <p class="indicator">
+                                <span>{{props.index}}</span>/{{dataList.length}}
+                            </p>
                             <p class="title">{{titleInfo.title}}</p>
                             <p class="subTitle">
                                 <span class="source">{{titleInfo.source}}</span><span class="time">{{titleInfo.time}}</span>
@@ -20,6 +24,9 @@
                 </template>
             </pi-carousel>
         </div>
+        <!--焦点图容器 end-->
+
+        <!--缩略图-->
         <div class="thumbWrap" ref="thumbWrap">
             <div class="thumb" v-for="(item, index) in dataList"
                 :class="{selected: index === thumbIndex}"
@@ -27,6 +34,7 @@
                 @click="thumbClick(index)">
             </div>
         </div>
+        <!--缩略图 end-->
     </div>
 </template>
 
