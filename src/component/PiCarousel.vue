@@ -19,7 +19,7 @@
                     </div>
                 </slot>
             </div>
-            <div class="pi-item">
+            <div class="pi-item" ref="currentItem">
                 <slot v-if="currentData"
                     :itemData="currentData"
                     :index="currentIndex">
@@ -246,6 +246,12 @@
         }
       },
       currentData() {
+        // 重置scrollTop
+        const { currentItem } = this.$refs;
+        if (currentItem) {
+          const wrapEl = currentItem.firstElementChild;
+          wrapEl && (wrapEl.scrollTop = 0);
+        }
         return this.dataList[this.currentIndex];
       },
       nextData: {
