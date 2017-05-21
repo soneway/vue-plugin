@@ -3,13 +3,29 @@
         <div class="carouselWrap">
             <pi-carousel ref="carousel"
                 :isShowPager="false"
-                :isLoop="false"></pi-carousel>
+                :isLoop="false"
+                :currentIndex="thumbIndex">
+                <template scope="props">
+                    <div class="imgWrap">
+                        <img class="img" :src="props.itemData.img" />
+                        <div class="imgInfo">
+                            <p class="indicator"><span>{{props.index}}</span>/{{dataList.length}}</p>
+                            <p class="title">{{titleInfo.title}}</p>
+                            <p class="subTitle">
+                                <span class="source">{{titleInfo.source}}</span><span class="time">{{titleInfo.time}}</span>
+                            </p>
+                            <p class="desc">{{props.itemData.desc}}</p>
+                        </div>
+                    </div>
+                </template>
+            </pi-carousel>
         </div>
         <div class="thumbWrap" ref="thumbWrap">
-            <div class="thumb" v-for="(itemData, index) in dataList"
-                :class="[{selected: index === thumbIndex}]"
-                :style="{backgroundImage: `url(${itemData.img})`}"
-                @click="thumbClick(index)"></div>
+            <div class="thumb" v-for="(item, index) in dataList"
+                :class="{selected: index === thumbIndex}"
+                :style="{backgroundImage: `url(${item.img})`}"
+                @click="thumbClick(index)">
+            </div>
         </div>
     </div>
 </template>
@@ -145,23 +161,11 @@
       PiCarousel
     },
     data: {
-      thumbIndex: 0
+      thumbIndex: 10
     },
     mounted() {
-      const { dataList, titleInfo } = this;
       const carousel = this.$refs.carousel;
-      carousel.contentFormate = (itemData, index) => {
-        return itemData && `<div class="imgWrap">
-                <img class="img" src="${itemData.img}"/>
-                <div class="imgInfo">
-                    <p class="indicator"><span>${index + 1}</span>/${dataList.length}</p>
-                    <p class="title">${titleInfo.title}</p>
-                    <p class="subTitle"><span class="source">${titleInfo.source}</span><span class="time">${titleInfo.time}</span></p>
-                    <p class="desc">${itemData.desc}</p>
-                </div>
-            </div>`;
-      };
-      carousel.dataList = dataList;
+      carousel.dataList = this.dataList;
       carousel.$on('slide', (index) => {
         this.thumbSlide(index);
       });

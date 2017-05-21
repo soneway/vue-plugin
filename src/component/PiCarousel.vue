@@ -10,24 +10,28 @@
             :style="wrapStyle"
             @click="__wrapClick">
             <div class="pi-item">
-                <slot :itemData="prevData">
-                    <div v-show="prevData"
-                        class="img"
+                <slot v-if="prevData"
+                    :itemData="prevData"
+                    :index="currentIndex - 1">
+                    <div class="pi-img"
                         :style="imgStyle(prevData)">
                     </div>
                 </slot>
             </div>
             <div class="pi-item">
-                <slot :itemData="currentData">
-                    <div class="img"
+                <slot v-if="currentData"
+                    :itemData="currentData"
+                    :index="currentIndex">
+                    <div class="pi-img"
                         :style="imgStyle(currentData)">
                     </div>
                 </slot>
             </div>
             <div class="pi-item">
-                <slot :itemData="nextData">
-                    <div v-show="nextData"
-                        class="img"
+                <slot v-if="nextData"
+                    :itemData="nextData"
+                    :index="currentIndex + 1">
+                    <div class="pi-img"
                         :style="imgStyle(nextData)">
                     </div>
                 </slot>
@@ -77,7 +81,7 @@
             flex: 1;
             overflow: hidden;
 
-            .img {
+            .pi-img {
                 background: center center no-repeat;
                 background-size: contain;
                 width: 100%;
