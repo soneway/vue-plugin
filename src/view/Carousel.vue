@@ -2,9 +2,9 @@
     <div class="wrapper">
         <pi-carousel ref="carousel"
             :isShowPager="true"
-            :isLoop="false"
+            :isLoop="true"
             :autoPlayTimeout="0"
-            :duration="300">
+            :duration="400">
         </pi-carousel>
     </div>
 </template>
