@@ -8,10 +8,7 @@
 </template>
 
 <style lang="scss">
-    * {
-        margin: 0;
-        padding: 0;
-    }
+    @import "../lib/base";
 
     .wrapper {
         position: absolute;
@@ -19,6 +16,20 @@
         right: 0;
         top: 0;
         bottom: 0;
+        padding: 20px;
+
+        a {
+            display: inline-block;
+            line-height: 200%;
+            padding: 0 1em;
+            border: 1px solid #09f;
+            color: #09f;
+            border-radius: 0.3em;
+
+            &:active {
+                background: #eee;
+            }
+        }
     }
 </style>
 
