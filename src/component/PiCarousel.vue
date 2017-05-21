@@ -1,14 +1,14 @@
 <template>
     <div class="pi-carousel"
-        :class="carouselClass"
-        :style="carouselStyle"
+        :class="_class"
+        :style="_style"
         @touchstart="__touchstart"
         @touchmove="__touchmove"
         @touchend="__touchend">
 
         <!--滚动容器-->
         <div class="pi-wrap"
-            :style="wrapStyle"
+            :style="_wrapStyle"
             @click="__wrapClick">
             <div class="pi-item">
                 <slot v-if="prevData"
@@ -279,19 +279,19 @@
           return dataList[index];
         }
       },
-      carouselClass() {
+      _class() {
         return [
           { notrans: this.notrans },
           { loading: this.isShowLoading }
         ];
       },
-      carouselStyle() {
+      _style() {
         return {
           width: this.width,
           height: this.height
         };
       },
-      wrapStyle() {
+      _wrapStyle() {
         return {
           transform: `translate3d(${this.currentTranslate},0,0)`,
           transitionDuration: `${this.duration / 1000}s`

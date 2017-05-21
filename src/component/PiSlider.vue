@@ -1,13 +1,13 @@
 <template>
     <div class="pi-slider"
-        :class="sliderClass"
-        :style="sliderStyle"
+        :class="_class"
+        :style="_style"
         @touchstart="__touchstart"
         @touchmove="__touchmove"
         @touchend="__touchend">
 
         <div class="pi-wrap"
-            :style="wrapStyle"
+            :style="_wrapStyle"
             @click="__wrapClick">
             <slot></slot>
         </div>
@@ -186,20 +186,20 @@
       items() {
         return this.$slots.default.filter((item) => item.tag);
       },
-      sliderClass() {
+      _class() {
         return [
           { notrans: this.notrans },
           { loading: this.isShowLoading },
           { horizontal: this.isHorizontal }
         ];
       },
-      sliderStyle() {
+      _style() {
         return {
           width: this.width,
           height: this.height
         };
       },
-      wrapStyle() {
+      _wrapStyle() {
         const { currentTranslate, currentIndex, isHorizontal, $el, items } = this;
         let { swipSpan } = this;
         const itemCount = items.length;
