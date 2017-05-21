@@ -1,9 +1,9 @@
 <template>
     <div class="wrapper">
         <div class="linkWrap">
-            <a @click="__linckClick" data-url="carousel"></a>
-            <a @click="__linckClick" data-url="uc-gallery"></a>
-            <a @click="__linckClick" data-url="slider"></a>
+            <a v-for="item in urls"
+                @click="__linckClick(item)"
+                :class="{selected: item === url}">{{item}}</a>
         </div>
         <iframe :src="`${url}.html`"></iframe>
     </div>
@@ -13,6 +13,7 @@
     * {
         margin: 0;
         padding: 0;
+        box-sizing: border-box;
     }
 
     .wrapper {
@@ -31,10 +32,11 @@
         z-index: 1;
 
         & > a {
+            display: inline-block;
             padding: 0 10px;
 
-            &:before {
-                content: attr(data-url);
+            &.selected {
+                box-shadow: 0 2px 0 0 #09f inset;
             }
         }
     }
@@ -46,13 +48,16 @@
 </style>
 
 <script>
+  const urls = ['carousel', 'uc-gallery', 'slider'];
+
   export default {
     data: {
-      url: 'carousel'
+      url: urls[0],
+      urls
     },
     methods: {
-      __linckClick(evt) {
-        this.url = evt.target.getAttribute('data-url');
+      __linckClick(url) {
+        this.url = url;
       }
     }
   };
