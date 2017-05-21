@@ -1,5 +1,4 @@
-import '../lib/es6/object';
-import 'regenerator-runtime/runtime';
+// import '../lib/es6/object';
 
 import Vue from '../lib/third/vue.runtime.min';
 import View from '../view/Slider.vue';
