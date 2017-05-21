@@ -5,14 +5,13 @@
         <div class="carouselWrap">
             <pi-carousel ref="carousel"
                 :isShowPager="false"
-                :isLoop="false"
-                :currentIndex="thumbIndex">
+                :isLoop="false">
                 <template scope="props">
                     <div class="imgWrap">
                         <img class="img" :src="props.itemData.img" />
                         <div class="imgInfo">
                             <p class="indicator">
-                                <span>{{props.index}}</span>/{{dataList.length}}
+                                <span>{{props.index + 1}}</span>/{{dataList.length}}
                             </p>
                             <p class="title">{{titleInfo.title}}</p>
                             <p class="subTitle">
@@ -169,7 +168,7 @@
       PiCarousel
     },
     data: {
-      thumbIndex: 10
+      thumbIndex: 0
     },
     mounted() {
       const carousel = this.$refs.carousel;
