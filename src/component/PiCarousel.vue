@@ -188,8 +188,8 @@
       isLoop: {
         default: true
       },
-      // 滚动索引
-      currentIndex: {
+      // 默认滚动索引
+      index: {
         default: 0
       },
       // 是否显示页脚
@@ -210,8 +210,10 @@
       return {
         // 禁用动画
         notrans: false,
+        // 滚动索引
+        currentIndex: this.index,
         // 滑动值
-        translate: 0,
+        currentTranslate: 0,
         // 缓存数据
         prevData$: null,
         nextData$: null
@@ -285,7 +287,7 @@
       },
       wrapStyle() {
         return {
-          transform: `translate3d(${this.translate},0,0)`,
+          transform: `translate3d(${this.currentTranslate},0,0)`,
           transitionDuration: `${this.duration / 1000}s`
         };
       }
@@ -349,7 +351,7 @@
           }
 
           // 位移
-          this.translate = `${this.swipSpan = swipSpanX}px`;
+          this.currentTranslate = `${this.swipSpan = swipSpanX}px`;
           // 已经满足滚动条件,且正在手指拖动
           this.isMoving = true;
         }
@@ -411,7 +413,7 @@
             // 动画状态
             this.isAnimating = true;
             // 作动画
-            this.translate = `${(100 / 3) * direction}%`;
+            this.currentTranslate = `${(100 / 3) * direction}%`;
 
             // index值为undefined
             index === undefined && (index = this.currentIndex - direction);
@@ -427,7 +429,7 @@
           }
           // 没有direction值(说明滑动没有超过swipSpanThreshold)
           default: {
-            this.translate = 0;
+            this.currentTranslate = 0;
           }
         }
       },
@@ -436,7 +438,7 @@
         // 禁用动画
         this.notrans = true;
         // 复位
-        this.translate = 0;
+        this.currentTranslate = 0;
 
         // 计算index
         const count = this.dataList.length;

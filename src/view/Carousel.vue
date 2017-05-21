@@ -4,6 +4,7 @@
             :isShowPager="true"
             :isLoop="true"
             :autoPlayTimeout="0"
+            :index="2"
             :duration="400">
         </pi-carousel>
     </div>
