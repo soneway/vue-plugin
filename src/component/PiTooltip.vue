@@ -45,7 +45,8 @@
     data() {
       return {
         msg: '',
-        isShow: false
+        isShow: false,
+        inter: null
       };
     },
     computed: {
@@ -68,7 +69,8 @@
         this.isShow = true;
 
         // 延迟消失
-        setTimeout(() => {
+        clearTimeout(this.inter);
+        this.inter = setTimeout(() => {
           this.isShow = false;
         }, timeout || this.timeout);
       }
