@@ -154,7 +154,7 @@
             border-left: 1px solid #fff;
         }
         &.selected {
-            border: 2px solid #00f;
+            border: 2px solid #06f;
 
             & + .thumb {
                 border: none;
