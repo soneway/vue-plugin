@@ -246,12 +246,6 @@
         }
       },
       currentData() {
-        // 重置scrollTop
-        const { currentItem } = this.$refs;
-        if (currentItem) {
-          const wrapEl = currentItem.firstElementChild;
-          wrapEl && (wrapEl.scrollTop = 0);
-        }
         return this.dataList[this.currentIndex];
       },
       nextData: {
@@ -296,6 +290,16 @@
           transform: `translate3d(${this.currentTranslate},0,0)`,
           transitionDuration: `${this.duration / 1000}s`
         };
+      }
+    },
+    watch: {
+      currentData() {
+        // 重置scrollTop
+        const { currentItem } = this.$refs;
+        if (currentItem) {
+          const wrapEl = currentItem.firstElementChild;
+          wrapEl && (wrapEl.scrollTop = 0);
+        }
       }
     },
     mounted() {
