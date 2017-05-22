@@ -419,7 +419,7 @@
             // 动画状态
             this.isAnimating = true;
             // 作动画
-            this.currentTranslate = `${(100 / 3) * direction}%`;
+            this.currentTranslate = `${this.$el.offsetWidth * direction}px`;
 
             // index值为undefined
             index === undefined && (index = this.currentIndex - direction);
