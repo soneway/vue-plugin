@@ -37,8 +37,6 @@
             opacity: 1;
 
             .pi-box {
-                /*动画*/
-                transition: transform 0.3s ease 0s;
                 transform: none;
             }
         }
@@ -48,9 +46,9 @@
             text-align: center;
             border-radius: 0.8em;
             overflow: hidden;
+            /*动画*/
+            transition: transform 0.3s ease;
             transform: scale3d(1.2, 1.2, 1);
-            /*超过0.3s,隐藏时无缩放动画*/
-            transition-delay: 1s;
         }
 
         .pi-title {
