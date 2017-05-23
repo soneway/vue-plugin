@@ -92,6 +92,9 @@
       },
       btnOkText: {
         default: '确定'
+      },
+      btnOkClick: {
+        default: null
       }
     },
     data() {
@@ -99,7 +102,6 @@
         msg: '',
         title: this.title,
         btnOkText: this.btnOkText,
-        btnOkClick: null,
         visible: false
       };
     },
@@ -115,17 +117,14 @@
         };
       }
     },
-    mounted() {
-    },
     methods: {
       show(opts) {
         // 配置项
         typeof opts === 'string' && (opts = { msg: opts });
-        const { msg, title, btnOkClick } = opts;
-
-        this.msg = msg;
-        title && (this.title = title);
-        this.btnOkClick = btnOkClick;
+        // 读取默认配置
+        const { _props } = this;
+        // 配置项合并
+        Object.assign(this, _props, opts);
         // 显示
         this.visible = true;
       },
