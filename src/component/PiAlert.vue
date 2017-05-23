@@ -72,7 +72,7 @@
             & > a {
                 flex: 1;
 
-                &:hover {
+                &:active {
                     background: #eee;
                 }
             }

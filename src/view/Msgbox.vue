@@ -29,7 +29,7 @@
             color: #09f;
             border-radius: 0.3em;
 
-            &:hover {
+            &:active {
                 background: #eee;
             }
         }
