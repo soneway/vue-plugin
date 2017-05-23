@@ -3,6 +3,9 @@
         <a @click="__alertClick">alert</a>
         <a @click="__confirmClick">confirm</a>
         <a @click="__tooltipClick">tooltip</a>
+
+        <pi-alert ref="alert"></pi-alert>
+        <pi-confirm ref="confirm"></pi-confirm>
         <pi-tooltip ref="tooltip"></pi-tooltip>
     </div>
 </template>
@@ -18,7 +21,7 @@
         bottom: 0;
         padding: 20px;
 
-        a {
+        & > a {
             display: inline-block;
             line-height: 200%;
             padding: 0 1em;
@@ -26,7 +29,7 @@
             color: #09f;
             border-radius: 0.3em;
 
-            &:active {
+            &:hover {
                 background: #eee;
             }
         }
@@ -48,10 +51,17 @@
 
     },
     methods: {
-      __alertClick() {},
+      __alertClick() {
+        this.$refs.alert.show({
+          msg: `哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈${Date.now()}`,
+          btnOkClick: () => {
+            console.log('ok click');
+          }
+        });
+      },
       __confirmClick() {},
       __tooltipClick() {
-        this.$refs.tooltip.show('哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈');
+        this.$refs.tooltip.show(`哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈${Date.now()}`);
       }
     }
   };
