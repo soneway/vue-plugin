@@ -28,8 +28,12 @@
 
     .linkWrap {
         line-height: 40px;
+        height: 40px;
+        overflow-y: hidden;
+        overflow-x: auto;
         box-shadow: 0 1px 3px rgba(#000, 0.3);
         z-index: 1;
+        white-space: nowrap;
 
         & > a {
             display: inline-block;
