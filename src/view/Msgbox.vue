@@ -53,13 +53,27 @@
     methods: {
       __alertClick() {
         this.$refs.alert.show({
-          msg: `哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈${Date.now()}`,
+          msg: `alert哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈${Date.now()}`,
+          title: 'alert title',
           btnOkClick: () => {
-            console.log('ok click');
+            console.log('alert btnOkClick');
           }
         });
       },
-      __confirmClick() {},
+      __confirmClick() {
+        this.$refs.confirm.show({
+          msg: `confirm哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈${Date.now()}`,
+          title: 'confirm title',
+          btnOkText: '好',
+          btnOkClick: () => {
+            console.log('confirm btnOkClick');
+          },
+          btnCancelText: 'cancel',
+          btnCancelClick: () => {
+            console.log('confirm btnCancelClick');
+          }
+        });
+      },
       __tooltipClick() {
         this.$refs.tooltip.show(`哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈${Date.now()}`);
       }
