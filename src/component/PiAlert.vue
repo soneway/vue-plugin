@@ -67,13 +67,14 @@
             box-shadow: 0 0 1px rgba(#000, 0.2);
             color: #08f;
             font-size: 1.15em;
-        }
+            display: flex;
 
-        .pi-btn-ok {
-            display: block;
+            & > a {
+                flex: 1;
 
-            &:hover {
-                background: #eee;
+                &:hover {
+                    background: #eee;
+                }
             }
         }
     }
