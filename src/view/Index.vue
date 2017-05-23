@@ -36,7 +36,7 @@
             padding: 0 10px;
 
             &.selected {
-                box-shadow: 0 2px 0 0 #09f inset;
+                box-shadow: 0 -2px 0 0 #09f inset;
             }
         }
     }
