@@ -45,7 +45,7 @@
     data() {
       return {
         msg: '',
-        isShow: false,
+        visible: false,
         inter: null
       };
     },
@@ -59,19 +59,19 @@
       },
       _class() {
         return [
-          { visible: this.isShow }
+          { visible: this.visible }
         ];
       }
     },
     methods: {
       show(msg, timeout) {
         this.msg = msg;
-        this.isShow = true;
+        this.visible = true;
 
         // 延迟消失
         clearTimeout(this.inter);
         this.inter = setTimeout(() => {
-          this.isShow = false;
+          this.visible = false;
         }, timeout || this.timeout);
       }
     }
