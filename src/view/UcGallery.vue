@@ -38,16 +38,7 @@
 </template>
 
 <style lang="scss">
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        -webkit-overflow-scrolling: touch;
-        font-family: sans-serif;
-    }
+    @import "../lib/base";
 
     /*缩略图高度*/
     $thumbHeight: 42px;

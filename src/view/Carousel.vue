@@ -10,10 +10,7 @@
 </template>
 
 <style lang="scss">
-    * {
-        margin: 0;
-        padding: 0;
-    }
+    @import "../lib/base";
 
     .wrapper {
         position: absolute;
