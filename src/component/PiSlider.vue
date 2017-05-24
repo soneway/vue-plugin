@@ -6,17 +6,24 @@
         @touchmove="__touchmove"
         @touchend="__touchend">
 
+        <!--滚动容器-->
         <div class="pi-wrap"
             :style="_wrapStyle"
             @click="__wrapClick">
             <slot></slot>
         </div>
+        <!--滚动容器 end-->
 
+        <!--页脚-->
         <div class="pi-pager"
-            v-if="isShowPager"
-            v-html="pagerHtml"
-            @click="__pagerClick">
+            v-if="isShowPager">
+            <slot name="pager" :items="items">
+                <span v-for="(_, index) in items"
+                    @click="__pagerClick(index)"
+                    :class="{selected: index === currentIndex}"></span>
+            </slot>
         </div>
+        <!--页脚 end-->
     </div>
 </template>
 
@@ -211,11 +218,6 @@
         }
 
         return style;
-      },
-      pagerHtml() {
-        return [...new Array(this.items.length)]
-          .map((item, index) => `<span ${index === this.currentIndex ? 'class="selected"' : ''} data-index="${index}"></span>`)
-          .join('');
       }
     },
     mounted() {
@@ -319,8 +321,7 @@
         // 开始定时器
         this.startInter();
       },
-      __pagerClick(evt) {
-        const index = +evt.target.getAttribute('data-index');
+      __pagerClick(index) {
         this.slideToIndex(index);
       },
       __wrapClick() {
