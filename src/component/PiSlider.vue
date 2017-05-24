@@ -21,6 +21,8 @@
 </template>
 
 <style lang="scss">
+    @import "../lib/css/loading";
+
     .pi-slider {
         overflow: hidden;
         position: relative;
@@ -32,9 +34,9 @@
             }
         }
         /*loading*/
-        &.loading {
+        &.pi-loading {
             .pi-wrap > * {
-                @extend .pi-loading;
+                @extend .loading;
             }
         }
         /*水平方向*/
@@ -81,41 +83,6 @@
                     border-color: #555;
                 }
             }
-        }
-    }
-
-    /*loading样式*/
-    .pi-loading {
-        &:before {
-            $width: 40px;
-            $border-width: 3px;
-            $border-color: #888;
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: $width;
-            height: $width;
-            margin-left: -$width / 2;
-            margin-top: -$width / 2;
-            border-radius: $width;
-            /*如.loading元素中还有transform,:before内容将挡不住*/
-            z-index: -1;
-            /*圆环用border生成*/
-            border: $border-width solid rgba($border-color, 0.2);
-            border-left: $border-width solid rgba($border-color, 1);
-            /*动画*/
-            animation: ani_circle 0.8s linear infinite;
-        }
-    }
-
-    /*旋转动画*/
-    @keyframes ani_circle {
-        0% {
-            transform: rotateZ(0deg);
-        }
-        100% {
-            transform: rotateZ(360deg);
         }
     }
 </style>
@@ -188,7 +155,7 @@
       _class() {
         return [
           { notrans: this.notrans },
-          { loading: this.isShowLoading },
+          { 'pi-loading': this.isShowLoading },
           { horizontal: this.isHorizontal }
         ];
       },

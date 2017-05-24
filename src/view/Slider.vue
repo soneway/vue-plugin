@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <pi-slider ref="slider"
-            :isHorizontal="true"
+            :isHorizontal="false"
             :autoPlayTimeout="0"
             :index="1"
             :isShowPager="true">
@@ -15,7 +15,7 @@
 </template>
 
 <style lang="scss">
-    @import "../lib/base";
+    @import "../lib/css/base";
 
     .wrapper {
         position: absolute;

@@ -38,7 +38,7 @@
 </template>
 
 <style lang="scss">
-    @import "../lib/base";
+    @import "../lib/css/base";
 
     /*缩略图高度*/
     $thumbHeight: 42px;
@@ -52,7 +52,7 @@
         bottom: $thumbHeight;
 
         // 复写loading的top位置
-        .pi-carousel.loading .pi-item:before {
+        .pi-carousel.pi-loading .pi-item:before {
             top: 100px;
         }
     }
