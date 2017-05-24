@@ -44,7 +44,6 @@
                 flex-direction: row;
 
                 & > * {
-                    float: left;
                     height: 100%;
                 }
             }
@@ -134,7 +133,7 @@
       },
       // 是否水平方向滚动
       isHorizontal: {
-        default: true
+        default: false
       },
       // 滑动距离阈值
       swipSpanThreshold: {
