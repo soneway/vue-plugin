@@ -9,7 +9,8 @@
         <div class="pi-wrap"
             :style="_wrapStyle"
             @click="__wrapClick">
-            <slot></slot>
+            <slot :style="__itemStyle"
+                :currentIndex="currentIndex"></slot>
         </div>
 
         <div class="pi-pager"
@@ -106,10 +107,6 @@
       duration: {
         default: 400
       },
-      // first和last拉不动的比率
-      pullRatio: {
-        default: 2
-      },
       // 默认滚动索引
       index: {
         default: 0
@@ -157,52 +154,12 @@
           height: this.height
         };
       },
-      _wrapStyle() {
-        const { currentTranslate, currentIndex, isHorizontal, $el, items } = this;
-        let { swipSpan } = this;
-        const itemCount = items.length;
-
-        let translate;
-        // touchmove跟手指滚动
-        if (swipSpan) {
-          // 起点或者终点
-          if (currentIndex === 0 && swipSpan > 0 || currentIndex === itemCount - 1 && swipSpan < 0) {
-            // 模拟拉不动的操作体验
-            swipSpan /= this.pullRatio;
-          }
-          translate = currentTranslate + swipSpan;
-        }
-        // touchend时滚动动画
-        else if ($el) {
-          // 计算出滑动值
-          const itemSpan = isHorizontal ? $el.offsetWidth : $el.offsetHeight;
-          translate = this.currentTranslate = -currentIndex * itemSpan;
-
-          // items的状态
-          items.forEach((item, index) => {
-            const itemEl = item.elm;
-            index === currentIndex ? itemEl.setAttribute('current', '') : itemEl.removeAttribute('current');
-          });
-        }
-
-        // 样式对象
-        const style = {
-          transform: `translate3d(${isHorizontal ? `${translate}px,0,0` : `0,${translate}px,0`})`,
-          transitionDuration: `${this.duration / 1000}s`
+      _itemStyle() {
+        let transform;
+        if (1) {}
+        return {
+          transform: `scale3d`
         };
-
-        // 容器的高度或宽度
-        const size = `${itemCount * 100}%`;
-        // 水平方向
-        if (isHorizontal) {
-          style.width = size;
-        }
-        // 竖直方向
-        else {
-          style.height = size;
-        }
-
-        return style;
       },
       pagerHtml() {
         return [...new Array(this.items.length)]

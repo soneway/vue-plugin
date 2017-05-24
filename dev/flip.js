@@ -133,6 +133,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -159,10 +160,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     // 动画时长
     duration: {
       default: 400
-    },
-    // first和last拉不动的比率
-    pullRatio: {
-      default: 2
     },
     // 默认滚动索引
     index: {
@@ -210,57 +207,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         height: this.height
       };
     },
-    _wrapStyle: function _wrapStyle() {
-      var currentTranslate = this.currentTranslate,
-          currentIndex = this.currentIndex,
-          isHorizontal = this.isHorizontal,
-          $el = this.$el,
-          items = this.items;
-      var swipSpan = this.swipSpan;
-
-      var itemCount = items.length;
-
-      var translate = void 0;
-      // touchmove跟手指滚动
-      if (swipSpan) {
-        // 起点或者终点
-        if (currentIndex === 0 && swipSpan > 0 || currentIndex === itemCount - 1 && swipSpan < 0) {
-          // 模拟拉不动的操作体验
-          swipSpan /= this.pullRatio;
-        }
-        translate = currentTranslate + swipSpan;
-      }
-      // touchend时滚动动画
-      else if ($el) {
-          // 计算出滑动值
-          var itemSpan = isHorizontal ? $el.offsetWidth : $el.offsetHeight;
-          translate = this.currentTranslate = -currentIndex * itemSpan;
-
-          // items的状态
-          items.forEach(function (item, index) {
-            var itemEl = item.elm;
-            index === currentIndex ? itemEl.setAttribute('current', '') : itemEl.removeAttribute('current');
-          });
-        }
-
-      // 样式对象
-      var style = {
-        transform: 'translate3d(' + (isHorizontal ? translate + 'px,0,0' : '0,' + translate + 'px,0') + ')',
-        transitionDuration: this.duration / 1000 + 's'
+    _itemStyle: function _itemStyle() {
+      var transform = void 0;
+      if (1) {}
+      return {
+        transform: 'scale3d'
       };
-
-      // 容器的高度或宽度
-      var size = itemCount * 100 + '%';
-      // 水平方向
-      if (isHorizontal) {
-        style.width = size;
-      }
-      // 竖直方向
-      else {
-          style.height = size;
-        }
-
-      return style;
     },
     pagerHtml: function pagerHtml() {
       var _this = this;
@@ -651,7 +603,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.__wrapClick
     }
-  }, [_vm._t("default")], 2), _vm._v(" "), (_vm.isShowPager) ? _c('div', {
+  }, [_vm._t("default", null, {
+    currentIndex: _vm.currentIndex
+  })], 2), _vm._v(" "), (_vm.isShowPager) ? _c('div', {
     staticClass: "pi-pager",
     domProps: {
       "innerHTML": _vm._s(_vm.pagerHtml)

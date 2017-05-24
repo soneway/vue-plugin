@@ -50,8 +50,13 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -269,13 +274,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         }
 
       return style;
-    },
-    pagerHtml: function pagerHtml() {
-      var _this = this;
-
-      return [].concat(_toConsumableArray(new Array(this.items.length))).map(function (item, index) {
-        return '<span ' + (index === _this.currentIndex ? 'class="selected"' : '') + ' data-index="' + index + '"></span>';
-      }).join('');
     }
   },
   mounted: function mounted() {
@@ -288,7 +286,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   methods: {
     // 初始化slots
     initSlots: function initSlots() {
-      var _this2 = this;
+      var _this = this;
 
       var $el = this.$el,
           currentIndex = this.currentIndex;
@@ -303,8 +301,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
         // 计算出初始滑动值
         if (currentIndex > 0) {
-          var itemSpan = _this2.isHorizontal ? $el.offsetWidth : $el.offsetHeight;
-          _this2.currentTranslate = -currentIndex * itemSpan;
+          var itemSpan = _this.isHorizontal ? $el.offsetWidth : $el.offsetHeight;
+          _this.currentTranslate = -currentIndex * itemSpan;
         }
       });
     },
@@ -388,8 +386,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       // 开始定时器
       this.startInter();
     },
-    __pagerClick: function __pagerClick(evt) {
-      var index = +evt.target.getAttribute('data-index');
+    __pagerClick: function __pagerClick(index) {
       this.slideToIndex(index);
     },
     __wrapClick: function __wrapClick() {
@@ -408,7 +405,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
     // 开始定时器
     startInter: function startInter() {
-      var _this3 = this;
+      var _this2 = this;
 
       var autoPlayTimeout = this.autoPlayTimeout;
 
@@ -418,10 +415,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       if (autoPlayTimeout) {
         this.inter = setInterval(function () {
           // 最后一帧
-          if (_this3.currentIndex === itemCount - 1) {
-            _this3.currentIndex = 0;
+          if (_this2.currentIndex === itemCount - 1) {
+            _this2.currentIndex = 0;
           } else {
-            ++_this3.currentIndex;
+            ++_this2.currentIndex;
           }
         }, autoPlayTimeout);
       }
@@ -600,9 +597,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   }, [_c('pi-slider', {
     ref: "slider",
     attrs: {
-      "isHorizontal": false,
+      "isHorizontal": true,
       "autoPlayTimeout": 0,
-      "index": 1,
+      "index": 0,
       "isShowPager": true
     }
   }, [_c('div', {
@@ -662,14 +659,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "click": _vm.__wrapClick
     }
   }, [_vm._t("default")], 2), _vm._v(" "), (_vm.isShowPager) ? _c('div', {
-    staticClass: "pi-pager",
-    domProps: {
-      "innerHTML": _vm._s(_vm.pagerHtml)
-    },
-    on: {
-      "click": _vm.__pagerClick
-    }
-  }) : _vm._e()])
+    staticClass: "pi-pager"
+  }, [_vm._t("pager", _vm._l((_vm.items), function(_, index) {
+    return _c('span', {
+      class: {
+        selected: index === _vm.currentIndex
+      },
+      on: {
+        "click": function($event) {
+          _vm.__pagerClick(index)
+        }
+      }
+    })
+  }), {
+    items: _vm.items
+  })], 2) : _vm._e()])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
