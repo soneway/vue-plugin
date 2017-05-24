@@ -12,12 +12,6 @@
             <slot :style="__itemStyle"
                 :currentIndex="currentIndex"></slot>
         </div>
-
-        <div class="pi-pager"
-            v-if="isShowPager"
-            v-html="pagerHtml"
-            @click="__pagerClick">
-        </div>
     </div>
 </template>
 
@@ -25,8 +19,8 @@
     @import "../lib/css/loading";
 
     .pi-flip {
-        overflow: hidden;
         position: relative;
+        perspective: 1000px;
 
         /*没有动画*/
         &.notrans {
@@ -45,6 +39,7 @@
             width: 100%;
             height: 100%;
             position: relative;
+            transition: all ease;
 
             & > * {
                 position: absolute;
@@ -53,8 +48,7 @@
                 top: 0;
                 bottom: 0;
                 overflow: hidden;
-                opacity: 0;
-                transition: all 0.3s ease;
+                // opacity: 0;
             }
         }
 
@@ -154,11 +148,16 @@
           height: this.height
         };
       },
-      _itemStyle() {
-        let transform;
-        if (1) {}
+      _wrapStyle() {
+        const { swipSpan } = this;
+        let deg = Math.sqrt(Math.abs(swipSpan)) * 5;
+        // 如为负
+        if (swipSpan < 0) {
+          deg = -deg;
+        }
         return {
-          transform: `scale3d`
+          transform: `rotate3d(0, 1, 0, ${deg}deg)`,
+          transitionDuration: `${this.duration / 1000}s`
         };
       },
       pagerHtml() {
