@@ -1,1036 +1,9 @@
-webpackJsonp([1],{
-
-/***/ 10:
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-
-/***/ 11:
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
-    "use strict";
-
-    if (global.setImmediate) {
-        return;
-    }
-
-    var nextHandle = 1; // Spec says greater than zero
-    var tasksByHandle = {};
-    var currentlyRunningATask = false;
-    var doc = global.document;
-    var registerImmediate;
-
-    function setImmediate(callback) {
-      // Callback can either be a function or a string
-      if (typeof callback !== "function") {
-        callback = new Function("" + callback);
-      }
-      // Copy function arguments
-      var args = new Array(arguments.length - 1);
-      for (var i = 0; i < args.length; i++) {
-          args[i] = arguments[i + 1];
-      }
-      // Store and register the task
-      var task = { callback: callback, args: args };
-      tasksByHandle[nextHandle] = task;
-      registerImmediate(nextHandle);
-      return nextHandle++;
-    }
-
-    function clearImmediate(handle) {
-        delete tasksByHandle[handle];
-    }
-
-    function run(task) {
-        var callback = task.callback;
-        var args = task.args;
-        switch (args.length) {
-        case 0:
-            callback();
-            break;
-        case 1:
-            callback(args[0]);
-            break;
-        case 2:
-            callback(args[0], args[1]);
-            break;
-        case 3:
-            callback(args[0], args[1], args[2]);
-            break;
-        default:
-            callback.apply(undefined, args);
-            break;
-        }
-    }
-
-    function runIfPresent(handle) {
-        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
-        // So if we're currently running a task, we'll need to delay this invocation.
-        if (currentlyRunningATask) {
-            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
-            // "too much recursion" error.
-            setTimeout(runIfPresent, 0, handle);
-        } else {
-            var task = tasksByHandle[handle];
-            if (task) {
-                currentlyRunningATask = true;
-                try {
-                    run(task);
-                } finally {
-                    clearImmediate(handle);
-                    currentlyRunningATask = false;
-                }
-            }
-        }
-    }
-
-    function installNextTickImplementation() {
-        registerImmediate = function(handle) {
-            process.nextTick(function () { runIfPresent(handle); });
-        };
-    }
-
-    function canUsePostMessage() {
-        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
-        // where `global.postMessage` means something completely different and can't be used for this purpose.
-        if (global.postMessage && !global.importScripts) {
-            var postMessageIsAsynchronous = true;
-            var oldOnMessage = global.onmessage;
-            global.onmessage = function() {
-                postMessageIsAsynchronous = false;
-            };
-            global.postMessage("", "*");
-            global.onmessage = oldOnMessage;
-            return postMessageIsAsynchronous;
-        }
-    }
-
-    function installPostMessageImplementation() {
-        // Installs an event handler on `global` for the `message` event: see
-        // * https://developer.mozilla.org/en/DOM/window.postMessage
-        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
-
-        var messagePrefix = "setImmediate$" + Math.random() + "$";
-        var onGlobalMessage = function(event) {
-            if (event.source === global &&
-                typeof event.data === "string" &&
-                event.data.indexOf(messagePrefix) === 0) {
-                runIfPresent(+event.data.slice(messagePrefix.length));
-            }
-        };
-
-        if (global.addEventListener) {
-            global.addEventListener("message", onGlobalMessage, false);
-        } else {
-            global.attachEvent("onmessage", onGlobalMessage);
-        }
-
-        registerImmediate = function(handle) {
-            global.postMessage(messagePrefix + handle, "*");
-        };
-    }
-
-    function installMessageChannelImplementation() {
-        var channel = new MessageChannel();
-        channel.port1.onmessage = function(event) {
-            var handle = event.data;
-            runIfPresent(handle);
-        };
-
-        registerImmediate = function(handle) {
-            channel.port2.postMessage(handle);
-        };
-    }
-
-    function installReadyStateChangeImplementation() {
-        var html = doc.documentElement;
-        registerImmediate = function(handle) {
-            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
-            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
-            var script = doc.createElement("script");
-            script.onreadystatechange = function () {
-                runIfPresent(handle);
-                script.onreadystatechange = null;
-                html.removeChild(script);
-                script = null;
-            };
-            html.appendChild(script);
-        };
-    }
-
-    function installSetTimeoutImplementation() {
-        registerImmediate = function(handle) {
-            setTimeout(runIfPresent, 0, handle);
-        };
-    }
-
-    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
-    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
-    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
-
-    // Don't get fooled by e.g. browserify environments.
-    if ({}.toString.call(global.process) === "[object process]") {
-        // For Node.js before 0.9
-        installNextTickImplementation();
-
-    } else if (canUsePostMessage()) {
-        // For non-IE10 modern browsers
-        installPostMessageImplementation();
-
-    } else if (global.MessageChannel) {
-        // For web workers, where supported
-        installMessageChannelImplementation();
-
-    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
-        // For IE 6–8
-        installReadyStateChangeImplementation();
-
-    } else {
-        // For older browsers
-        installSetTimeoutImplementation();
-    }
-
-    attachTo.setImmediate = setImmediate;
-    attachTo.clearImmediate = clearImmediate;
-}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(10)))
-
-/***/ }),
-
-/***/ 12:
-/***/ (function(module, exports, __webpack_require__) {
-
-var apply = Function.prototype.apply;
-
-// DOM APIs, for completeness
-
-exports.setTimeout = function() {
-  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
-};
-exports.setInterval = function() {
-  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
-};
-exports.clearTimeout =
-exports.clearInterval = function(timeout) {
-  if (timeout) {
-    timeout.close();
-  }
-};
-
-function Timeout(id, clearFn) {
-  this._id = id;
-  this._clearFn = clearFn;
-}
-Timeout.prototype.unref = Timeout.prototype.ref = function() {};
-Timeout.prototype.close = function() {
-  this._clearFn.call(window, this._id);
-};
-
-// Does not start the time, just sets up the members needed.
-exports.enroll = function(item, msecs) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = msecs;
-};
-
-exports.unenroll = function(item) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = -1;
-};
-
-exports._unrefActive = exports.active = function(item) {
-  clearTimeout(item._idleTimeoutId);
-
-  var msecs = item._idleTimeout;
-  if (msecs >= 0) {
-    item._idleTimeoutId = setTimeout(function onTimeout() {
-      if (item._onTimeout)
-        item._onTimeout();
-    }, msecs);
-  }
-};
-
-// setimmediate attaches itself to the global object
-__webpack_require__(11);
-exports.setImmediate = setImmediate;
-exports.clearImmediate = clearImmediate;
-
-
-/***/ }),
-
-/***/ 13:
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(15)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(8),
-  /* template */
-  __webpack_require__(14),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/soneway/Sites/github/vue-plugin/src/component/PiCarousel.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] PiCarousel.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d083b4a6", Component.options)
-  } else {
-    hotAPI.reload("data-v-d083b4a6", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ 14:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "pi-carousel",
-    class: _vm._class,
-    style: (_vm._style),
-    on: {
-      "touchstart": _vm.__touchstart,
-      "touchmove": _vm.__touchmove,
-      "touchend": _vm.__touchend
-    }
-  }, [_c('div', {
-    staticClass: "pi-wrap",
-    style: (_vm._wrapStyle),
-    on: {
-      "click": _vm.__wrapClick
-    }
-  }, [_c('div', {
-    staticClass: "pi-item"
-  }, [(_vm.prevData) ? _vm._t("default", [_c('div', {
-    staticClass: "pi-img",
-    style: (_vm.imgStyle(_vm.prevData))
-  })], {
-    itemData: _vm.prevData,
-    index: _vm.currentIndex - 1
-  }) : _vm._e()], 2), _vm._v(" "), _c('div', {
-    ref: "currentItem",
-    staticClass: "pi-item"
-  }, [(_vm.currentData) ? _vm._t("default", [_c('div', {
-    staticClass: "pi-img",
-    style: (_vm.imgStyle(_vm.currentData))
-  })], {
-    itemData: _vm.currentData,
-    index: _vm.currentIndex
-  }) : _vm._e()], 2), _vm._v(" "), _c('div', {
-    staticClass: "pi-item"
-  }, [(_vm.nextData) ? _vm._t("default", [_c('div', {
-    staticClass: "pi-img",
-    style: (_vm.imgStyle(_vm.nextData))
-  })], {
-    itemData: _vm.nextData,
-    index: _vm.currentIndex + 1
-  }) : _vm._e()], 2)]), _vm._v(" "), (_vm.isShowPager) ? _c('div', {
-    staticClass: "pi-pager"
-  }, [_vm._t("pager", _vm._l((_vm.dataList), function(_, index) {
-    return _c('span', {
-      class: {
-        selected: index === _vm.currentIndex
-      },
-      on: {
-        "click": function($event) {
-          _vm.__pagerClick(index)
-        }
-      }
-    })
-  }), {
-    dataList: _vm.dataList
-  })], 2) : _vm._e()])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-d083b4a6", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ 15:
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(9);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("10ca1f40", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d083b4a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCarousel.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d083b4a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCarousel.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ 16:
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(71)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(27),
-  /* template */
-  __webpack_require__(60),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/soneway/Sites/github/vue-plugin/src/view/Carousel.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] Carousel.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-416e0e50", Component.options)
-  } else {
-    hotAPI.reload("data-v-416e0e50", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-
-/***/ 27:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_PiCarousel_vue__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_PiCarousel_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__component_PiCarousel_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_request__ = __webpack_require__(40);
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  components: {
-    PiCarousel: __WEBPACK_IMPORTED_MODULE_0__component_PiCarousel_vue___default.a
-  },
-  mounted: function mounted() {
-    this.initImgs();
-    this.initEvent();
-  },
-
-  methods: {
-    initImgs: function () {
-      var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-        var carousel, imgs;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                carousel = this.$refs.carousel;
-                _context.next = 3;
-                return __WEBPACK_IMPORTED_MODULE_1__lib_request__["a" /* default */].getImgs();
-
-              case 3:
-                imgs = _context.sent;
-
-                if (imgs) {
-                  _context.next = 6;
-                  break;
-                }
-
-                return _context.abrupt('return', console.log('网络请求失败'));
-
-              case 6:
-                carousel.dataList = imgs;
-
-              case 7:
-              case 'end':
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function initImgs() {
-        return _ref.apply(this, arguments);
-      }
-
-      return initImgs;
-    }(),
-    initEvent: function initEvent() {
-      var _this = this;
-
-      var carousel = this.$refs.carousel;
-      carousel.$on('slide', function () {
-        var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(index, direction) {
-          var _carousel$dataList, imgs;
-
-          return regeneratorRuntime.wrap(function _callee2$(_context2) {
-            while (1) {
-              switch (_context2.prev = _context2.next) {
-                case 0:
-                  if (!(index === carousel.dataList.length - 1 && direction === -1)) {
-                    _context2.next = 5;
-                    break;
-                  }
-
-                  _context2.next = 3;
-                  return __WEBPACK_IMPORTED_MODULE_1__lib_request__["a" /* default */].getImgs();
-
-                case 3:
-                  imgs = _context2.sent;
-
-                  imgs.length && (_carousel$dataList = carousel.dataList).push.apply(_carousel$dataList, _toConsumableArray(imgs));
-
-                case 5:
-                case 'end':
-                  return _context2.stop();
-              }
-            }
-          }, _callee2, _this);
-        }));
-
-        return function (_x, _x2) {
-          return _ref2.apply(this, arguments);
-        };
-      }());
-    }
-  }
-});
-
-/***/ }),
-
-/***/ 33:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_es6_object__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_es6_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__lib_es6_object__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_promise_polyfill__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_promise_polyfill___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_promise_polyfill__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_regenerator_runtime_runtime__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_regenerator_runtime_runtime___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_regenerator_runtime_runtime__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_third_vue_runtime_min__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_third_vue_runtime_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__lib_third_vue_runtime_min__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_Carousel_vue__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_Carousel_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__view_Carousel_vue__);
-
-
-
-
-
-
-
-__WEBPACK_IMPORTED_MODULE_4__view_Carousel_vue___default.a.el = '#root';
-// pc触摸事件兼容
-if (!('ontouchend' in document)) {
-  var scriptEl = document.createElement('script');
-  scriptEl.src = 'https://soneway.github.io/js/desktouch.js';
-  document.head.appendChild(scriptEl);
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (new __WEBPACK_IMPORTED_MODULE_3__lib_third_vue_runtime_min___default.a(__WEBPACK_IMPORTED_MODULE_4__view_Carousel_vue___default.a));
-
-/***/ }),
-
-/***/ 39:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-// 获取uid函数
-var getUid = function () {
-  var uid = 0;
-  return function () {
-    return ++uid;
-  };
-}();
-
-// 获取?或者&号
-function getSymbol(url) {
-  return url.indexOf('?') < 0 ? '?' : '&';
-}
-
-// 判断是否为function函数
-function isFunction(fn) {
-  return typeof fn === 'function';
-}
-
-// 加载js函数
-var getScript = function () {
-  var headEl = document.head;
-  var jsReg = /(\.js)$/;
-
-  return function (url, fn) {
-    var isJs = jsReg.test(url);
-    var scriptEl = document.createElement('script');
-
-    // type
-    scriptEl.type = 'text/javascript';
-
-    // onload
-    scriptEl.onload = function () {
-      isFunction(fn) && fn();
-      isJs || headEl.removeChild(scriptEl);
-    };
-
-    // onerror
-    scriptEl.onerror = function (err) {
-      isFunction(fn) && fn(err);
-    };
-
-    // 请求
-    scriptEl.src = url;
-    headEl.appendChild(scriptEl);
-  };
-}();
-
-// get数据函数
-function get(opts) {
-  // 配置项
-  opts = Object.assign({}, get.defaults, opts);
-  var _opts = opts,
-      url = _opts.url,
-      data = _opts.data;
-  // callback可用于统计
-
-  var _opts2 = opts,
-      success = _opts2.success,
-      error = _opts2.error,
-      callback = _opts2.callback;
-
-  // url判断
-
-  if (!url) {
-    return console.error('请求的url不能为空');
-  }
-
-  // 回调函数名
-  var cbName = 'jsonpcb' + getUid();
-
-  // 将回调函数添加到全局变量
-  window[cbName] = function (rs) {
-    // 回调
-    isFunction(success) && success(rs);
-    isFunction(callback) && callback(opts, rs);
-    // 释放回调函数
-    window[cbName] = null;
-  };
-
-  // url中添加callback
-  Object.assign(data || (data = {}), {
-    callback: cbName
-  });
-
-  // 拼接data
-  if (data) {
-    url += getSymbol(url) + Object.keys(data).map(function (item) {
-      return item + '=' + encodeURIComponent(data[item]);
-    }).join('&');
-  }
-
-  // 发起请求
-  getScript(url, function (err) {
-    // js加载出错
-    if (err) {
-      // 回调
-      isFunction(error) && error(err);
-      isFunction(callback) && callback(opts);
-      // 释放回调函数
-      window[cbName] = null;
-    }
-  });
-}
-// get数据默认配置项
-get.defaults = {};
-
-// post数据函数
-var post = function () {
-  // 回调函数对象
-  var msgcb = {};
-  var bodyEl = document.body;
-  // 临时元素
-  var tmpEl = document.createElement('div');
-
-  // 绑定消息事件
-  window.addEventListener('message', function (evt) {
-    var data = evt.data;
-
-    // data转对象
-
-    (typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object' || (data = JSON.parse(data || null) || {});
-
-    // 回调函数
-    var callback = msgcb[data.id];
-    isFunction(callback) && callback(data.rs);
-  });
-
-  return function (opts) {
-    // 配置项
-    opts = Object.assign({}, post.defaults, opts);
-    var _opts3 = opts,
-        success = _opts3.success,
-        error = _opts3.error,
-        callback = _opts3.callback,
-        formSelector = _opts3.formSelector,
-        url = _opts3.url,
-        method = _opts3.method,
-        data = _opts3.data,
-        enctype = _opts3.enctype;
-
-    // iframe元素
-
-    var ifrId = 'postifr' + getUid();
-    tmpEl.innerHTML = '<iframe name="' + ifrId + '" style="display: none;"></iframe>';
-    var ifrEl = tmpEl.childNodes[0];
-    bodyEl.appendChild(ifrEl);
-
-    // form元素
-    var formEl = void 0;
-    // 页面中已存在的form提交
-    if (formSelector) {
-      formEl = document.querySelector(formSelector);
-      // 请求url中添加callback信息
-      var _formEl = formEl,
-          action = _formEl.action;
-
-      formEl.action = action + getSymbol(action) + 'msgcb=' + ifrId;
-    }
-    // 动态生成的form提交
-    else {
-        // 请求url
-        var _action = url + getSymbol(url) + 'msgcb=' + ifrId;
-        // 数据添加到form的input
-        var inputHtml = data && Object.keys(data).map(function (key) {
-          return '<input type="hidden" name="' + key + '" value="' + data[key] + '"/>';
-        }).join('');
-        tmpEl.innerHTML = '<form style="display: none;" method="' + method + '" action="' + _action + '">' + inputHtml + '</form>';
-        formEl = tmpEl.childNodes[0];
-      }
-    // target
-    formEl.target = ifrId;
-    // enctype
-    enctype && (formEl.enctype = enctype);
-
-    // message事件响应函数
-    msgcb[ifrId] = function (rs) {
-      // 回调
-      isFunction(success) && success(rs);
-      isFunction(callback) && callback(opts, rs);
-      // 释放回调函数
-      msgcb[ifrId] = null;
-
-      // 删除节点
-      bodyEl.removeChild(ifrEl);
-      formSelector || bodyEl.removeChild(formEl);
-    };
-
-    // iframe onload事件,主要处理请求失败
-    ifrEl.onload = function () {
-      // 延迟运行
-      setTimeout(function () {
-        // 如果回调还在,说明没有成功回调,即发生错误
-        if (msgcb[ifrId]) {
-          // 回调
-          isFunction(error) && error();
-          isFunction(callback) && callback(opts);
-          // 释放回调函数
-          msgcb[ifrId] = null;
-
-          // 删除节点
-          bodyEl.removeChild(ifrEl);
-          formSelector || bodyEl.removeChild(formEl);
-        }
-      }, 100);
-    };
-
-    // 提交
-    formSelector || bodyEl.appendChild(formEl);
-    formEl.submit();
-  };
-}();
-// post数据默认配置项
-post.defaults = {
-  method: 'POST'
-};
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-  // 加载js函数
-  getScript: getScript,
-  // get数据函数
-  get: get,
-  // post数据函数
-  post: post
-});
-
-/***/ }),
-
-/***/ 4:
+webpackJsonp([1],[
+/* 0 */,
+/* 1 */,
+/* 2 */,
+/* 3 */,
+/* 4 */
 /***/ (function(module, exports) {
 
 // Object.assign
@@ -1046,106 +19,8 @@ if (!Object.assign) {
 }
 
 /***/ }),
-
-/***/ 40:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jsonp__ = __webpack_require__(39);
-
-
-// 获取图片数据
-var getImgs = function () {
-  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-    var rs, articles;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return get('/iflow/api/v1/channel/100?method=new');
-
-          case 2:
-            rs = _context.sent;
-
-            if (rs) {
-              _context.next = 5;
-              break;
-            }
-
-            return _context.abrupt('return');
-
-          case 5:
-            articles = rs.data.articles || {};
-            return _context.abrupt('return', Object.keys(articles).map(function (key) {
-              var images = articles[key].images[0] || {};
-              return images.url;
-            }).filter(function (item) {
-              return !!item;
-            }));
-
-          case 7:
-          case 'end':
-            return _context.stop();
-        }
-      }
-    }, _callee, this);
-  }));
-
-  return function getImgs() {
-    return _ref.apply(this, arguments);
-  };
-}();
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-
-
-var origin = 'https://m.uczzd.cn';
-
-// get请求函数,对应jsonp
-function get(pathname, data) {
-  return new Promise(function (resolve) {
-    __WEBPACK_IMPORTED_MODULE_0__jsonp__["a" /* default */].get({
-      url: origin + pathname,
-      data: data,
-      success: function success(rs) {
-        resolve(rs);
-      },
-      error: function error() {
-        resolve();
-      }
-    });
-  });
-}
-
-// post请求函数
-function post(opts) {}
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-  get: get,
-  post: post,
-  getImgs: getImgs
-});
-
-/***/ }),
-
-/***/ 44:
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, "\n@charset \"UTF-8\";\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\nbody {\n  overflow-x: hidden;\n  /*可继承*/\n  color: #333;\n  font-size: 14px;\n  font-family: helvetica, sans-serif;\n  -webkit-text-size-adjust: none;\n  /*禁止选中文本*/\n  -webkit-user-select: none;\n          user-select: none;\n  /*部分浏览器点选时会有淡蓝色框,这样可以去掉*/\n  -webkit-tap-highlight-color: transparent;\n  /*禁止保存图片*/\n  -webkit-touch-callout: none;\n  /*滚动平滑*/\n  -webkit-overflow-scrolling: touch;\n}\ninput, textarea, select {\n  font-size: inherit;\n}\ninput, textarea {\n  -webkit-user-select: text;\n          user-select: text;\n}\nimg, input {\n  vertical-align: middle;\n}\nimg {\n  border: none;\n}\na {\n  outline: none;\n  color: inherit;\n  text-decoration: none;\n  cursor: pointer;\n}\nli {\n  list-style: none;\n}\ni {\n  font-style: normal;\n}\n.wrapper {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n}\n", "", {"version":3,"sources":["/Users/soneway/Sites/github/vue-plugin/src/view/Carousel.vue"],"names":[],"mappings":";AAAA,iBAAiB;AACjB;EACE,UAAU;EACV,WAAW;EACX,uBAAuB;CAAE;AAE3B;EACE,mBAAmB;EACnB,OAAO;EACP,YAAY;EACZ,gBAAgB;EAChB,mCAAmC;EACnC,+BAA+B;EAC/B,UAAU;EACV,0BAAkB;UAAlB,kBAAkB;EAClB,yBAAyB;EACzB,yCAAyC;EACzC,UAAU;EACV,4BAA4B;EAC5B,QAAQ;EACR,kCAAkC;CAAE;AAEtC;EACE,mBAAmB;CAAE;AAEvB;EACE,0BAAkB;UAAlB,kBAAkB;CAAE;AAEtB;EACE,uBAAuB;CAAE;AAE3B;EACE,aAAa;CAAE;AAEjB;EACE,cAAc;EACd,eAAe;EACf,sBAAsB;EACtB,gBAAgB;CAAE;AAEpB;EACE,iBAAiB;CAAE;AAErB;EACE,mBAAmB;CAAE;AAEvB;EACE,mBAAmB;EACnB,QAAQ;EACR,SAAS;EACT,OAAO;EACP,UAAU;CAAE","file":"Carousel.vue","sourcesContent":["@charset \"UTF-8\";\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nbody {\n  overflow-x: hidden;\n  /*可继承*/\n  color: #333;\n  font-size: 14px;\n  font-family: helvetica, sans-serif;\n  -webkit-text-size-adjust: none;\n  /*禁止选中文本*/\n  user-select: none;\n  /*部分浏览器点选时会有淡蓝色框,这样可以去掉*/\n  -webkit-tap-highlight-color: transparent;\n  /*禁止保存图片*/\n  -webkit-touch-callout: none;\n  /*滚动平滑*/\n  -webkit-overflow-scrolling: touch; }\n\ninput, textarea, select {\n  font-size: inherit; }\n\ninput, textarea {\n  user-select: text; }\n\nimg, input {\n  vertical-align: middle; }\n\nimg {\n  border: none; }\n\na {\n  outline: none;\n  color: inherit;\n  text-decoration: none;\n  cursor: pointer; }\n\nli {\n  list-style: none; }\n\ni {\n  font-style: normal; }\n\n.wrapper {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0; }\n"],"sourceRoot":""}]);
-
-// exports
-
-
-/***/ }),
-
-/***/ 6:
+/* 5 */,
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {(function (root) {
@@ -1385,34 +260,7 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n* {\n  margin: 0;\n  padding: 0;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12).setImmediate))
 
 /***/ }),
-
-/***/ 60:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "wrapper"
-  }, [_c('pi-carousel', {
-    ref: "carousel",
-    attrs: {
-      "isShowPager": true,
-      "isLoop": true,
-      "autoPlayTimeout": 0,
-      "duration": 400
-    }
-  })], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-416e0e50", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ 7:
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -2155,35 +1003,7 @@ if (false) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-
-/***/ 71:
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(44);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("f6dc8a32", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-416e0e50\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Carousel.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-416e0e50\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Carousel.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ 8:
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2688,8 +1508,7 @@ var BACK = 1;
 });
 
 /***/ }),
-
-/***/ 9:
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2702,7 +1521,1211 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/*loading样式*/\n.loading:befo
 // exports
 
 
-/***/ })
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
 
-},[33]);
+// shim for using process in browser
+var process = module.exports = {};
+
+// cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
+(function () {
+    try {
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
+        }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
+    }
+    try {
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
+        }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
+    }
+} ())
+function runTimeout(fun) {
+    if (cachedSetTimeout === setTimeout) {
+        //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
+        return setTimeout(fun, 0);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedSetTimeout(fun, 0);
+    } catch(e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+        } catch(e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+        }
+    }
+
+
+}
+function runClearTimeout(marker) {
+    if (cachedClearTimeout === clearTimeout) {
+        //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
+        return clearTimeout(marker);
+    }
+    try {
+        // when when somebody has screwed with setTimeout but no I.E. maddness
+        return cachedClearTimeout(marker);
+    } catch (e){
+        try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+        } catch (e){
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+        }
+    }
+
+
+
+}
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = runTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        runTimeout(drainQueue);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) { return [] }
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
+    "use strict";
+
+    if (global.setImmediate) {
+        return;
+    }
+
+    var nextHandle = 1; // Spec says greater than zero
+    var tasksByHandle = {};
+    var currentlyRunningATask = false;
+    var doc = global.document;
+    var registerImmediate;
+
+    function setImmediate(callback) {
+      // Callback can either be a function or a string
+      if (typeof callback !== "function") {
+        callback = new Function("" + callback);
+      }
+      // Copy function arguments
+      var args = new Array(arguments.length - 1);
+      for (var i = 0; i < args.length; i++) {
+          args[i] = arguments[i + 1];
+      }
+      // Store and register the task
+      var task = { callback: callback, args: args };
+      tasksByHandle[nextHandle] = task;
+      registerImmediate(nextHandle);
+      return nextHandle++;
+    }
+
+    function clearImmediate(handle) {
+        delete tasksByHandle[handle];
+    }
+
+    function run(task) {
+        var callback = task.callback;
+        var args = task.args;
+        switch (args.length) {
+        case 0:
+            callback();
+            break;
+        case 1:
+            callback(args[0]);
+            break;
+        case 2:
+            callback(args[0], args[1]);
+            break;
+        case 3:
+            callback(args[0], args[1], args[2]);
+            break;
+        default:
+            callback.apply(undefined, args);
+            break;
+        }
+    }
+
+    function runIfPresent(handle) {
+        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
+        // So if we're currently running a task, we'll need to delay this invocation.
+        if (currentlyRunningATask) {
+            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
+            // "too much recursion" error.
+            setTimeout(runIfPresent, 0, handle);
+        } else {
+            var task = tasksByHandle[handle];
+            if (task) {
+                currentlyRunningATask = true;
+                try {
+                    run(task);
+                } finally {
+                    clearImmediate(handle);
+                    currentlyRunningATask = false;
+                }
+            }
+        }
+    }
+
+    function installNextTickImplementation() {
+        registerImmediate = function(handle) {
+            process.nextTick(function () { runIfPresent(handle); });
+        };
+    }
+
+    function canUsePostMessage() {
+        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
+        // where `global.postMessage` means something completely different and can't be used for this purpose.
+        if (global.postMessage && !global.importScripts) {
+            var postMessageIsAsynchronous = true;
+            var oldOnMessage = global.onmessage;
+            global.onmessage = function() {
+                postMessageIsAsynchronous = false;
+            };
+            global.postMessage("", "*");
+            global.onmessage = oldOnMessage;
+            return postMessageIsAsynchronous;
+        }
+    }
+
+    function installPostMessageImplementation() {
+        // Installs an event handler on `global` for the `message` event: see
+        // * https://developer.mozilla.org/en/DOM/window.postMessage
+        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
+
+        var messagePrefix = "setImmediate$" + Math.random() + "$";
+        var onGlobalMessage = function(event) {
+            if (event.source === global &&
+                typeof event.data === "string" &&
+                event.data.indexOf(messagePrefix) === 0) {
+                runIfPresent(+event.data.slice(messagePrefix.length));
+            }
+        };
+
+        if (global.addEventListener) {
+            global.addEventListener("message", onGlobalMessage, false);
+        } else {
+            global.attachEvent("onmessage", onGlobalMessage);
+        }
+
+        registerImmediate = function(handle) {
+            global.postMessage(messagePrefix + handle, "*");
+        };
+    }
+
+    function installMessageChannelImplementation() {
+        var channel = new MessageChannel();
+        channel.port1.onmessage = function(event) {
+            var handle = event.data;
+            runIfPresent(handle);
+        };
+
+        registerImmediate = function(handle) {
+            channel.port2.postMessage(handle);
+        };
+    }
+
+    function installReadyStateChangeImplementation() {
+        var html = doc.documentElement;
+        registerImmediate = function(handle) {
+            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+            var script = doc.createElement("script");
+            script.onreadystatechange = function () {
+                runIfPresent(handle);
+                script.onreadystatechange = null;
+                html.removeChild(script);
+                script = null;
+            };
+            html.appendChild(script);
+        };
+    }
+
+    function installSetTimeoutImplementation() {
+        registerImmediate = function(handle) {
+            setTimeout(runIfPresent, 0, handle);
+        };
+    }
+
+    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
+    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
+    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
+
+    // Don't get fooled by e.g. browserify environments.
+    if ({}.toString.call(global.process) === "[object process]") {
+        // For Node.js before 0.9
+        installNextTickImplementation();
+
+    } else if (canUsePostMessage()) {
+        // For non-IE10 modern browsers
+        installPostMessageImplementation();
+
+    } else if (global.MessageChannel) {
+        // For web workers, where supported
+        installMessageChannelImplementation();
+
+    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
+        // For IE 6–8
+        installReadyStateChangeImplementation();
+
+    } else {
+        // For older browsers
+        installSetTimeoutImplementation();
+    }
+
+    attachTo.setImmediate = setImmediate;
+    attachTo.clearImmediate = clearImmediate;
+}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(10)))
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var apply = Function.prototype.apply;
+
+// DOM APIs, for completeness
+
+exports.setTimeout = function() {
+  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
+};
+exports.setInterval = function() {
+  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
+};
+exports.clearTimeout =
+exports.clearInterval = function(timeout) {
+  if (timeout) {
+    timeout.close();
+  }
+};
+
+function Timeout(id, clearFn) {
+  this._id = id;
+  this._clearFn = clearFn;
+}
+Timeout.prototype.unref = Timeout.prototype.ref = function() {};
+Timeout.prototype.close = function() {
+  this._clearFn.call(window, this._id);
+};
+
+// Does not start the time, just sets up the members needed.
+exports.enroll = function(item, msecs) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = msecs;
+};
+
+exports.unenroll = function(item) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = -1;
+};
+
+exports._unrefActive = exports.active = function(item) {
+  clearTimeout(item._idleTimeoutId);
+
+  var msecs = item._idleTimeout;
+  if (msecs >= 0) {
+    item._idleTimeoutId = setTimeout(function onTimeout() {
+      if (item._onTimeout)
+        item._onTimeout();
+    }, msecs);
+  }
+};
+
+// setimmediate attaches itself to the global object
+__webpack_require__(11);
+exports.setImmediate = setImmediate;
+exports.clearImmediate = clearImmediate;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(15)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(8),
+  /* template */
+  __webpack_require__(14),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/soneway/Sites/github/vue-plugin/src/component/PiCarousel.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] PiCarousel.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-d083b4a6", Component.options)
+  } else {
+    hotAPI.reload("data-v-d083b4a6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "pi-carousel",
+    class: _vm._class,
+    style: (_vm._style),
+    on: {
+      "touchstart": _vm.__touchstart,
+      "touchmove": _vm.__touchmove,
+      "touchend": _vm.__touchend
+    }
+  }, [_c('div', {
+    staticClass: "pi-wrap",
+    style: (_vm._wrapStyle),
+    on: {
+      "click": _vm.__wrapClick
+    }
+  }, [_c('div', {
+    staticClass: "pi-item"
+  }, [(_vm.prevData) ? _vm._t("default", [_c('div', {
+    staticClass: "pi-img",
+    style: (_vm.imgStyle(_vm.prevData))
+  })], {
+    itemData: _vm.prevData,
+    index: _vm.currentIndex - 1
+  }) : _vm._e()], 2), _vm._v(" "), _c('div', {
+    ref: "currentItem",
+    staticClass: "pi-item"
+  }, [(_vm.currentData) ? _vm._t("default", [_c('div', {
+    staticClass: "pi-img",
+    style: (_vm.imgStyle(_vm.currentData))
+  })], {
+    itemData: _vm.currentData,
+    index: _vm.currentIndex
+  }) : _vm._e()], 2), _vm._v(" "), _c('div', {
+    staticClass: "pi-item"
+  }, [(_vm.nextData) ? _vm._t("default", [_c('div', {
+    staticClass: "pi-img",
+    style: (_vm.imgStyle(_vm.nextData))
+  })], {
+    itemData: _vm.nextData,
+    index: _vm.currentIndex + 1
+  }) : _vm._e()], 2)]), _vm._v(" "), (_vm.isShowPager) ? _c('div', {
+    staticClass: "pi-pager"
+  }, [_vm._t("pager", _vm._l((_vm.dataList), function(_, index) {
+    return _c('span', {
+      class: {
+        selected: index === _vm.currentIndex
+      },
+      on: {
+        "click": function($event) {
+          _vm.__pagerClick(index)
+        }
+      }
+    })
+  }), {
+    dataList: _vm.dataList
+  })], 2) : _vm._e()])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-d083b4a6", module.exports)
+  }
+}
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(9);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("10ca1f40", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d083b4a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCarousel.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d083b4a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCarousel.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(61)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(25),
+  /* template */
+  __webpack_require__(52),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/soneway/Sites/github/vue-plugin/src/view/Carousel.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] Carousel.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-416e0e50", Component.options)
+  } else {
+    hotAPI.reload("data-v-416e0e50", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_PiCarousel_vue__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_PiCarousel_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__component_PiCarousel_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_request__ = __webpack_require__(36);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    PiCarousel: __WEBPACK_IMPORTED_MODULE_0__component_PiCarousel_vue___default.a
+  },
+  mounted: function mounted() {
+    this.initImgs();
+    this.initEvent();
+  },
+
+  methods: {
+    initImgs: function () {
+      var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+        var carousel, imgs;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                carousel = this.$refs.carousel;
+                _context.next = 3;
+                return __WEBPACK_IMPORTED_MODULE_1__lib_request__["a" /* default */].getImgs();
+
+              case 3:
+                imgs = _context.sent;
+
+                if (imgs) {
+                  _context.next = 6;
+                  break;
+                }
+
+                return _context.abrupt('return', console.log('网络请求失败'));
+
+              case 6:
+                carousel.dataList = imgs;
+
+              case 7:
+              case 'end':
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function initImgs() {
+        return _ref.apply(this, arguments);
+      }
+
+      return initImgs;
+    }(),
+    initEvent: function initEvent() {
+      var _this = this;
+
+      var carousel = this.$refs.carousel;
+      carousel.$on('slide', function () {
+        var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(index, direction) {
+          var _carousel$dataList, imgs;
+
+          return regeneratorRuntime.wrap(function _callee2$(_context2) {
+            while (1) {
+              switch (_context2.prev = _context2.next) {
+                case 0:
+                  if (!(index === carousel.dataList.length - 1 && direction === -1)) {
+                    _context2.next = 5;
+                    break;
+                  }
+
+                  _context2.next = 3;
+                  return __WEBPACK_IMPORTED_MODULE_1__lib_request__["a" /* default */].getImgs();
+
+                case 3:
+                  imgs = _context2.sent;
+
+                  imgs.length && (_carousel$dataList = carousel.dataList).push.apply(_carousel$dataList, _toConsumableArray(imgs));
+
+                case 5:
+                case 'end':
+                  return _context2.stop();
+              }
+            }
+          }, _callee2, _this);
+        }));
+
+        return function (_x, _x2) {
+          return _ref2.apply(this, arguments);
+        };
+      }());
+    }
+  }
+});
+
+/***/ }),
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_es6_object__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_es6_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__lib_es6_object__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_promise_polyfill__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_promise_polyfill___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_promise_polyfill__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_regenerator_runtime_runtime__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_regenerator_runtime_runtime___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_regenerator_runtime_runtime__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_third_vue_runtime_min__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_third_vue_runtime_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__lib_third_vue_runtime_min__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_Carousel_vue__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__view_Carousel_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__view_Carousel_vue__);
+
+
+
+
+
+
+
+__WEBPACK_IMPORTED_MODULE_4__view_Carousel_vue___default.a.el = '#root';
+// pc触摸事件兼容
+if (!('ontouchend' in document)) {
+  var scriptEl = document.createElement('script');
+  scriptEl.src = 'https://soneway.github.io/js/desktouch.js';
+  document.head.appendChild(scriptEl);
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (new __WEBPACK_IMPORTED_MODULE_3__lib_third_vue_runtime_min___default.a(__WEBPACK_IMPORTED_MODULE_4__view_Carousel_vue___default.a));
+
+/***/ }),
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+// 获取uid函数
+var getUid = function () {
+  var uid = 0;
+  return function () {
+    return ++uid;
+  };
+}();
+
+// 获取?或者&号
+function getSymbol(url) {
+  return url.indexOf('?') < 0 ? '?' : '&';
+}
+
+// 判断是否为function函数
+function isFunction(fn) {
+  return typeof fn === 'function';
+}
+
+// 加载js函数
+var getScript = function () {
+  var headEl = document.head;
+  var jsReg = /(\.js)$/;
+
+  return function (url, fn) {
+    var isJs = jsReg.test(url);
+    var scriptEl = document.createElement('script');
+
+    // type
+    scriptEl.type = 'text/javascript';
+
+    // onload
+    scriptEl.onload = function () {
+      isFunction(fn) && fn();
+      isJs || headEl.removeChild(scriptEl);
+    };
+
+    // onerror
+    scriptEl.onerror = function (err) {
+      isFunction(fn) && fn(err);
+    };
+
+    // 请求
+    scriptEl.src = url;
+    headEl.appendChild(scriptEl);
+  };
+}();
+
+// get数据函数
+function get(opts) {
+  // 配置项
+  opts = Object.assign({}, get.defaults, opts);
+  var _opts = opts,
+      url = _opts.url,
+      data = _opts.data;
+  // callback可用于统计
+
+  var _opts2 = opts,
+      success = _opts2.success,
+      error = _opts2.error,
+      callback = _opts2.callback;
+
+  // url判断
+
+  if (!url) {
+    return console.error('请求的url不能为空');
+  }
+
+  // 回调函数名
+  var cbName = 'jsonpcb' + getUid();
+
+  // 将回调函数添加到全局变量
+  window[cbName] = function (rs) {
+    // 回调
+    isFunction(success) && success(rs);
+    isFunction(callback) && callback(opts, rs);
+    // 释放回调函数
+    window[cbName] = null;
+  };
+
+  // url中添加callback
+  Object.assign(data || (data = {}), {
+    callback: cbName
+  });
+
+  // 拼接data
+  if (data) {
+    url += getSymbol(url) + Object.keys(data).map(function (item) {
+      return item + '=' + encodeURIComponent(data[item]);
+    }).join('&');
+  }
+
+  // 发起请求
+  getScript(url, function (err) {
+    // js加载出错
+    if (err) {
+      // 回调
+      isFunction(error) && error(err);
+      isFunction(callback) && callback(opts);
+      // 释放回调函数
+      window[cbName] = null;
+    }
+  });
+}
+// get数据默认配置项
+get.defaults = {};
+
+// post数据函数
+var post = function () {
+  // 回调函数对象
+  var msgcb = {};
+  var bodyEl = document.body;
+  // 临时元素
+  var tmpEl = document.createElement('div');
+
+  // 绑定消息事件
+  window.addEventListener('message', function (evt) {
+    var data = evt.data;
+
+    // data转对象
+
+    (typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object' || (data = JSON.parse(data || null) || {});
+
+    // 回调函数
+    var callback = msgcb[data.id];
+    isFunction(callback) && callback(data.rs);
+  });
+
+  return function (opts) {
+    // 配置项
+    opts = Object.assign({}, post.defaults, opts);
+    var _opts3 = opts,
+        success = _opts3.success,
+        error = _opts3.error,
+        callback = _opts3.callback,
+        formSelector = _opts3.formSelector,
+        url = _opts3.url,
+        method = _opts3.method,
+        data = _opts3.data,
+        enctype = _opts3.enctype;
+
+    // iframe元素
+
+    var ifrId = 'postifr' + getUid();
+    tmpEl.innerHTML = '<iframe name="' + ifrId + '" style="display: none;"></iframe>';
+    var ifrEl = tmpEl.childNodes[0];
+    bodyEl.appendChild(ifrEl);
+
+    // form元素
+    var formEl = void 0;
+    // 页面中已存在的form提交
+    if (formSelector) {
+      formEl = document.querySelector(formSelector);
+      // 请求url中添加callback信息
+      var _formEl = formEl,
+          action = _formEl.action;
+
+      formEl.action = action + getSymbol(action) + 'msgcb=' + ifrId;
+    }
+    // 动态生成的form提交
+    else {
+        // 请求url
+        var _action = url + getSymbol(url) + 'msgcb=' + ifrId;
+        // 数据添加到form的input
+        var inputHtml = data && Object.keys(data).map(function (key) {
+          return '<input type="hidden" name="' + key + '" value="' + data[key] + '"/>';
+        }).join('');
+        tmpEl.innerHTML = '<form style="display: none;" method="' + method + '" action="' + _action + '">' + inputHtml + '</form>';
+        formEl = tmpEl.childNodes[0];
+      }
+    // target
+    formEl.target = ifrId;
+    // enctype
+    enctype && (formEl.enctype = enctype);
+
+    // message事件响应函数
+    msgcb[ifrId] = function (rs) {
+      // 回调
+      isFunction(success) && success(rs);
+      isFunction(callback) && callback(opts, rs);
+      // 释放回调函数
+      msgcb[ifrId] = null;
+
+      // 删除节点
+      bodyEl.removeChild(ifrEl);
+      formSelector || bodyEl.removeChild(formEl);
+    };
+
+    // iframe onload事件,主要处理请求失败
+    ifrEl.onload = function () {
+      // 延迟运行
+      setTimeout(function () {
+        // 如果回调还在,说明没有成功回调,即发生错误
+        if (msgcb[ifrId]) {
+          // 回调
+          isFunction(error) && error();
+          isFunction(callback) && callback(opts);
+          // 释放回调函数
+          msgcb[ifrId] = null;
+
+          // 删除节点
+          bodyEl.removeChild(ifrEl);
+          formSelector || bodyEl.removeChild(formEl);
+        }
+      }, 100);
+    };
+
+    // 提交
+    formSelector || bodyEl.appendChild(formEl);
+    formEl.submit();
+  };
+}();
+// post数据默认配置项
+post.defaults = {
+  method: 'POST'
+};
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  // 加载js函数
+  getScript: getScript,
+  // get数据函数
+  get: get,
+  // post数据函数
+  post: post
+});
+
+/***/ }),
+/* 36 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jsonp__ = __webpack_require__(35);
+
+
+// 获取图片数据
+var getImgs = function () {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+    var rs, articles;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return get('/iflow/api/v1/channel/100?method=new');
+
+          case 2:
+            rs = _context.sent;
+
+            if (rs) {
+              _context.next = 5;
+              break;
+            }
+
+            return _context.abrupt('return');
+
+          case 5:
+            articles = rs.data.articles || {};
+            return _context.abrupt('return', Object.keys(articles).map(function (key) {
+              var images = articles[key].images[0] || {};
+              return images.url;
+            }).filter(function (item) {
+              return !!item;
+            }));
+
+          case 7:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function getImgs() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+
+
+var origin = 'https://m.uczzd.cn';
+
+// get请求函数,对应jsonp
+function get(pathname, data) {
+  return new Promise(function (resolve) {
+    __WEBPACK_IMPORTED_MODULE_0__jsonp__["a" /* default */].get({
+      url: origin + pathname,
+      data: data,
+      success: function success(rs) {
+        resolve(rs);
+      },
+      error: function error() {
+        resolve();
+      }
+    });
+  });
+}
+
+// post请求函数
+function post(opts) {}
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  get: get,
+  post: post,
+  getImgs: getImgs
+});
+
+/***/ }),
+/* 37 */,
+/* 38 */,
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, "\n@charset \"UTF-8\";\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\nbody {\n  overflow-x: hidden;\n  /*可继承*/\n  color: #333;\n  font-size: 14px;\n  font-family: helvetica, sans-serif;\n  -webkit-text-size-adjust: none;\n  /*禁止选中文本*/\n  -webkit-user-select: none;\n          user-select: none;\n  /*部分浏览器点选时会有淡蓝色框,这样可以去掉*/\n  -webkit-tap-highlight-color: transparent;\n  /*禁止保存图片*/\n  -webkit-touch-callout: none;\n  /*滚动平滑*/\n  -webkit-overflow-scrolling: touch;\n}\ninput, textarea, select {\n  font-size: inherit;\n}\ninput, textarea {\n  -webkit-user-select: text;\n          user-select: text;\n}\nimg, input {\n  vertical-align: middle;\n}\nimg {\n  border: none;\n}\na {\n  outline: none;\n  color: inherit;\n  text-decoration: none;\n  cursor: pointer;\n}\nli {\n  list-style: none;\n}\ni {\n  font-style: normal;\n}\n.wrapper {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n}\n", "", {"version":3,"sources":["/Users/soneway/Sites/github/vue-plugin/src/view/Carousel.vue"],"names":[],"mappings":";AAAA,iBAAiB;AACjB;EACE,UAAU;EACV,WAAW;EACX,uBAAuB;CAAE;AAE3B;EACE,mBAAmB;EACnB,OAAO;EACP,YAAY;EACZ,gBAAgB;EAChB,mCAAmC;EACnC,+BAA+B;EAC/B,UAAU;EACV,0BAAkB;UAAlB,kBAAkB;EAClB,yBAAyB;EACzB,yCAAyC;EACzC,UAAU;EACV,4BAA4B;EAC5B,QAAQ;EACR,kCAAkC;CAAE;AAEtC;EACE,mBAAmB;CAAE;AAEvB;EACE,0BAAkB;UAAlB,kBAAkB;CAAE;AAEtB;EACE,uBAAuB;CAAE;AAE3B;EACE,aAAa;CAAE;AAEjB;EACE,cAAc;EACd,eAAe;EACf,sBAAsB;EACtB,gBAAgB;CAAE;AAEpB;EACE,iBAAiB;CAAE;AAErB;EACE,mBAAmB;CAAE;AAEvB;EACE,mBAAmB;EACnB,QAAQ;EACR,SAAS;EACT,OAAO;EACP,UAAU;CAAE","file":"Carousel.vue","sourcesContent":["@charset \"UTF-8\";\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nbody {\n  overflow-x: hidden;\n  /*可继承*/\n  color: #333;\n  font-size: 14px;\n  font-family: helvetica, sans-serif;\n  -webkit-text-size-adjust: none;\n  /*禁止选中文本*/\n  user-select: none;\n  /*部分浏览器点选时会有淡蓝色框,这样可以去掉*/\n  -webkit-tap-highlight-color: transparent;\n  /*禁止保存图片*/\n  -webkit-touch-callout: none;\n  /*滚动平滑*/\n  -webkit-overflow-scrolling: touch; }\n\ninput, textarea, select {\n  font-size: inherit; }\n\ninput, textarea {\n  user-select: text; }\n\nimg, input {\n  vertical-align: middle; }\n\nimg {\n  border: none; }\n\na {\n  outline: none;\n  color: inherit;\n  text-decoration: none;\n  cursor: pointer; }\n\nli {\n  list-style: none; }\n\ni {\n  font-style: normal; }\n\n.wrapper {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0; }\n"],"sourceRoot":""}]);
+
+// exports
+
+
+/***/ }),
+/* 40 */,
+/* 41 */,
+/* 42 */,
+/* 43 */,
+/* 44 */,
+/* 45 */,
+/* 46 */,
+/* 47 */,
+/* 48 */,
+/* 49 */,
+/* 50 */,
+/* 51 */,
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "wrapper"
+  }, [_c('pi-carousel', {
+    ref: "carousel",
+    attrs: {
+      "isShowPager": true,
+      "isLoop": true,
+      "autoPlayTimeout": 0,
+      "duration": 400
+    }
+  })], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-416e0e50", module.exports)
+  }
+}
+
+/***/ }),
+/* 53 */,
+/* 54 */,
+/* 55 */,
+/* 56 */,
+/* 57 */,
+/* 58 */,
+/* 59 */,
+/* 60 */,
+/* 61 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(39);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("f6dc8a32", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-416e0e50\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Carousel.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-416e0e50\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Carousel.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ })
+],[30]);
 //# sourceMappingURL=carousel.js.map
