@@ -1,3 +1,4 @@
+import '../lib/base';
 import '../lib/es6/object';
 import 'promise-polyfill';
 import 'regenerator-runtime/runtime';
