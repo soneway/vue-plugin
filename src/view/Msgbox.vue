@@ -4,9 +4,9 @@
         <a @click="__confirmClick">confirm</a>
         <a @click="__tooltipClick">tooltip</a>
 
-        <pi-alert ref="alert"></pi-alert>
-        <pi-confirm ref="confirm"></pi-confirm>
-        <pi-tooltip ref="tooltip"></pi-tooltip>
+        <pi-alert ref="alert" :isGlobal="true"></pi-alert>
+        <pi-confirm ref="confirm" :isGlobal="true"></pi-confirm>
+        <pi-tooltip ref="tooltip" :isGlobal="true"></pi-tooltip>
     </div>
 </template>
 

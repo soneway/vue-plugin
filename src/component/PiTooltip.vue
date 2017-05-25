@@ -38,8 +38,13 @@
       width: {
         default: '280px'
       },
+      // 显示时长
       timeout: {
         default: 2000
+      },
+      // 是否添加到全局变量
+      isGlobal: {
+        default: false
       }
     },
     data() {
@@ -62,6 +67,9 @@
           { visible: this.visible }
         ];
       }
+    },
+    mounted() {
+      this.isGlobal && (window.tooltip = this.show);
     },
     methods: {
       show(msg, timeout) {

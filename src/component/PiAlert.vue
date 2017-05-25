@@ -87,14 +87,21 @@
       width: {
         default: '280px'
       },
+      // 标题
       title: {
         default: '提示'
       },
+      // 确定按钮文案
       btnOkText: {
         default: '确定'
       },
+      // 确定按钮点击事件
       btnOkClick: {
         default: null
+      },
+      // 是否添加到全局变量
+      isGlobal: {
+        default: false
       }
     },
     data() {
@@ -117,10 +124,13 @@
         };
       }
     },
+    mounted() {
+      this.isGlobal && (window.alert = this.show);
+    },
     methods: {
       show(opts) {
         // 配置项
-        typeof opts === 'string' && (opts = { msg: opts });
+        typeof opts === 'object' || (opts = { msg: opts });
         // 读取默认配置
         const { _props } = this;
         // 配置项合并

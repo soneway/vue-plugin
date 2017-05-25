@@ -1503,6 +1503,8 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 //
 //
 //
@@ -1592,14 +1594,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     width: {
       default: '280px'
     },
+    // 标题
     title: {
       default: '提示'
     },
+    // 确定按钮文案
     btnOkText: {
       default: '确定'
     },
+    // 确定按钮点击事件
     btnOkClick: {
       default: null
+    },
+    // 是否添加到全局变量
+    isGlobal: {
+      default: false
     }
   },
   data: function data() {
@@ -1621,10 +1630,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
     }
   },
+  mounted: function mounted() {
+    this.isGlobal && (window.alert = this.show);
+  },
+
   methods: {
     show: function show(opts) {
       // 配置项
-      typeof opts === 'string' && (opts = { msg: opts });
+      (typeof opts === 'undefined' ? 'undefined' : _typeof(opts)) === 'object' || (opts = { msg: opts });
       // 读取默认配置
       var _props = this._props;
       // 配置项合并
@@ -1648,6 +1661,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 //
 //
 //
@@ -1749,20 +1764,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     width: {
       default: '280px'
     },
+    // 标题
     title: {
       default: '提示'
     },
+    // 确定按钮文案
     btnOkText: {
       default: '确定'
     },
+    // 确定按钮点击事件
     btnOkClick: {
       default: null
     },
+    // 取消按钮文案
     btnCancelText: {
       default: '取消'
     },
+    // 取消按钮点击事件
     btnCancelClick: {
       default: null
+    },
+    // 是否添加到全局变量
+    isGlobal: {
+      default: false
     }
   },
   data: function data() {
@@ -1785,10 +1809,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       };
     }
   },
+  mounted: function mounted() {
+    this.isGlobal && (window.confirm = this.show);
+  },
+
   methods: {
     show: function show(opts) {
       // 配置项
-      typeof opts === 'string' && (opts = { msg: opts });
+      (typeof opts === 'undefined' ? 'undefined' : _typeof(opts)) === 'object' || (opts = { msg: opts });
       // 读取默认配置
       var _props = this._props;
       // 配置项合并
@@ -1859,8 +1887,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     width: {
       default: '280px'
     },
+    // 显示时长
     timeout: {
       default: 2000
+    },
+    // 是否添加到全局变量
+    isGlobal: {
+      default: false
     }
   },
   data: function data() {
@@ -1884,6 +1917,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return [{ visible: this.visible }];
     }
   },
+  mounted: function mounted() {
+    this.isGlobal && (window.tooltip = this.show);
+  },
+
   methods: {
     show: function show(msg, timeout) {
       var _this = this;
@@ -2284,11 +2321,20 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "click": _vm.__tooltipClick
     }
   }, [_vm._v("tooltip")]), _vm._v(" "), _c('pi-alert', {
-    ref: "alert"
+    ref: "alert",
+    attrs: {
+      "isGlobal": true
+    }
   }), _vm._v(" "), _c('pi-confirm', {
-    ref: "confirm"
+    ref: "confirm",
+    attrs: {
+      "isGlobal": true
+    }
   }), _vm._v(" "), _c('pi-tooltip', {
-    ref: "tooltip"
+    ref: "tooltip",
+    attrs: {
+      "isGlobal": true
+    }
   })], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
