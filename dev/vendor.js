@@ -37,8 +37,6 @@
 /******/ 		5: 0
 /******/ 	};
 /******/
-/******/ 	var resolvedPromise = new Promise(function(resolve) { resolve(); });
-/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/
@@ -67,7 +65,7 @@
 /******/ 	// The chunk loading function for additional chunks
 /******/ 	__webpack_require__.e = function requireEnsure(chunkId) {
 /******/ 		if(installedChunks[chunkId] === 0) {
-/******/ 			return resolvedPromise;
+/******/ 			return Promise.resolve();
 /******/ 		}
 /******/
 /******/ 		// a Promise means "currently loading".
@@ -255,10 +253,7 @@ module.exports = function normalizeComponent (
   if (moduleIdentifier) { // server build
     hook = function (context) {
       // 2.3 injection
-      context =
-        context || // cached call
-        (this.$vnode && this.$vnode.ssrContext) || // stateful
-        (this.parent && this.parent.$vnode && this.parent.$vnode.ssrContext) // functional
+      context = context || (this.$vnode && this.$vnode.ssrContext)
       // 2.2 with runInNewContext: true
       if (!context && typeof __VUE_SSR_CONTEXT__ !== 'undefined') {
         context = __VUE_SSR_CONTEXT__
@@ -280,22 +275,11 @@ module.exports = function normalizeComponent (
   }
 
   if (hook) {
-    var functional = options.functional
-    var existing = functional
-      ? options.render
-      : options.beforeCreate
-    if (!functional) {
-      // inject component registration as beforeCreate hook
-      options.beforeCreate = existing
-        ? [].concat(existing, hook)
-        : [hook]
-    } else {
-      // register for functioal component in vue file
-      options.render = function renderWithStyleInjection (h, context) {
-        hook.call(context)
-        return existing(h, context)
-      }
-    }
+    // inject component registration as beforeCreate hook
+    var existing = options.beforeCreate
+    options.beforeCreate = existing
+      ? [].concat(existing, hook)
+      : [hook]
   }
 
   return {
@@ -304,6 +288,34 @@ module.exports = function normalizeComponent (
     options: options
   }
 }
+
+
+/***/ }),
+
+/***/ 11:
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
 
 
 /***/ }),
@@ -327,7 +339,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(68)
+var listToStyles = __webpack_require__(69)
 
 /*
 type StyleObject = {
@@ -531,6 +543,13 @@ function applyToTag (styleElement, obj) {
 /***/ }),
 
 /***/ 3:
+/***/ (function(module, exports) {
+
+
+
+/***/ }),
+
+/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -2124,39 +2143,11 @@ function applyToTag (styleElement, obj) {
     nr.devtools && br && br.emit("init", ve);
   }, 0), ve;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
 
 /***/ }),
 
-/***/ 5:
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
-/***/ 68:
+/***/ 69:
 /***/ (function(module, exports) {
 
 /**
