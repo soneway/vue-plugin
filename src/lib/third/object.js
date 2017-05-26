@@ -5,7 +5,7 @@ Object.getVal = (obj, path, defaultVal) => {
   // 遍历路径
   const val = paths.reduce((prev, item) => {
     if (prev === undefined || prev === null) {
-      return undefined;
+      return prev;
     }
     return prev[item];
   }, obj);

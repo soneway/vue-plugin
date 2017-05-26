@@ -2194,7 +2194,7 @@ Object.getVal = function (obj, path, defaultVal) {
   // 遍历路径
   var val = paths.reduce(function (prev, item) {
     if (prev === undefined || prev === null) {
-      return undefined;
+      return prev;
     }
     return prev[item];
   }, obj);
