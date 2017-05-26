@@ -15,7 +15,7 @@
 </template>
 
 <style lang="scss">
-    @import "../lib/css/base";
+    @import "../lib/css/common";
 
     .wrapper {
         position: absolute;

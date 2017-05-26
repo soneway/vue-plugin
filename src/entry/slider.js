@@ -1,4 +1,4 @@
-import '../lib/base';
+import '../lib/common';
 
 import Vue from '../lib/third/vue.runtime.min';
 import View from '../view/Slider.vue';

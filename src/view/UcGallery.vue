@@ -38,7 +38,7 @@
 </template>
 
 <style lang="scss">
-    @import "../lib/css/base";
+    @import "../lib/css/common";
 
     /*缩略图高度*/
     $thumbHeight: 42px;

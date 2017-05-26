@@ -1,4 +1,4 @@
-import '../lib/base';
+import '../lib/common';
 import '../lib/es6/object';
 
 import Vue from '../lib/third/vue.runtime.min';
