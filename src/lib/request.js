@@ -1,4 +1,4 @@
-import jsonp from './jsonp';
+import jsonp from './third/jsonp';
 
 const origin = 'https://m.uczzd.cn';
 
