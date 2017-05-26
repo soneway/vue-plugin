@@ -81,6 +81,7 @@
             margin-left: -100%;
             transition: transform ease;
             display: flex;
+            /*虽然是默认值,但不能省略,以确保auto-prefixer插件准确生成兼容安卓4.0的代码*/
             flex-direction: row;
         }
 
