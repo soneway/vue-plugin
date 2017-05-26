@@ -543,8 +543,11 @@ function applyToTag (styleElement, obj) {
 /***/ }),
 
 /***/ 3:
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__third_object__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__third_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__third_object__);
 
 
 /***/ }),
@@ -2178,6 +2181,30 @@ module.exports = function listToStyles (parentId, list) {
   return styles
 }
 
+
+/***/ }),
+
+/***/ 70:
+/***/ (function(module, exports) {
+
+// 根据path安全取对象属性函数
+Object.getVal = function (obj, path, defaultVal) {
+  var paths = path.split('.');
+
+  // 遍历路径
+  var val = paths.reduce(function (prev, item) {
+    if (prev === undefined || prev === null) {
+      return undefined;
+    }
+    return prev[item];
+  }, obj);
+
+  // 如拿到的值为undefined,返回默认值
+  if (val === undefined) {
+    return defaultVal;
+  }
+  return val;
+};
 
 /***/ })
 

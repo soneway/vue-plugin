@@ -2031,7 +2031,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_common__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_common___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__lib_common__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_es6_object__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_es6_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__lib_es6_object__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_promise_polyfill__ = __webpack_require__(13);
@@ -2094,10 +2093,9 @@ var getImgs = function () {
             return _context.abrupt('return');
 
           case 5:
-            articles = rs.data.articles || {};
+            articles = Object.getVal(rs, 'data.articles', {});
             return _context.abrupt('return', Object.keys(articles).map(function (key) {
-              var images = articles[key].images[0] || {};
-              return images.url;
+              return Object.getVal(articles, key + '.images.0.url');
             }).filter(function (item) {
               return !!item;
             }));

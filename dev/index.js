@@ -122,7 +122,6 @@ var urls = ['carousel', 'uc-gallery', 'slider', 'msgbox'];
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_common__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_common___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__lib_common__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_third_vue_runtime_min__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_third_vue_runtime_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__lib_third_vue_runtime_min__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_Index_vue__ = __webpack_require__(16);

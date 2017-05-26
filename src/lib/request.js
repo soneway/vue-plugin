@@ -29,11 +29,8 @@ async function getImgs() {
   if (!rs) {
     return;
   }
-  const articles = rs.data.articles || {};
-  return Object.keys(articles).map((key) => {
-    const images = articles[key].images[0] || {};
-    return images.url;
-  }).filter((item) => !!item);
+  const articles = Object.getVal(rs, 'data.articles', {});
+  return Object.keys(articles).map((key) => Object.getVal(articles, `${key}.images.0.url`)).filter((item) => !!item);
 }
 
 export default {

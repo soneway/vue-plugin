@@ -1,1 +1,1 @@
-
+import './third/object';
