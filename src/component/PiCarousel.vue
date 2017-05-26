@@ -59,6 +59,8 @@
     .pi-carousel {
         overflow: hidden;
         position: relative;
+        /*优化滚动效果*/
+        backface-visibility: hidden;
 
         /*没有动画*/
         &.notrans {
