@@ -44,7 +44,7 @@
         }
 
         .pi-box {
-            background: rgba(#fff, 0.9);
+            background: rgba(#fff, 0.8);
             text-align: center;
             border-radius: 0.8em;
             overflow: hidden;
@@ -55,7 +55,8 @@
 
         .pi-title {
             line-height: 250%;
-            background: rgba(#000, 0.05);
+            background: rgba(#fff, 0.3);
+            box-shadow: 0 0 20px rgba(#000, 0.03);
             font-size: 1.2em;
         }
 
@@ -76,7 +77,7 @@
                 flex: 1;
 
                 &:active {
-                    background: #eee;
+                    background: rgba(#000, 0.04);
                 }
 
                 /*间隔线*/

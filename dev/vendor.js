@@ -339,7 +339,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(69)
+var listToStyles = __webpack_require__(70)
 
 /*
 type StyleObject = {
@@ -546,9 +546,33 @@ function applyToTag (styleElement, obj) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__third_object__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__third_object__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__third_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__third_object__);
 
+
+/***/ }),
+
+/***/ 36:
+/***/ (function(module, exports) {
+
+// 根据path安全取对象属性函数
+Object.getVal = function (obj, path, defaultVal) {
+  var paths = path.split('.');
+
+  // 遍历路径
+  var val = paths.reduce(function (prev, item) {
+    if (prev === undefined || prev === null) {
+      return prev;
+    }
+    return prev[item];
+  }, obj);
+
+  // 如拿到的值为undefined,返回默认值
+  if (val === undefined) {
+    return defaultVal;
+  }
+  return val;
+};
 
 /***/ }),
 
@@ -2150,7 +2174,7 @@ function applyToTag (styleElement, obj) {
 
 /***/ }),
 
-/***/ 69:
+/***/ 70:
 /***/ (function(module, exports) {
 
 /**
@@ -2181,30 +2205,6 @@ module.exports = function listToStyles (parentId, list) {
   return styles
 }
 
-
-/***/ }),
-
-/***/ 70:
-/***/ (function(module, exports) {
-
-// 根据path安全取对象属性函数
-Object.getVal = function (obj, path, defaultVal) {
-  var paths = path.split('.');
-
-  // 遍历路径
-  var val = paths.reduce(function (prev, item) {
-    if (prev === undefined || prev === null) {
-      return prev;
-    }
-    return prev[item];
-  }, obj);
-
-  // 如拿到的值为undefined,返回默认值
-  if (val === undefined) {
-    return defaultVal;
-  }
-  return val;
-};
 
 /***/ })
 
