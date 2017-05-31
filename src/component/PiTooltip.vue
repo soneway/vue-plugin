@@ -17,7 +17,7 @@
         line-height: 120%;
         padding: 0.6em 1em;
         text-align: center;
-        border-radius: 4px;
+        border-radius: 0.5em;
         /*动画*/
         transition: all 0.3s ease;
         z-index: -1;
