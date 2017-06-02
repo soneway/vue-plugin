@@ -5,7 +5,7 @@
       {
         "targets": {
           "browsers": [
-            "ios > 7",
+            "ios >= 7",
             "android  >= 4"
           ]
         }
