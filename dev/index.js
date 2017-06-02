@@ -107,10 +107,13 @@ Object.defineProperty(exports, "__esModule", {
 var urls = ['carousel', 'uc-gallery', 'slider', 'msgbox'];
 
 exports.default = {
-  data: {
-    url: urls[0],
-    urls: urls
+  data: function data() {
+    return {
+      url: urls[0],
+      urls: urls
+    };
   },
+
   methods: {
     __linckClick: function __linckClick(url) {
       this.url = url;

@@ -51,9 +51,11 @@
   const urls = ['carousel', 'uc-gallery', 'slider', 'msgbox'];
 
   export default {
-    data: {
-      url: urls[0],
-      urls
+    data() {
+      return {
+        url: urls[0],
+        urls
+      };
     },
     methods: {
       __linckClick(url) {
