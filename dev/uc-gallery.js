@@ -299,9 +299,9 @@ Object.defineProperty(exports, "__esModule", {
 
 __webpack_require__(3);
 
-var _vue = __webpack_require__(4);
+var _vueRuntime = __webpack_require__(71);
 
-var _vue2 = _interopRequireDefault(_vue);
+var _vueRuntime2 = _interopRequireDefault(_vueRuntime);
 
 var _UcGallery = __webpack_require__(16);
 
@@ -310,7 +310,7 @@ var _UcGallery2 = _interopRequireDefault(_UcGallery);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _UcGallery2.default.el = '.uc-gallery'; // common.js
-exports.default = new _vue2.default(_UcGallery2.default);
+exports.default = new _vueRuntime2.default(_UcGallery2.default);
 
 /***/ }),
 
