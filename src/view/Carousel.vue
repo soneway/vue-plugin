@@ -22,8 +22,6 @@
 </style>
 
 <script>
-  import '../lib/common';
-
   import PiCarousel from '../component/PiCarousel.vue';
   import request from '../lib/request';
 

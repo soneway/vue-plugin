@@ -1,6 +1,6 @@
 webpackJsonp([4],{
 
-/***/ 19:
+/***/ 13:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -8,9 +8,9 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(66)
 }
-var Component = __webpack_require__(2)(
+var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(28),
+  __webpack_require__(22),
   /* template */
   __webpack_require__(57),
   /* styles */
@@ -45,7 +45,7 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 28:
+/***/ 22:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -120,7 +120,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 33:
+/***/ 27:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -130,23 +130,24 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+__webpack_require__(3);
+
 var _vue = __webpack_require__(4);
 
 var _vue2 = _interopRequireDefault(_vue);
 
-var _Index = __webpack_require__(19);
+var _Index = __webpack_require__(13);
 
 var _Index2 = _interopRequireDefault(_Index);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_Index2.default.el = '#root';
-
+_Index2.default.el = '#root'; // common.js
 exports.default = new _vue2.default(_Index2.default);
 
 /***/ }),
 
-/***/ 44:
+/***/ 40:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -202,11 +203,11 @@ if (false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(44);
+var content = __webpack_require__(40);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(3)("75c3f352", content, false);
+var update = __webpack_require__(2)("75c3f352", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -223,5 +224,5 @@ if(false) {
 
 /***/ })
 
-},[33]);
+},[27]);
 //# sourceMappingURL=index.js.map

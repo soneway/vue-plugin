@@ -1,6 +1,6 @@
 // polyfill
 import '../lib/es6/object';
-import 'promise-polyfill';
+import '../lib/es6/promise';
 import 'regenerator-runtime/runtime';
 
 // 扩展Object对象

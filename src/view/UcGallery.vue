@@ -155,8 +155,6 @@
 </style>
 
 <script>
-  import '../lib/common';
-
   import PiCarousel from '../component/PiCarousel.vue';
 
   export default {
