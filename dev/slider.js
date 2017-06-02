@@ -221,7 +221,11 @@ exports.default = {
       });
     },
     _class: function _class() {
-      return [{ notrans: this.notrans }, { 'pi-loading': this.isShowLoading }, { horizontal: this.isHorizontal }];
+      return {
+        notrans: this.notrans,
+        'pi-loading': this.isShowLoading,
+        horizontal: this.isHorizontal
+      };
     },
     _style: function _style() {
       return {
