@@ -5,7 +5,8 @@
         <div class="carouselWrap">
             <pi-carousel ref="carousel"
                 :isShowPager="false"
-                :isLoop="false">
+                :isLoop="false"
+                :dataList="dataList">
                 <template scope="props">
                     <div class="imgWrap">
                         <img class="img" :src="props.itemData.img" />
@@ -30,7 +31,7 @@
             <div class="thumb" v-for="(item, index) in dataList"
                 :class="{selected: index === thumbIndex}"
                 :style="{backgroundImage: `url(${item.img})`}"
-                @click="thumbClick(index)">
+                @click="__thumbClick(index)">
             </div>
         </div>
         <!--缩略图 end-->
@@ -161,17 +162,43 @@
     components: {
       PiCarousel
     },
-    data: {
-      thumbIndex: 0
+    created() {
+      // 从html中拿到数据
+      const headerEl = document.querySelector('header');
+      const titleInfo = {
+        title: headerEl.querySelector('h1').textContent.trim(),
+        source: headerEl.querySelector('#source').textContent.trim(),
+        time: headerEl.querySelector('time').textContent.trim()
+      };
+      const figures = [...document.querySelectorAll('.uc-gallery figure')];
+      const dataList = figures.map((item) => {
+        return {
+          img: item.querySelector('img').getAttribute('alt-src'),
+          desc: item.querySelector('figcaption>p').textContent.trim()
+        };
+      });
+
+      // 将data中的数据覆盖
+      Object.assign(this, {
+        dataList,
+        titleInfo
+      });
+    },
+    data() {
+      return {
+        thumbIndex: 0,
+        dataList: [],
+        titleInfo: {}
+      };
     },
     mounted() {
-      const carousel = this.$refs.carousel;
-      carousel.dataList = this.dataList;
-      carousel.$on('slide', (index) => {
+      // carousel插件滚动事件
+      this.$refs.carousel.$on('slide', (index) => {
         this.thumbSlide(index);
       });
     },
     methods: {
+      // 缩略图滚动
       thumbSlide(index) {
         if (index === this.thumbIndex) {
           return;
@@ -180,9 +207,10 @@
         this.$refs.carousel.slideToIndex(index);
         this.center(index);
       },
-      thumbClick(index) {
+      __thumbClick(index) {
         this.thumbSlide(index);
       },
+      // 缩略图居中
       center(index) {
         const { thumbWrap } = this.$refs;
         const thumbEl = document.querySelector(`.thumb:nth-of-type(${index + 1})`);

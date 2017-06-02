@@ -61,24 +61,208 @@ var _PiCarousel2 = _interopRequireDefault(_PiCarousel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 exports.default = {
   components: {
     PiCarousel: _PiCarousel2.default
   },
-  data: {
-    thumbIndex: 0
+  created: function created() {
+    // 从html中拿到数据
+    var headerEl = document.querySelector('header');
+    var titleInfo = {
+      title: headerEl.querySelector('h1').textContent.trim(),
+      source: headerEl.querySelector('#source').textContent.trim(),
+      time: headerEl.querySelector('time').textContent.trim()
+    };
+    var figures = [].concat(_toConsumableArray(document.querySelectorAll('.uc-gallery figure')));
+    var dataList = figures.map(function (item) {
+      return {
+        img: item.querySelector('img').getAttribute('alt-src'),
+        desc: item.querySelector('figcaption>p').textContent.trim()
+      };
+    });
+
+    // 将data中的数据覆盖
+    Object.assign(this, {
+      dataList: dataList,
+      titleInfo: titleInfo
+    });
+  },
+  data: function data() {
+    return {
+      thumbIndex: 0,
+      dataList: [],
+      titleInfo: {}
+    };
   },
   mounted: function mounted() {
     var _this = this;
 
-    var carousel = this.$refs.carousel;
-    carousel.dataList = this.dataList;
-    carousel.$on('slide', function (index) {
+    // carousel插件滚动事件
+    this.$refs.carousel.$on('slide', function (index) {
       _this.thumbSlide(index);
     });
   },
 
   methods: {
+    // 缩略图滚动
     thumbSlide: function thumbSlide(index) {
       if (index === this.thumbIndex) {
         return;
@@ -87,9 +271,11 @@ exports.default = {
       this.$refs.carousel.slideToIndex(index);
       this.center(index);
     },
-    thumbClick: function thumbClick(index) {
+    __thumbClick: function __thumbClick(index) {
       this.thumbSlide(index);
     },
+
+    // 缩略图居中
     center: function center(index) {
       var thumbWrap = this.$refs.thumbWrap;
 
@@ -97,162 +283,7 @@ exports.default = {
       thumbWrap.scrollLeft = thumbEl.offsetLeft - (thumbWrap.offsetWidth - thumbEl.offsetWidth) / 2;
     }
   }
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+};
 
 /***/ }),
 
@@ -278,28 +309,7 @@ var _UcGallery2 = _interopRequireDefault(_UcGallery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_UcGallery2.default.el = '.uc-gallery';
-
-// 从html中拿到数据
-// common.js
-var headerEl = document.querySelector('header');
-var titleInfo = {
-  title: headerEl.querySelector('h1').textContent.trim(),
-  source: headerEl.querySelector('#source').textContent.trim(),
-  time: headerEl.querySelector('time').textContent.trim()
-};
-var figures = [].slice.call(document.querySelectorAll('.uc-gallery figure'));
-var dataList = figures.map(function (item) {
-  return {
-    img: item.querySelector('img').getAttribute('alt-src'),
-    desc: item.querySelector('figcaption>p').textContent.trim()
-  };
-});
-Object.assign(_UcGallery2.default.data || (_UcGallery2.default.data = {}), {
-  dataList: dataList,
-  titleInfo: titleInfo
-});
-
+_UcGallery2.default.el = '.uc-gallery'; // common.js
 exports.default = new _vue2.default(_UcGallery2.default);
 
 /***/ }),
@@ -859,7 +869,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     ref: "carousel",
     attrs: {
       "isShowPager": false,
-      "isLoop": false
+      "isLoop": false,
+      "dataList": _vm.dataList
     },
     scopedSlots: _vm._u([{
       key: "default",
@@ -902,7 +913,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }),
       on: {
         "click": function($event) {
-          _vm.thumbClick(index)
+          _vm.__thumbClick(index)
         }
       }
     })
