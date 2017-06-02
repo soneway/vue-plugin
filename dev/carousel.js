@@ -1,689 +1,6 @@
 webpackJsonp([1],[
 /* 0 */,
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */
-/***/ (function(module, exports) {
-
-// Object.assign
-if (!Object.assign) {
-  Object.assign = function (obj) {
-    [].slice.call(arguments, 1).forEach(function (item) {
-      Object.keys(item).forEach(function (key) {
-        obj[key] = item[key];
-      });
-    });
-    return obj;
-  };
-}
-
-/***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-var FORWARD = -1;
-var BACK = 1;
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    // 宽度
-    width: {
-      default: '100%'
-    },
-    // 高度
-    height: {
-      default: '100%'
-    },
-    // 列表数据
-    dataList: {
-      default: []
-    },
-    // 滑动距离阈值
-    swipSpanThreshold: {
-      default: 6
-    },
-    // 滑动阈值
-    swipThreshold: {
-      default: 50
-    },
-    // 动画时长
-    duration: {
-      default: 400
-    },
-    // first和last拉不动的比率
-    pullRatio: {
-      default: 2
-    },
-    // 是否循环滚动
-    isLoop: {
-      default: true
-    },
-    // 默认滚动索引
-    index: {
-      default: 0
-    },
-    // 是否显示页脚
-    isShowPager: {
-      default: true
-    },
-    // 是否显示loading
-    isShowLoading: {
-      default: true
-    },
-    // 自动播放间隔
-    autoPlayTimeout: {
-      // 默认为0,表示禁用自动播放
-      default: 0
-    }
-  },
-  data: function data() {
-    return {
-      // 禁用动画
-      notrans: false,
-      // 滚动索引
-      currentIndex: this.index,
-      // 滑动值
-      currentTranslate: 0,
-      // 缓存数据
-      prevData$: null,
-      nextData$: null
-    };
-  },
-
-  computed: {
-    prevData: {
-      set: function set(data) {
-        this.prevData$ = data;
-      },
-      get: function get() {
-        var dataList = this.dataList,
-            prevData$ = this.prevData$,
-            currentIndex = this.currentIndex;
-
-        // 是否有缓存数据
-
-        if (prevData$) {
-          this.prevData$ = null;
-          return prevData$;
-        }
-
-        var index = currentIndex - 1;
-        // 第一帧前面
-        if (index < 0) {
-          // 不能循环滚动
-          if (!this.isLoop) {
-            return;
-          }
-          index = dataList.length - 1;
-        }
-        return dataList[index];
-      }
-    },
-    currentData: function currentData() {
-      return this.dataList[this.currentIndex];
-    },
-
-    nextData: {
-      set: function set(data) {
-        this.nextData$ = data;
-      },
-      get: function get() {
-        var dataList = this.dataList,
-            nextData$ = this.nextData$,
-            currentIndex = this.currentIndex;
-
-        // 是否有缓存数据
-
-        if (nextData$) {
-          this.nextData$ = null;
-          return nextData$;
-        }
-
-        var index = currentIndex + 1;
-        // 最后一帧后面
-        if (index === dataList.length) {
-          // 不能循环滚动
-          if (!this.isLoop) {
-            return;
-          }
-          index = 0;
-        }
-        return dataList[index];
-      }
-    },
-    _class: function _class() {
-      return [{ notrans: this.notrans }, { 'pi-loading': this.isShowLoading }];
-    },
-    _style: function _style() {
-      return {
-        width: this.width,
-        height: this.height
-      };
-    },
-    _wrapStyle: function _wrapStyle() {
-      return {
-        transform: 'translate3d(' + this.currentTranslate + ',0,0)',
-        transitionDuration: this.duration / 1000 + 's'
-      };
-    }
-  },
-  watch: {
-    currentData: function currentData() {
-      // 重置scrollTop
-      var currentItem = this.$refs.currentItem;
-
-      if (currentItem) {
-        var wrapEl = currentItem.firstElementChild;
-        wrapEl && (wrapEl.scrollTop = 0);
-      }
-    }
-  },
-  mounted: function mounted() {
-    this.startInter();
-  },
-
-  methods: {
-    __touchstart: function __touchstart(evt) {
-      // 如果正在作动画,不作响应
-      if (this.isAnimating) {
-        return;
-      }
-
-      var touch = evt.targetTouches ? evt.targetTouches[0] : evt;
-
-      // 记录触摸开始位置
-      this.startX = touch.pageX;
-      this.startY = touch.pageY;
-
-      // 重置swipSpan
-      this.swipSpan = 0;
-      // 重置手指拖拽移动
-      this.isMoving = false;
-      // 禁用动画
-      this.notrans = true;
-
-      // 停止定时器
-      this.stopInter();
-    },
-    __touchmove: function __touchmove(evt) {
-      // 如果正在作动画,不作响应
-      if (this.isAnimating) {
-        evt.preventDefault();
-        evt.stopPropagation();
-        return;
-      }
-
-      var touch = evt.targetTouches ? evt.targetTouches[0] : evt;
-      // x轴滑动距离
-      var swipSpanX = touch.pageX - this.startX;
-      var absX = Math.abs(swipSpanX);
-      // y轴滑动距离
-      var swipSpanY = touch.pageY - this.startY;
-      var absY = Math.abs(swipSpanY);
-
-      // x轴滑动距离大于y轴 y轴滑动距离小于阈值, 说明的确是左右滑动
-      if (this.isMoving || absY < absX || absY < this.swipSpanThreshold) {
-        evt.preventDefault();
-        evt.stopPropagation();
-
-        // 不能循环滚动
-        if (!this.isLoop) {
-          var currentIndex = this.currentIndex;
-          // 第一张图或最后一张图
-
-          if (currentIndex === 0 && swipSpanX > 0 || currentIndex === this.dataList.length - 1 && swipSpanX < 0) {
-            // 模拟拉不动操作体验
-            swipSpanX /= this.pullRatio;
-          }
-        }
-
-        // 位移
-        this.currentTranslate = (this.swipSpan = swipSpanX) + 'px';
-        // 已经满足滚动条件,且正在手指拖动
-        this.isMoving = true;
-      }
-    },
-    __touchend: function __touchend() {
-      // 如果正在作动画,不作响应
-      if (this.isAnimating) {
-        return;
-      }
-
-      var swipSpan = this.swipSpan,
-          swipThreshold = this.swipThreshold,
-          currentIndex = this.currentIndex;
-
-      var direction = void 0;
-
-      // 向左
-      if (swipSpan < -swipThreshold) {
-        // 不能循环滚动
-        if (!this.isLoop) {
-          // 不是最后一帧
-          currentIndex !== this.dataList.length - 1 && (direction = FORWARD);
-        } else {
-          direction = FORWARD;
-        }
-      }
-      // 向右
-      else if (swipSpan > swipThreshold) {
-          // 不能循环滚动
-          if (!this.isLoop) {
-            // 不是第一帧
-            currentIndex !== 0 && (direction = BACK);
-          } else {
-            direction = BACK;
-          }
-        }
-      // 滚动
-      swipSpan && this.slide(direction);
-
-      // 开始定时器
-      this.startInter();
-    },
-    __pagerClick: function __pagerClick(index) {
-      this.slideToIndex(index);
-    },
-    __wrapClick: function __wrapClick() {
-      this.$emit('click', this.currentIndex);
-    },
-
-
-    // 滚动
-    slide: function slide(direction, index) {
-      var _this = this;
-
-      // 开启动画
-      this.notrans = false;
-      // 判断滚动方向
-      switch (direction) {
-        // 向左
-        case FORWARD:
-        // 向右
-        case BACK:
-          {
-            // 动画状态
-            this.isAnimating = true;
-            // 作动画
-            this.currentTranslate = this.$el.offsetWidth * direction + 'px';
-
-            // index值为undefined
-            index === undefined && (index = this.currentIndex - direction);
-
-            // 复位
-            setTimeout(function () {
-              // 复位(更新内容)
-              _this.reset(index);
-              // 触发slide事件
-              _this.$emit('slide', index, direction);
-            }, this.duration);
-            break;
-          }
-        // 没有direction值(说明滑动没有超过swipSpanThreshold)
-        default:
-          {
-            this.currentTranslate = 0;
-          }
-      }
-    },
-
-    // 复位
-    reset: function reset(index) {
-      // 禁用动画
-      this.notrans = true;
-      // 复位
-      this.currentTranslate = 0;
-
-      // 计算index
-      var count = this.dataList.length;
-      if (index < 0) {
-        index = count - 1;
-      }
-      if (index === count) {
-        index = 0;
-      }
-      // 更新index(更新内容)
-      this.currentIndex = index;
-
-      // 重置isAnimating
-      this.isAnimating = false;
-    },
-
-    // 滑动到第几帧
-    slideToIndex: function slideToIndex(index) {
-      var dataList = this.dataList,
-          currentIndex = this.currentIndex;
-      // index不符合条件
-
-      if (typeof index !== 'number' || index < 0 || index >= dataList.length || index === currentIndex) {
-        return;
-      }
-
-      // 滑动方向
-      var direction = void 0;
-      // 向左
-      if (index > currentIndex) {
-        direction = FORWARD;
-        this.nextData = dataList[index];
-      }
-      // 向右
-      else {
-          direction = BACK;
-          this.prevData = dataList[index];
-        }
-      // 滑动操作
-      this.slide(direction, index);
-    },
-
-    // 开始定时器
-    startInter: function startInter() {
-      var _this2 = this;
-
-      var autoPlayTimeout = this.autoPlayTimeout;
-
-      if (autoPlayTimeout) {
-        this.inter = setInterval(function () {
-          _this2.slide(FORWARD);
-        }, autoPlayTimeout);
-      }
-    },
-
-    // 停止定定时器
-    stopInter: function stopInter() {
-      clearInterval(this.inter);
-    },
-
-    // 获取图片样式
-    imgStyle: function imgStyle(data) {
-      return data && { backgroundImage: 'url(' + data + ')' };
-    }
-  }
-});
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/*loading样式*/\n.loading:before, .pi-carousel.pi-loading .pi-item:before {\n  content: '';\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  width: 40px;\n  height: 40px;\n  margin-left: -20px;\n  margin-top: -20px;\n  border-radius: 40px;\n  /*如.loading元素中还有transform,:before内容将挡不住*/\n  z-index: -1;\n  /*圆环用border生成*/\n  border: 3px solid rgba(136, 136, 136, 0.2);\n  border-left: 3px solid #888888;\n  /*动画*/\n  -webkit-animation: ani_circle 0.8s linear infinite;\n          animation: ani_circle 0.8s linear infinite;\n}\n\n/*旋转动画*/\n@-webkit-keyframes ani_circle {\n0% {\n    -webkit-transform: rotateZ(0deg);\n            transform: rotateZ(0deg);\n}\n100% {\n    -webkit-transform: rotateZ(360deg);\n            transform: rotateZ(360deg);\n}\n}\n@keyframes ani_circle {\n0% {\n    -webkit-transform: rotateZ(0deg);\n            transform: rotateZ(0deg);\n}\n100% {\n    -webkit-transform: rotateZ(360deg);\n            transform: rotateZ(360deg);\n}\n}\n.pi-carousel {\n  overflow: hidden;\n  position: relative;\n  /*优化滚动效果*/\n  -webkit-backface-visibility: hidden;\n          backface-visibility: hidden;\n  /*没有动画*/\n  /*loading*/\n}\n.pi-carousel.notrans .pi-wrap {\n    -webkit-transition: none;\n    transition: none;\n}\n.pi-carousel .pi-wrap {\n    width: 300%;\n    height: 100%;\n    margin-left: -100%;\n    -webkit-transition: -webkit-transform ease;\n    transition: -webkit-transform ease;\n    transition: transform ease;\n    transition: transform ease, -webkit-transform ease;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: flex;\n    /*虽然是默认值,但不能省略,以确保auto-prefixer插件准确生成兼容安卓4.0的代码*/\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n            flex-direction: row;\n}\n.pi-carousel .pi-item {\n    height: 100%;\n    -webkit-box-flex: 1;\n    -webkit-flex: 1;\n            flex: 1;\n    overflow: hidden;\n}\n.pi-carousel .pi-item .pi-img {\n      background: center center no-repeat;\n      background-size: contain;\n      width: 100%;\n      height: 100%;\n}\n.pi-carousel .pi-pager {\n    position: absolute;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    text-align: center;\n    font-size: 0;\n    line-height: 20px;\n}\n.pi-carousel .pi-pager > span {\n      border: 3px solid #bbb;\n      border-radius: 50%;\n      margin: 0 2px;\n}\n.pi-carousel .pi-pager > span.selected {\n        border-color: #555;\n}\n", "", {"version":3,"sources":["/./src/component/PiCarousel.vue"],"names":[],"mappings":";AAAA,iBAAiB;AACjB,aAAa;AACb;EACE,YAAY;EACZ,mBAAmB;EACnB,UAAU;EACV,SAAS;EACT,YAAY;EACZ,aAAa;EACb,mBAAmB;EACnB,kBAAkB;EAClB,oBAAoB;EACpB,yCAAyC;EACzC,YAAY;EACZ,eAAe;EACf,2CAA2C;EAC3C,+BAA+B;EAC/B,MAAM;EACN,mDAA2C;UAA3C,2CAA2C;CAAE;;AAE/C,QAAQ;AACR;AACE;IACE,iCAAyB;YAAzB,yBAAyB;CAAE;AAC7B;IACE,mCAA2B;YAA3B,2BAA2B;CAAE;CAAE;AAJnC;AACE;IACE,iCAAyB;YAAzB,yBAAyB;CAAE;AAC7B;IACE,mCAA2B;YAA3B,2BAA2B;CAAE;CAAE;AAEnC;EACE,iBAAiB;EACjB,mBAAmB;EACnB,UAAU;EACV,oCAA4B;UAA5B,4BAA4B;EAC5B,QAAQ;EACR,WAAW;CAAE;AACb;IACE,yBAAiB;IAAjB,iBAAiB;CAAE;AACrB;IACE,YAAY;IACZ,aAAa;IACb,mBAAmB;IACnB,2CAA2B;IAA3B,mCAA2B;IAA3B,2BAA2B;IAA3B,mDAA2B;IAC3B,qBAAc;IAAd,sBAAc;IAAd,cAAc;IACd,iDAAiD;IACjD,+BAAoB;IAApB,8BAAoB;IAApB,4BAAoB;YAApB,oBAAoB;CAAE;AACxB;IACE,aAAa;IACb,oBAAQ;IAAR,gBAAQ;YAAR,QAAQ;IACR,iBAAiB;CAAE;AACnB;MACE,oCAAoC;MACpC,yBAAyB;MACzB,YAAY;MACZ,aAAa;CAAE;AACnB;IACE,mBAAmB;IACnB,QAAQ;IACR,SAAS;IACT,UAAU;IACV,mBAAmB;IACnB,aAAa;IACb,kBAAkB;CAAE;AACpB;MACE,uBAAuB;MACvB,mBAAmB;MACnB,cAAc;CAAE;AAChB;QACE,mBAAmB;CAAE","file":"PiCarousel.vue","sourcesContent":["@charset \"UTF-8\";\n/*loading样式*/\n.loading:before, .pi-carousel.pi-loading .pi-item:before {\n  content: '';\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  width: 40px;\n  height: 40px;\n  margin-left: -20px;\n  margin-top: -20px;\n  border-radius: 40px;\n  /*如.loading元素中还有transform,:before内容将挡不住*/\n  z-index: -1;\n  /*圆环用border生成*/\n  border: 3px solid rgba(136, 136, 136, 0.2);\n  border-left: 3px solid #888888;\n  /*动画*/\n  animation: ani_circle 0.8s linear infinite; }\n\n/*旋转动画*/\n@keyframes ani_circle {\n  0% {\n    transform: rotateZ(0deg); }\n  100% {\n    transform: rotateZ(360deg); } }\n\n.pi-carousel {\n  overflow: hidden;\n  position: relative;\n  /*优化滚动效果*/\n  backface-visibility: hidden;\n  /*没有动画*/\n  /*loading*/ }\n  .pi-carousel.notrans .pi-wrap {\n    transition: none; }\n  .pi-carousel .pi-wrap {\n    width: 300%;\n    height: 100%;\n    margin-left: -100%;\n    transition: transform ease;\n    display: flex;\n    /*虽然是默认值,但不能省略,以确保auto-prefixer插件准确生成兼容安卓4.0的代码*/\n    flex-direction: row; }\n  .pi-carousel .pi-item {\n    height: 100%;\n    flex: 1;\n    overflow: hidden; }\n    .pi-carousel .pi-item .pi-img {\n      background: center center no-repeat;\n      background-size: contain;\n      width: 100%;\n      height: 100%; }\n  .pi-carousel .pi-pager {\n    position: absolute;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    text-align: center;\n    font-size: 0;\n    line-height: 20px; }\n    .pi-carousel .pi-pager > span {\n      border: 3px solid #bbb;\n      border-radius: 50%;\n      margin: 0 2px; }\n      .pi-carousel .pi-pager > span.selected {\n        border-color: #555; }\n"],"sourceRoot":"webpack://"}]);
-
-// exports
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(10)
-}
-var Component = __webpack_require__(1)(
-  /* script */
-  __webpack_require__(6),
-  /* template */
-  __webpack_require__(9),
-  /* styles */
-  injectStyle,
-  /* scopeId */
-  null,
-  /* moduleIdentifier (server only) */
-  null
-)
-Component.options.__file = "/Users/soneway/Sites/github/vue-plugin/src/component/PiCarousel.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] PiCarousel.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d083b4a6", Component.options)
-  } else {
-    hotAPI.reload("data-v-d083b4a6", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "pi-carousel",
-    class: _vm._class,
-    style: (_vm._style),
-    on: {
-      "touchstart": _vm.__touchstart,
-      "touchmove": _vm.__touchmove,
-      "touchend": _vm.__touchend
-    }
-  }, [_c('div', {
-    staticClass: "pi-wrap",
-    style: (_vm._wrapStyle),
-    on: {
-      "click": _vm.__wrapClick
-    }
-  }, [_c('div', {
-    staticClass: "pi-item"
-  }, [(_vm.prevData) ? _vm._t("default", [_c('div', {
-    staticClass: "pi-img",
-    style: (_vm.imgStyle(_vm.prevData))
-  })], {
-    itemData: _vm.prevData,
-    index: _vm.currentIndex - 1
-  }) : _vm._e()], 2), _vm._v(" "), _c('div', {
-    ref: "currentItem",
-    staticClass: "pi-item"
-  }, [(_vm.currentData) ? _vm._t("default", [_c('div', {
-    staticClass: "pi-img",
-    style: (_vm.imgStyle(_vm.currentData))
-  })], {
-    itemData: _vm.currentData,
-    index: _vm.currentIndex
-  }) : _vm._e()], 2), _vm._v(" "), _c('div', {
-    staticClass: "pi-item"
-  }, [(_vm.nextData) ? _vm._t("default", [_c('div', {
-    staticClass: "pi-img",
-    style: (_vm.imgStyle(_vm.nextData))
-  })], {
-    itemData: _vm.nextData,
-    index: _vm.currentIndex + 1
-  }) : _vm._e()], 2)]), _vm._v(" "), (_vm.isShowPager) ? _c('div', {
-    staticClass: "pi-pager"
-  }, [_vm._t("pager", _vm._l((_vm.dataList), function(_, index) {
-    return _c('span', {
-      class: {
-        selected: index === _vm.currentIndex
-      },
-      on: {
-        "click": function($event) {
-          _vm.__pagerClick(index)
-        }
-      }
-    })
-  }), {
-    dataList: _vm.dataList
-  })], 2) : _vm._e()])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-d083b4a6", module.exports)
-  }
-}
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(7);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("10ca1f40", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d083b4a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCarousel.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d083b4a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCarousel.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 11 */,
-/* 12 */
+/* 1 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -873,7 +190,77 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 13 */
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__js_object__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__js_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__js_object__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_es6_object__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_es6_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__lib_es6_object__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_promise_polyfill__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_promise_polyfill___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_promise_polyfill__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_regenerator_runtime_runtime__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_regenerator_runtime_runtime___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_regenerator_runtime_runtime__);
+
+
+// polyfill
+
+
+
+
+// pc触摸事件兼容
+if (!('ontouchend' in document)) {
+  var scriptEl = document.createElement('script');
+  scriptEl.src = 'https://soneway.github.io/js/desktouch.js';
+  document.head.appendChild(scriptEl);
+}
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports) {
+
+// Object.assign
+if (!Object.assign) {
+  Object.assign = function (obj) {
+    [].slice.call(arguments, 1).forEach(function (item) {
+      Object.keys(item).forEach(function (key) {
+        obj[key] = item[key];
+      });
+    });
+    return obj;
+  };
+}
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+// 根据path安全取对象属性函数
+Object.getVal = function (obj, path, defaultVal) {
+  var paths = path.split('.');
+
+  // 遍历路径
+  var val = paths.reduce(function (prev, item) {
+    if (prev === undefined || prev === null) {
+      return prev;
+    }
+    return prev[item];
+  }, obj);
+
+  // 如拿到的值为undefined,返回默认值
+  if (val === undefined) {
+    return defaultVal;
+  }
+  return val;
+};
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(setImmediate) {(function (root) {
@@ -1110,10 +497,10 @@ process.umask = function() { return 0; };
 
 })(this);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(47).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12).setImmediate))
 
 /***/ }),
-/* 14 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {/**
@@ -1840,7 +1227,781 @@ process.umask = function() { return 0; };
   typeof self === "object" ? self : this
 );
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(12)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(1)))
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
+    "use strict";
+
+    if (global.setImmediate) {
+        return;
+    }
+
+    var nextHandle = 1; // Spec says greater than zero
+    var tasksByHandle = {};
+    var currentlyRunningATask = false;
+    var doc = global.document;
+    var registerImmediate;
+
+    function setImmediate(callback) {
+      // Callback can either be a function or a string
+      if (typeof callback !== "function") {
+        callback = new Function("" + callback);
+      }
+      // Copy function arguments
+      var args = new Array(arguments.length - 1);
+      for (var i = 0; i < args.length; i++) {
+          args[i] = arguments[i + 1];
+      }
+      // Store and register the task
+      var task = { callback: callback, args: args };
+      tasksByHandle[nextHandle] = task;
+      registerImmediate(nextHandle);
+      return nextHandle++;
+    }
+
+    function clearImmediate(handle) {
+        delete tasksByHandle[handle];
+    }
+
+    function run(task) {
+        var callback = task.callback;
+        var args = task.args;
+        switch (args.length) {
+        case 0:
+            callback();
+            break;
+        case 1:
+            callback(args[0]);
+            break;
+        case 2:
+            callback(args[0], args[1]);
+            break;
+        case 3:
+            callback(args[0], args[1], args[2]);
+            break;
+        default:
+            callback.apply(undefined, args);
+            break;
+        }
+    }
+
+    function runIfPresent(handle) {
+        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
+        // So if we're currently running a task, we'll need to delay this invocation.
+        if (currentlyRunningATask) {
+            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
+            // "too much recursion" error.
+            setTimeout(runIfPresent, 0, handle);
+        } else {
+            var task = tasksByHandle[handle];
+            if (task) {
+                currentlyRunningATask = true;
+                try {
+                    run(task);
+                } finally {
+                    clearImmediate(handle);
+                    currentlyRunningATask = false;
+                }
+            }
+        }
+    }
+
+    function installNextTickImplementation() {
+        registerImmediate = function(handle) {
+            process.nextTick(function () { runIfPresent(handle); });
+        };
+    }
+
+    function canUsePostMessage() {
+        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
+        // where `global.postMessage` means something completely different and can't be used for this purpose.
+        if (global.postMessage && !global.importScripts) {
+            var postMessageIsAsynchronous = true;
+            var oldOnMessage = global.onmessage;
+            global.onmessage = function() {
+                postMessageIsAsynchronous = false;
+            };
+            global.postMessage("", "*");
+            global.onmessage = oldOnMessage;
+            return postMessageIsAsynchronous;
+        }
+    }
+
+    function installPostMessageImplementation() {
+        // Installs an event handler on `global` for the `message` event: see
+        // * https://developer.mozilla.org/en/DOM/window.postMessage
+        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
+
+        var messagePrefix = "setImmediate$" + Math.random() + "$";
+        var onGlobalMessage = function(event) {
+            if (event.source === global &&
+                typeof event.data === "string" &&
+                event.data.indexOf(messagePrefix) === 0) {
+                runIfPresent(+event.data.slice(messagePrefix.length));
+            }
+        };
+
+        if (global.addEventListener) {
+            global.addEventListener("message", onGlobalMessage, false);
+        } else {
+            global.attachEvent("onmessage", onGlobalMessage);
+        }
+
+        registerImmediate = function(handle) {
+            global.postMessage(messagePrefix + handle, "*");
+        };
+    }
+
+    function installMessageChannelImplementation() {
+        var channel = new MessageChannel();
+        channel.port1.onmessage = function(event) {
+            var handle = event.data;
+            runIfPresent(handle);
+        };
+
+        registerImmediate = function(handle) {
+            channel.port2.postMessage(handle);
+        };
+    }
+
+    function installReadyStateChangeImplementation() {
+        var html = doc.documentElement;
+        registerImmediate = function(handle) {
+            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+            var script = doc.createElement("script");
+            script.onreadystatechange = function () {
+                runIfPresent(handle);
+                script.onreadystatechange = null;
+                html.removeChild(script);
+                script = null;
+            };
+            html.appendChild(script);
+        };
+    }
+
+    function installSetTimeoutImplementation() {
+        registerImmediate = function(handle) {
+            setTimeout(runIfPresent, 0, handle);
+        };
+    }
+
+    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
+    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
+    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
+
+    // Don't get fooled by e.g. browserify environments.
+    if ({}.toString.call(global.process) === "[object process]") {
+        // For Node.js before 0.9
+        installNextTickImplementation();
+
+    } else if (canUsePostMessage()) {
+        // For non-IE10 modern browsers
+        installPostMessageImplementation();
+
+    } else if (global.MessageChannel) {
+        // For web workers, where supported
+        installMessageChannelImplementation();
+
+    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
+        // For IE 6–8
+        installReadyStateChangeImplementation();
+
+    } else {
+        // For older browsers
+        installSetTimeoutImplementation();
+    }
+
+    attachTo.setImmediate = setImmediate;
+    attachTo.clearImmediate = clearImmediate;
+}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5), __webpack_require__(1)))
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var apply = Function.prototype.apply;
+
+// DOM APIs, for completeness
+
+exports.setTimeout = function() {
+  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
+};
+exports.setInterval = function() {
+  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
+};
+exports.clearTimeout =
+exports.clearInterval = function(timeout) {
+  if (timeout) {
+    timeout.close();
+  }
+};
+
+function Timeout(id, clearFn) {
+  this._id = id;
+  this._clearFn = clearFn;
+}
+Timeout.prototype.unref = Timeout.prototype.ref = function() {};
+Timeout.prototype.close = function() {
+  this._clearFn.call(window, this._id);
+};
+
+// Does not start the time, just sets up the members needed.
+exports.enroll = function(item, msecs) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = msecs;
+};
+
+exports.unenroll = function(item) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = -1;
+};
+
+exports._unrefActive = exports.active = function(item) {
+  clearTimeout(item._idleTimeoutId);
+
+  var msecs = item._idleTimeout;
+  if (msecs >= 0) {
+    item._idleTimeoutId = setTimeout(function onTimeout() {
+      if (item._onTimeout)
+        item._onTimeout();
+    }, msecs);
+  }
+};
+
+// setimmediate attaches itself to the global object
+__webpack_require__(11);
+exports.setImmediate = setImmediate;
+exports.clearImmediate = clearImmediate;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var FORWARD = -1;
+var BACK = 1;
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    // 宽度
+    width: {
+      default: '100%'
+    },
+    // 高度
+    height: {
+      default: '100%'
+    },
+    // 列表数据
+    dataList: {
+      default: []
+    },
+    // 滑动距离阈值
+    swipSpanThreshold: {
+      default: 6
+    },
+    // 滑动阈值
+    swipThreshold: {
+      default: 50
+    },
+    // 动画时长
+    duration: {
+      default: 400
+    },
+    // first和last拉不动的比率
+    pullRatio: {
+      default: 2
+    },
+    // 是否循环滚动
+    isLoop: {
+      default: true
+    },
+    // 默认滚动索引
+    index: {
+      default: 0
+    },
+    // 是否显示页脚
+    isShowPager: {
+      default: true
+    },
+    // 是否显示loading
+    isShowLoading: {
+      default: true
+    },
+    // 自动播放间隔
+    autoPlayTimeout: {
+      // 默认为0,表示禁用自动播放
+      default: 0
+    }
+  },
+  data: function data() {
+    return {
+      // 禁用动画
+      notrans: false,
+      // 滚动索引
+      currentIndex: this.index,
+      // 滑动值
+      currentTranslate: 0,
+      // 缓存数据
+      prevData$: null,
+      nextData$: null
+    };
+  },
+
+  computed: {
+    prevData: {
+      set: function set(data) {
+        this.prevData$ = data;
+      },
+      get: function get() {
+        var dataList = this.dataList,
+            prevData$ = this.prevData$,
+            currentIndex = this.currentIndex;
+
+        // 是否有缓存数据
+
+        if (prevData$) {
+          this.prevData$ = null;
+          return prevData$;
+        }
+
+        var index = currentIndex - 1;
+        // 第一帧前面
+        if (index < 0) {
+          // 不能循环滚动
+          if (!this.isLoop) {
+            return;
+          }
+          index = dataList.length - 1;
+        }
+        return dataList[index];
+      }
+    },
+    currentData: function currentData() {
+      return this.dataList[this.currentIndex];
+    },
+
+    nextData: {
+      set: function set(data) {
+        this.nextData$ = data;
+      },
+      get: function get() {
+        var dataList = this.dataList,
+            nextData$ = this.nextData$,
+            currentIndex = this.currentIndex;
+
+        // 是否有缓存数据
+
+        if (nextData$) {
+          this.nextData$ = null;
+          return nextData$;
+        }
+
+        var index = currentIndex + 1;
+        // 最后一帧后面
+        if (index === dataList.length) {
+          // 不能循环滚动
+          if (!this.isLoop) {
+            return;
+          }
+          index = 0;
+        }
+        return dataList[index];
+      }
+    },
+    _class: function _class() {
+      return [{ notrans: this.notrans }, { 'pi-loading': this.isShowLoading }];
+    },
+    _style: function _style() {
+      return {
+        width: this.width,
+        height: this.height
+      };
+    },
+    _wrapStyle: function _wrapStyle() {
+      return {
+        transform: 'translate3d(' + this.currentTranslate + ',0,0)',
+        transitionDuration: this.duration / 1000 + 's'
+      };
+    }
+  },
+  watch: {
+    currentData: function currentData() {
+      // 重置scrollTop
+      var currentItem = this.$refs.currentItem;
+
+      if (currentItem) {
+        var wrapEl = currentItem.firstElementChild;
+        wrapEl && (wrapEl.scrollTop = 0);
+      }
+    }
+  },
+  mounted: function mounted() {
+    this.startInter();
+  },
+
+  methods: {
+    __touchstart: function __touchstart(evt) {
+      // 如果正在作动画,不作响应
+      if (this.isAnimating) {
+        return;
+      }
+
+      var touch = evt.targetTouches ? evt.targetTouches[0] : evt;
+
+      // 记录触摸开始位置
+      this.startX = touch.pageX;
+      this.startY = touch.pageY;
+
+      // 重置swipSpan
+      this.swipSpan = 0;
+      // 重置手指拖拽移动
+      this.isMoving = false;
+      // 禁用动画
+      this.notrans = true;
+
+      // 停止定时器
+      this.stopInter();
+    },
+    __touchmove: function __touchmove(evt) {
+      // 如果正在作动画,不作响应
+      if (this.isAnimating) {
+        evt.preventDefault();
+        evt.stopPropagation();
+        return;
+      }
+
+      var touch = evt.targetTouches ? evt.targetTouches[0] : evt;
+      // x轴滑动距离
+      var swipSpanX = touch.pageX - this.startX;
+      var absX = Math.abs(swipSpanX);
+      // y轴滑动距离
+      var swipSpanY = touch.pageY - this.startY;
+      var absY = Math.abs(swipSpanY);
+
+      // x轴滑动距离大于y轴 y轴滑动距离小于阈值, 说明的确是左右滑动
+      if (this.isMoving || absY < absX || absY < this.swipSpanThreshold) {
+        evt.preventDefault();
+        evt.stopPropagation();
+
+        // 不能循环滚动
+        if (!this.isLoop) {
+          var currentIndex = this.currentIndex;
+          // 第一张图或最后一张图
+
+          if (currentIndex === 0 && swipSpanX > 0 || currentIndex === this.dataList.length - 1 && swipSpanX < 0) {
+            // 模拟拉不动操作体验
+            swipSpanX /= this.pullRatio;
+          }
+        }
+
+        // 位移
+        this.currentTranslate = (this.swipSpan = swipSpanX) + 'px';
+        // 已经满足滚动条件,且正在手指拖动
+        this.isMoving = true;
+      }
+    },
+    __touchend: function __touchend() {
+      // 如果正在作动画,不作响应
+      if (this.isAnimating) {
+        return;
+      }
+
+      var swipSpan = this.swipSpan,
+          swipThreshold = this.swipThreshold,
+          currentIndex = this.currentIndex;
+
+      var direction = void 0;
+
+      // 向左
+      if (swipSpan < -swipThreshold) {
+        // 不能循环滚动
+        if (!this.isLoop) {
+          // 不是最后一帧
+          currentIndex !== this.dataList.length - 1 && (direction = FORWARD);
+        } else {
+          direction = FORWARD;
+        }
+      }
+      // 向右
+      else if (swipSpan > swipThreshold) {
+          // 不能循环滚动
+          if (!this.isLoop) {
+            // 不是第一帧
+            currentIndex !== 0 && (direction = BACK);
+          } else {
+            direction = BACK;
+          }
+        }
+      // 滚动
+      swipSpan && this.slide(direction);
+
+      // 开始定时器
+      this.startInter();
+    },
+    __pagerClick: function __pagerClick(index) {
+      this.slideToIndex(index);
+    },
+    __wrapClick: function __wrapClick() {
+      this.$emit('click', this.currentIndex);
+    },
+
+
+    // 滚动
+    slide: function slide(direction, index) {
+      var _this = this;
+
+      // 开启动画
+      this.notrans = false;
+      // 判断滚动方向
+      switch (direction) {
+        // 向左
+        case FORWARD:
+        // 向右
+        case BACK:
+          {
+            // 动画状态
+            this.isAnimating = true;
+            // 作动画
+            this.currentTranslate = this.$el.offsetWidth * direction + 'px';
+
+            // index值为undefined
+            index === undefined && (index = this.currentIndex - direction);
+
+            // 复位
+            setTimeout(function () {
+              // 复位(更新内容)
+              _this.reset(index);
+              // 触发slide事件
+              _this.$emit('slide', index, direction);
+            }, this.duration);
+            break;
+          }
+        // 没有direction值(说明滑动没有超过swipSpanThreshold)
+        default:
+          {
+            this.currentTranslate = 0;
+          }
+      }
+    },
+
+    // 复位
+    reset: function reset(index) {
+      // 禁用动画
+      this.notrans = true;
+      // 复位
+      this.currentTranslate = 0;
+
+      // 计算index
+      var count = this.dataList.length;
+      if (index < 0) {
+        index = count - 1;
+      }
+      if (index === count) {
+        index = 0;
+      }
+      // 更新index(更新内容)
+      this.currentIndex = index;
+
+      // 重置isAnimating
+      this.isAnimating = false;
+    },
+
+    // 滑动到第几帧
+    slideToIndex: function slideToIndex(index) {
+      var dataList = this.dataList,
+          currentIndex = this.currentIndex;
+      // index不符合条件
+
+      if (typeof index !== 'number' || index < 0 || index >= dataList.length || index === currentIndex) {
+        return;
+      }
+
+      // 滑动方向
+      var direction = void 0;
+      // 向左
+      if (index > currentIndex) {
+        direction = FORWARD;
+        this.nextData = dataList[index];
+      }
+      // 向右
+      else {
+          direction = BACK;
+          this.prevData = dataList[index];
+        }
+      // 滑动操作
+      this.slide(direction, index);
+    },
+
+    // 开始定时器
+    startInter: function startInter() {
+      var _this2 = this;
+
+      var autoPlayTimeout = this.autoPlayTimeout;
+
+      if (autoPlayTimeout) {
+        this.inter = setInterval(function () {
+          _this2.slide(FORWARD);
+        }, autoPlayTimeout);
+      }
+    },
+
+    // 停止定定时器
+    stopInter: function stopInter() {
+      clearInterval(this.inter);
+    },
+
+    // 获取图片样式
+    imgStyle: function imgStyle(data) {
+      return data && { backgroundImage: 'url(' + data + ')' };
+    }
+  }
+});
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, "\n@charset \"UTF-8\";\n/*loading样式*/\n.loading:before, .pi-carousel.pi-loading .pi-item:before {\n  content: '';\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  width: 40px;\n  height: 40px;\n  margin-left: -20px;\n  margin-top: -20px;\n  border-radius: 40px;\n  /*如.loading元素中还有transform,:before内容将挡不住*/\n  z-index: -1;\n  /*圆环用border生成*/\n  border: 3px solid rgba(136, 136, 136, 0.2);\n  border-left: 3px solid #888888;\n  /*动画*/\n  -webkit-animation: ani_circle 0.8s linear infinite;\n          animation: ani_circle 0.8s linear infinite;\n}\n\n/*旋转动画*/\n@-webkit-keyframes ani_circle {\n0% {\n    -webkit-transform: rotateZ(0deg);\n            transform: rotateZ(0deg);\n}\n100% {\n    -webkit-transform: rotateZ(360deg);\n            transform: rotateZ(360deg);\n}\n}\n@keyframes ani_circle {\n0% {\n    -webkit-transform: rotateZ(0deg);\n            transform: rotateZ(0deg);\n}\n100% {\n    -webkit-transform: rotateZ(360deg);\n            transform: rotateZ(360deg);\n}\n}\n.pi-carousel {\n  overflow: hidden;\n  position: relative;\n  /*优化滚动效果*/\n  -webkit-backface-visibility: hidden;\n          backface-visibility: hidden;\n  /*没有动画*/\n  /*loading*/\n}\n.pi-carousel.notrans .pi-wrap {\n    -webkit-transition: none;\n    transition: none;\n}\n.pi-carousel .pi-wrap {\n    width: 300%;\n    height: 100%;\n    margin-left: -100%;\n    -webkit-transition: -webkit-transform ease;\n    transition: -webkit-transform ease;\n    transition: transform ease;\n    transition: transform ease, -webkit-transform ease;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: flex;\n    /*虽然是默认值,但不能省略,以确保auto-prefixer插件准确生成兼容安卓4.0的代码*/\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n            flex-direction: row;\n}\n.pi-carousel .pi-item {\n    height: 100%;\n    -webkit-box-flex: 1;\n    -webkit-flex: 1;\n            flex: 1;\n    overflow: hidden;\n}\n.pi-carousel .pi-item .pi-img {\n      background: center center no-repeat;\n      background-size: contain;\n      width: 100%;\n      height: 100%;\n}\n.pi-carousel .pi-pager {\n    position: absolute;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    text-align: center;\n    font-size: 0;\n    line-height: 20px;\n}\n.pi-carousel .pi-pager > span {\n      border: 3px solid #bbb;\n      border-radius: 50%;\n      margin: 0 2px;\n}\n.pi-carousel .pi-pager > span.selected {\n        border-color: #555;\n}\n", "", {"version":3,"sources":["/./src/component/PiCarousel.vue"],"names":[],"mappings":";AAAA,iBAAiB;AACjB,aAAa;AACb;EACE,YAAY;EACZ,mBAAmB;EACnB,UAAU;EACV,SAAS;EACT,YAAY;EACZ,aAAa;EACb,mBAAmB;EACnB,kBAAkB;EAClB,oBAAoB;EACpB,yCAAyC;EACzC,YAAY;EACZ,eAAe;EACf,2CAA2C;EAC3C,+BAA+B;EAC/B,MAAM;EACN,mDAA2C;UAA3C,2CAA2C;CAAE;;AAE/C,QAAQ;AACR;AACE;IACE,iCAAyB;YAAzB,yBAAyB;CAAE;AAC7B;IACE,mCAA2B;YAA3B,2BAA2B;CAAE;CAAE;AAJnC;AACE;IACE,iCAAyB;YAAzB,yBAAyB;CAAE;AAC7B;IACE,mCAA2B;YAA3B,2BAA2B;CAAE;CAAE;AAEnC;EACE,iBAAiB;EACjB,mBAAmB;EACnB,UAAU;EACV,oCAA4B;UAA5B,4BAA4B;EAC5B,QAAQ;EACR,WAAW;CAAE;AACb;IACE,yBAAiB;IAAjB,iBAAiB;CAAE;AACrB;IACE,YAAY;IACZ,aAAa;IACb,mBAAmB;IACnB,2CAA2B;IAA3B,mCAA2B;IAA3B,2BAA2B;IAA3B,mDAA2B;IAC3B,qBAAc;IAAd,sBAAc;IAAd,cAAc;IACd,iDAAiD;IACjD,+BAAoB;IAApB,8BAAoB;IAApB,4BAAoB;YAApB,oBAAoB;CAAE;AACxB;IACE,aAAa;IACb,oBAAQ;IAAR,gBAAQ;YAAR,QAAQ;IACR,iBAAiB;CAAE;AACnB;MACE,oCAAoC;MACpC,yBAAyB;MACzB,YAAY;MACZ,aAAa;CAAE;AACnB;IACE,mBAAmB;IACnB,QAAQ;IACR,SAAS;IACT,UAAU;IACV,mBAAmB;IACnB,aAAa;IACb,kBAAkB;CAAE;AACpB;MACE,uBAAuB;MACvB,mBAAmB;MACnB,cAAc;CAAE;AAChB;QACE,mBAAmB;CAAE","file":"PiCarousel.vue","sourcesContent":["@charset \"UTF-8\";\n/*loading样式*/\n.loading:before, .pi-carousel.pi-loading .pi-item:before {\n  content: '';\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  width: 40px;\n  height: 40px;\n  margin-left: -20px;\n  margin-top: -20px;\n  border-radius: 40px;\n  /*如.loading元素中还有transform,:before内容将挡不住*/\n  z-index: -1;\n  /*圆环用border生成*/\n  border: 3px solid rgba(136, 136, 136, 0.2);\n  border-left: 3px solid #888888;\n  /*动画*/\n  animation: ani_circle 0.8s linear infinite; }\n\n/*旋转动画*/\n@keyframes ani_circle {\n  0% {\n    transform: rotateZ(0deg); }\n  100% {\n    transform: rotateZ(360deg); } }\n\n.pi-carousel {\n  overflow: hidden;\n  position: relative;\n  /*优化滚动效果*/\n  backface-visibility: hidden;\n  /*没有动画*/\n  /*loading*/ }\n  .pi-carousel.notrans .pi-wrap {\n    transition: none; }\n  .pi-carousel .pi-wrap {\n    width: 300%;\n    height: 100%;\n    margin-left: -100%;\n    transition: transform ease;\n    display: flex;\n    /*虽然是默认值,但不能省略,以确保auto-prefixer插件准确生成兼容安卓4.0的代码*/\n    flex-direction: row; }\n  .pi-carousel .pi-item {\n    height: 100%;\n    flex: 1;\n    overflow: hidden; }\n    .pi-carousel .pi-item .pi-img {\n      background: center center no-repeat;\n      background-size: contain;\n      width: 100%;\n      height: 100%; }\n  .pi-carousel .pi-pager {\n    position: absolute;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    text-align: center;\n    font-size: 0;\n    line-height: 20px; }\n    .pi-carousel .pi-pager > span {\n      border: 3px solid #bbb;\n      border-radius: 50%;\n      margin: 0 2px; }\n      .pi-carousel .pi-pager > span.selected {\n        border-color: #555; }\n"],"sourceRoot":"webpack://"}]);
+
+// exports
+
 
 /***/ }),
 /* 15 */
@@ -1849,11 +2010,151 @@ process.umask = function() { return 0; };
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
+  __webpack_require__(17)
+}
+var Component = __webpack_require__(2)(
+  /* script */
+  __webpack_require__(13),
+  /* template */
+  __webpack_require__(16),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/soneway/Sites/github/vue-plugin/src/component/PiCarousel.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] PiCarousel.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-d083b4a6", Component.options)
+  } else {
+    hotAPI.reload("data-v-d083b4a6", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "pi-carousel",
+    class: _vm._class,
+    style: (_vm._style),
+    on: {
+      "touchstart": _vm.__touchstart,
+      "touchmove": _vm.__touchmove,
+      "touchend": _vm.__touchend
+    }
+  }, [_c('div', {
+    staticClass: "pi-wrap",
+    style: (_vm._wrapStyle),
+    on: {
+      "click": _vm.__wrapClick
+    }
+  }, [_c('div', {
+    staticClass: "pi-item"
+  }, [(_vm.prevData) ? _vm._t("default", [_c('div', {
+    staticClass: "pi-img",
+    style: (_vm.imgStyle(_vm.prevData))
+  })], {
+    itemData: _vm.prevData,
+    index: _vm.currentIndex - 1
+  }) : _vm._e()], 2), _vm._v(" "), _c('div', {
+    ref: "currentItem",
+    staticClass: "pi-item"
+  }, [(_vm.currentData) ? _vm._t("default", [_c('div', {
+    staticClass: "pi-img",
+    style: (_vm.imgStyle(_vm.currentData))
+  })], {
+    itemData: _vm.currentData,
+    index: _vm.currentIndex
+  }) : _vm._e()], 2), _vm._v(" "), _c('div', {
+    staticClass: "pi-item"
+  }, [(_vm.nextData) ? _vm._t("default", [_c('div', {
+    staticClass: "pi-img",
+    style: (_vm.imgStyle(_vm.nextData))
+  })], {
+    itemData: _vm.nextData,
+    index: _vm.currentIndex + 1
+  }) : _vm._e()], 2)]), _vm._v(" "), (_vm.isShowPager) ? _c('div', {
+    staticClass: "pi-pager"
+  }, [_vm._t("pager", _vm._l((_vm.dataList), function(_, index) {
+    return _c('span', {
+      class: {
+        selected: index === _vm.currentIndex
+      },
+      on: {
+        "click": function($event) {
+          _vm.__pagerClick(index)
+        }
+      }
+    })
+  }), {
+    dataList: _vm.dataList
+  })], 2) : _vm._e()])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-d083b4a6", module.exports)
+  }
+}
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(14);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(3)("10ca1f40", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d083b4a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCarousel.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d083b4a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCarousel.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
   __webpack_require__(63)
 }
-var Component = __webpack_require__(1)(
+var Component = __webpack_require__(2)(
   /* script */
-  __webpack_require__(24),
+  __webpack_require__(27),
   /* template */
   __webpack_require__(54),
   /* styles */
@@ -1887,22 +2188,23 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 16 */,
-/* 17 */,
-/* 18 */,
 /* 19 */,
 /* 20 */,
 /* 21 */,
 /* 22 */,
 /* 23 */,
-/* 24 */
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_PiCarousel_vue__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__component_PiCarousel_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__component_PiCarousel_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_request__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_common__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__component_PiCarousel_vue__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__component_PiCarousel_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__component_PiCarousel_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_request__ = __webpack_require__(38);
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -1934,9 +2236,11 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 
 
+
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    PiCarousel: __WEBPACK_IMPORTED_MODULE_0__component_PiCarousel_vue___default.a
+    PiCarousel: __WEBPACK_IMPORTED_MODULE_1__component_PiCarousel_vue___default.a
   },
   mounted: function mounted() {
     this.initImgs();
@@ -1953,7 +2257,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
               case 0:
                 carousel = this.$refs.carousel;
                 _context.next = 3;
-                return __WEBPACK_IMPORTED_MODULE_1__lib_request__["a" /* default */].getImgs();
+                return __WEBPACK_IMPORTED_MODULE_2__lib_request__["a" /* default */].getImgs();
 
               case 3:
                 imgs = _context.sent;
@@ -2000,7 +2304,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                   }
 
                   _context2.next = 3;
-                  return __WEBPACK_IMPORTED_MODULE_1__lib_request__["a" /* default */].getImgs();
+                  return __WEBPACK_IMPORTED_MODULE_2__lib_request__["a" /* default */].getImgs();
 
                 case 3:
                   imgs = _context2.sent;
@@ -2024,131 +2328,32 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 });
 
 /***/ }),
-/* 25 */,
-/* 26 */,
-/* 27 */,
 /* 28 */,
-/* 29 */
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_common__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_es6_object__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_es6_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__lib_es6_object__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_promise_polyfill__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_promise_polyfill___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_promise_polyfill__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_regenerator_runtime_runtime__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_regenerator_runtime_runtime___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_regenerator_runtime_runtime__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_third_vue_runtime_min__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_third_vue_runtime_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__lib_third_vue_runtime_min__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__view_Carousel_vue__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__view_Carousel_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__view_Carousel_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Carousel_vue__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Carousel_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__view_Carousel_vue__);
 
 
 
+__WEBPACK_IMPORTED_MODULE_1__view_Carousel_vue___default.a.el = '#root';
 
-
-
-
-
-__WEBPACK_IMPORTED_MODULE_5__view_Carousel_vue___default.a.el = '#root';
-// pc触摸事件兼容
-if (!('ontouchend' in document)) {
-  var scriptEl = document.createElement('script');
-  scriptEl.src = 'https://soneway.github.io/js/desktouch.js';
-  document.head.appendChild(scriptEl);
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (new __WEBPACK_IMPORTED_MODULE_4__lib_third_vue_runtime_min___default.a(__WEBPACK_IMPORTED_MODULE_5__view_Carousel_vue___default.a));
+/* harmony default export */ __webpack_exports__["default"] = (new __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min___default.a(__WEBPACK_IMPORTED_MODULE_1__view_Carousel_vue___default.a));
 
 /***/ }),
-/* 30 */,
-/* 31 */,
-/* 32 */,
 /* 33 */,
-/* 34 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__third_jsonp__ = __webpack_require__(35);
-
-
-// 获取图片数据
-var getImgs = function () {
-  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-    var rs, articles;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return get('/iflow/api/v1/channel/100?method=new');
-
-          case 2:
-            rs = _context.sent;
-
-            if (rs) {
-              _context.next = 5;
-              break;
-            }
-
-            return _context.abrupt('return');
-
-          case 5:
-            articles = Object.getVal(rs, 'data.articles', {});
-            return _context.abrupt('return', Object.keys(articles).map(function (key) {
-              return Object.getVal(articles, key + '.images.0.url');
-            }).filter(function (item) {
-              return !!item;
-            }));
-
-          case 7:
-          case 'end':
-            return _context.stop();
-        }
-      }
-    }, _callee, this);
-  }));
-
-  return function getImgs() {
-    return _ref.apply(this, arguments);
-  };
-}();
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-
-
-var origin = 'https://m.uczzd.cn';
-
-// get请求函数,对应jsonp
-function get(pathname, data) {
-  return new Promise(function (resolve) {
-    __WEBPACK_IMPORTED_MODULE_0__third_jsonp__["a" /* default */].get({
-      url: origin + pathname,
-      data: data,
-      success: function success(rs) {
-        resolve(rs);
-      },
-      error: function error() {
-        resolve();
-      }
-    });
-  });
-}
-
-// post请求函数
-function post(opts) {}
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-  get: get,
-  post: post,
-  getImgs: getImgs
-});
-
-/***/ }),
-/* 35 */
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2380,10 +2585,90 @@ post.defaults = {
 });
 
 /***/ }),
-/* 36 */,
-/* 37 */,
-/* 38 */,
-/* 39 */
+/* 38 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__js_jsonp__ = __webpack_require__(37);
+
+
+// 获取图片数据
+var getImgs = function () {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+    var rs, articles;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return get('/iflow/api/v1/channel/100?method=new');
+
+          case 2:
+            rs = _context.sent;
+
+            if (rs) {
+              _context.next = 5;
+              break;
+            }
+
+            return _context.abrupt('return');
+
+          case 5:
+            articles = Object.getVal(rs, 'data.articles', {});
+            return _context.abrupt('return', Object.keys(articles).map(function (key) {
+              return Object.getVal(articles, key + '.images.0.url');
+            }).filter(function (item) {
+              return item;
+            }));
+
+          case 7:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function getImgs() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+
+
+var origin = 'https://m.uczzd.cn';
+
+// get请求函数,对应jsonp
+function get(pathname, data) {
+  return new Promise(function (resolve) {
+    __WEBPACK_IMPORTED_MODULE_0__js_jsonp__["a" /* default */].get({
+      url: origin + pathname,
+      data: data,
+      success: function success(rs) {
+        resolve(rs);
+      },
+      error: function error() {
+        resolve();
+      }
+    });
+  });
+}
+
+// post请求函数
+function post(opts) {}
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  get: get,
+  post: post,
+  getImgs: getImgs
+});
+
+/***/ }),
+/* 39 */,
+/* 40 */,
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -2397,264 +2682,12 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n* {\n  margin: 0;\n  padding: 0;
 
 
 /***/ }),
-/* 40 */,
-/* 41 */,
 /* 42 */,
 /* 43 */,
 /* 44 */,
 /* 45 */,
-/* 46 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
-    "use strict";
-
-    if (global.setImmediate) {
-        return;
-    }
-
-    var nextHandle = 1; // Spec says greater than zero
-    var tasksByHandle = {};
-    var currentlyRunningATask = false;
-    var doc = global.document;
-    var registerImmediate;
-
-    function setImmediate(callback) {
-      // Callback can either be a function or a string
-      if (typeof callback !== "function") {
-        callback = new Function("" + callback);
-      }
-      // Copy function arguments
-      var args = new Array(arguments.length - 1);
-      for (var i = 0; i < args.length; i++) {
-          args[i] = arguments[i + 1];
-      }
-      // Store and register the task
-      var task = { callback: callback, args: args };
-      tasksByHandle[nextHandle] = task;
-      registerImmediate(nextHandle);
-      return nextHandle++;
-    }
-
-    function clearImmediate(handle) {
-        delete tasksByHandle[handle];
-    }
-
-    function run(task) {
-        var callback = task.callback;
-        var args = task.args;
-        switch (args.length) {
-        case 0:
-            callback();
-            break;
-        case 1:
-            callback(args[0]);
-            break;
-        case 2:
-            callback(args[0], args[1]);
-            break;
-        case 3:
-            callback(args[0], args[1], args[2]);
-            break;
-        default:
-            callback.apply(undefined, args);
-            break;
-        }
-    }
-
-    function runIfPresent(handle) {
-        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
-        // So if we're currently running a task, we'll need to delay this invocation.
-        if (currentlyRunningATask) {
-            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
-            // "too much recursion" error.
-            setTimeout(runIfPresent, 0, handle);
-        } else {
-            var task = tasksByHandle[handle];
-            if (task) {
-                currentlyRunningATask = true;
-                try {
-                    run(task);
-                } finally {
-                    clearImmediate(handle);
-                    currentlyRunningATask = false;
-                }
-            }
-        }
-    }
-
-    function installNextTickImplementation() {
-        registerImmediate = function(handle) {
-            process.nextTick(function () { runIfPresent(handle); });
-        };
-    }
-
-    function canUsePostMessage() {
-        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
-        // where `global.postMessage` means something completely different and can't be used for this purpose.
-        if (global.postMessage && !global.importScripts) {
-            var postMessageIsAsynchronous = true;
-            var oldOnMessage = global.onmessage;
-            global.onmessage = function() {
-                postMessageIsAsynchronous = false;
-            };
-            global.postMessage("", "*");
-            global.onmessage = oldOnMessage;
-            return postMessageIsAsynchronous;
-        }
-    }
-
-    function installPostMessageImplementation() {
-        // Installs an event handler on `global` for the `message` event: see
-        // * https://developer.mozilla.org/en/DOM/window.postMessage
-        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
-
-        var messagePrefix = "setImmediate$" + Math.random() + "$";
-        var onGlobalMessage = function(event) {
-            if (event.source === global &&
-                typeof event.data === "string" &&
-                event.data.indexOf(messagePrefix) === 0) {
-                runIfPresent(+event.data.slice(messagePrefix.length));
-            }
-        };
-
-        if (global.addEventListener) {
-            global.addEventListener("message", onGlobalMessage, false);
-        } else {
-            global.attachEvent("onmessage", onGlobalMessage);
-        }
-
-        registerImmediate = function(handle) {
-            global.postMessage(messagePrefix + handle, "*");
-        };
-    }
-
-    function installMessageChannelImplementation() {
-        var channel = new MessageChannel();
-        channel.port1.onmessage = function(event) {
-            var handle = event.data;
-            runIfPresent(handle);
-        };
-
-        registerImmediate = function(handle) {
-            channel.port2.postMessage(handle);
-        };
-    }
-
-    function installReadyStateChangeImplementation() {
-        var html = doc.documentElement;
-        registerImmediate = function(handle) {
-            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
-            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
-            var script = doc.createElement("script");
-            script.onreadystatechange = function () {
-                runIfPresent(handle);
-                script.onreadystatechange = null;
-                html.removeChild(script);
-                script = null;
-            };
-            html.appendChild(script);
-        };
-    }
-
-    function installSetTimeoutImplementation() {
-        registerImmediate = function(handle) {
-            setTimeout(runIfPresent, 0, handle);
-        };
-    }
-
-    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
-    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
-    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
-
-    // Don't get fooled by e.g. browserify environments.
-    if ({}.toString.call(global.process) === "[object process]") {
-        // For Node.js before 0.9
-        installNextTickImplementation();
-
-    } else if (canUsePostMessage()) {
-        // For non-IE10 modern browsers
-        installPostMessageImplementation();
-
-    } else if (global.MessageChannel) {
-        // For web workers, where supported
-        installMessageChannelImplementation();
-
-    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
-        // For IE 6–8
-        installReadyStateChangeImplementation();
-
-    } else {
-        // For older browsers
-        installSetTimeoutImplementation();
-    }
-
-    attachTo.setImmediate = setImmediate;
-    attachTo.clearImmediate = clearImmediate;
-}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11), __webpack_require__(12)))
-
-/***/ }),
-/* 47 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var apply = Function.prototype.apply;
-
-// DOM APIs, for completeness
-
-exports.setTimeout = function() {
-  return new Timeout(apply.call(setTimeout, window, arguments), clearTimeout);
-};
-exports.setInterval = function() {
-  return new Timeout(apply.call(setInterval, window, arguments), clearInterval);
-};
-exports.clearTimeout =
-exports.clearInterval = function(timeout) {
-  if (timeout) {
-    timeout.close();
-  }
-};
-
-function Timeout(id, clearFn) {
-  this._id = id;
-  this._clearFn = clearFn;
-}
-Timeout.prototype.unref = Timeout.prototype.ref = function() {};
-Timeout.prototype.close = function() {
-  this._clearFn.call(window, this._id);
-};
-
-// Does not start the time, just sets up the members needed.
-exports.enroll = function(item, msecs) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = msecs;
-};
-
-exports.unenroll = function(item) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = -1;
-};
-
-exports._unrefActive = exports.active = function(item) {
-  clearTimeout(item._idleTimeoutId);
-
-  var msecs = item._idleTimeout;
-  if (msecs >= 0) {
-    item._idleTimeoutId = setTimeout(function onTimeout() {
-      if (item._onTimeout)
-        item._onTimeout();
-    }, msecs);
-  }
-};
-
-// setimmediate attaches itself to the global object
-__webpack_require__(46);
-exports.setImmediate = setImmediate;
-exports.clearImmediate = clearImmediate;
-
-
-/***/ }),
+/* 46 */,
+/* 47 */,
 /* 48 */,
 /* 49 */,
 /* 50 */,
@@ -2700,11 +2733,11 @@ if (false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(39);
+var content = __webpack_require__(41);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("f6dc8a32", content, false);
+var update = __webpack_require__(3)("f6dc8a32", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -2720,5 +2753,5 @@ if(false) {
 }
 
 /***/ })
-],[29]);
+],[32]);
 //# sourceMappingURL=carousel.js.map

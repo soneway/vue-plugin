@@ -10,7 +10,7 @@
 </template>
 
 <style lang="scss">
-    @import "../lib/css/common";
+    @import "../lib/common";
 
     .wrapper {
         position: absolute;
@@ -22,6 +22,8 @@
 </style>
 
 <script>
+  import '../lib/common';
+
   import PiCarousel from '../component/PiCarousel.vue';
   import request from '../lib/request';
 

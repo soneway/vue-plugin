@@ -1,6 +1,6 @@
 webpackJsonp([4],{
 
-/***/ 16:
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
@@ -8,9 +8,9 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(66)
 }
-var Component = __webpack_require__(1)(
+var Component = __webpack_require__(2)(
   /* script */
-  __webpack_require__(25),
+  __webpack_require__(28),
   /* template */
   __webpack_require__(57),
   /* styles */
@@ -45,7 +45,7 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 25:
+/***/ 28:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -116,34 +116,25 @@ var urls = ['carousel', 'uc-gallery', 'slider', 'msgbox'];
 
 /***/ }),
 
-/***/ 30:
+/***/ 33:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_common__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_third_vue_runtime_min__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_third_vue_runtime_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__lib_third_vue_runtime_min__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_Index_vue__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__view_Index_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__view_Index_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Index_vue__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Index_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__view_Index_vue__);
 
 
 
+__WEBPACK_IMPORTED_MODULE_1__view_Index_vue___default.a.el = '#root';
 
-
-__WEBPACK_IMPORTED_MODULE_2__view_Index_vue___default.a.el = '#root';
-// pc触摸事件兼容
-if (!('ontouchend' in document)) {
-  var scriptEl = document.createElement('script');
-  scriptEl.src = 'https://soneway.github.io/js/desktouch.js';
-  document.head.appendChild(scriptEl);
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (new __WEBPACK_IMPORTED_MODULE_1__lib_third_vue_runtime_min___default.a(__WEBPACK_IMPORTED_MODULE_2__view_Index_vue___default.a));
+/* harmony default export */ __webpack_exports__["default"] = (new __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min___default.a(__WEBPACK_IMPORTED_MODULE_1__view_Index_vue___default.a));
 
 /***/ }),
 
-/***/ 42:
+/***/ 44:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -199,11 +190,11 @@ if (false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(42);
+var content = __webpack_require__(44);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("75c3f352", content, false);
+var update = __webpack_require__(3)("75c3f352", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
@@ -220,5 +211,5 @@ if(false) {
 
 /***/ })
 
-},[30]);
+},[33]);
 //# sourceMappingURL=index.js.map

@@ -11,7 +11,7 @@
 </template>
 
 <style lang="scss">
-    @import "../lib/css/common";
+    @import "../lib/common";
 
     .wrapper {
         position: absolute;
@@ -37,6 +37,8 @@
 </style>
 
 <script>
+  import '../lib/common';
+
   import PiAlert from '../component/PiAlert.vue';
   import PiTooltip from '../component/PiTooltip.vue';
   import PiConfirm from '../component/PiConfirm.vue';

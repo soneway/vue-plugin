@@ -1,4 +1,4 @@
-import jsonp from './third/jsonp';
+import jsonp from './js/jsonp';
 
 const origin = 'https://m.uczzd.cn';
 
@@ -30,7 +30,7 @@ async function getImgs() {
     return;
   }
   const articles = Object.getVal(rs, 'data.articles', {});
-  return Object.keys(articles).map((key) => Object.getVal(articles, `${key}.images.0.url`)).filter((item) => !!item);
+  return Object.keys(articles).map((key) => Object.getVal(articles, `${key}.images.0.url`)).filter((item) => item);
 }
 
 export default {

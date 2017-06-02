@@ -10,7 +10,7 @@
 </template>
 
 <style lang="scss">
-    @import "../lib/css/common";
+    @import "../lib/common";
 
     .wrapper {
         position: absolute;

@@ -208,7 +208,7 @@ module.exports = function() {
 
 /***/ }),
 
-/***/ 1:
+/***/ 2:
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -292,35 +292,7 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
-/***/ 11:
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
-/***/ 2:
+/***/ 3:
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -539,40 +511,6 @@ function applyToTag (styleElement, obj) {
   }
 }
 
-
-/***/ }),
-
-/***/ 3:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__third_object__ = __webpack_require__(36);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__third_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__third_object__);
-
-
-/***/ }),
-
-/***/ 36:
-/***/ (function(module, exports) {
-
-// 根据path安全取对象属性函数
-Object.getVal = function (obj, path, defaultVal) {
-  var paths = path.split('.');
-
-  // 遍历路径
-  var val = paths.reduce(function (prev, item) {
-    if (prev === undefined || prev === null) {
-      return prev;
-    }
-    return prev[item];
-  }, obj);
-
-  // 如拿到的值为undefined,返回默认值
-  if (val === undefined) {
-    return defaultVal;
-  }
-  return val;
-};
 
 /***/ }),
 
@@ -2170,7 +2108,35 @@ Object.getVal = function (obj, path, defaultVal) {
     nr.devtools && br && br.emit("init", ve);
   }, 0), ve;
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
+
+/***/ }),
+
+/***/ 5:
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
 
 /***/ }),
 

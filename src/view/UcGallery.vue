@@ -38,7 +38,7 @@
 </template>
 
 <style lang="scss">
-    @import "../lib/css/common";
+    @import "../lib/common";
 
     /*缩略图高度*/
     $thumbHeight: 42px;
@@ -155,6 +155,8 @@
 </style>
 
 <script>
+  import '../lib/common';
+
   import PiCarousel from '../component/PiCarousel.vue';
 
   export default {
