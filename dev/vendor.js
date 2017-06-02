@@ -1031,7 +1031,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 // 根据path安全取对象属性函数
-Object.getVal = function (obj, path, defaultVal) {
+Object.getValByPath = function (obj, path, defaultVal) {
   var paths = path.split('.');
 
   // 遍历路径

@@ -1,5 +1,5 @@
 // 根据path安全取对象属性函数
-Object.getVal = (obj, path, defaultVal) => {
+Object.getValByPath = (obj, path, defaultVal) => {
   const paths = path.split('.');
 
   // 遍历路径
