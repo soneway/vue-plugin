@@ -55,7 +55,7 @@
         this.$refs.alert.show({
           msg: `alert哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈${Date.now()}`,
           title: 'alert title',
-          btnOkClick: () => {
+          btnOkClick() {
             console.log('alert btnOkClick');
           }
         });
@@ -65,11 +65,11 @@
           msg: `confirm哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈${Date.now()}`,
           title: 'confirm title',
           btnOkText: '好',
-          btnOkClick: () => {
+          btnOkClick() {
             console.log('confirm btnOkClick');
           },
           btnCancelText: 'cancel',
-          btnCancelClick: () => {
+          btnCancelClick() {
             console.log('confirm btnCancelClick');
           }
         });

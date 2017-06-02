@@ -484,9 +484,9 @@ var getImgs = function () {
             return _context.abrupt('return');
 
           case 5:
-            articles = Object.getVal(rs, 'data.articles', {});
+            articles = Object.getValByPath(rs, 'data.articles', {});
             return _context.abrupt('return', Object.keys(articles).map(function (key) {
-              return Object.getVal(articles, key + '.images.0.url');
+              return Object.getValByPath(articles, key + '.images.0.url');
             }).filter(function (item) {
               return item;
             }));

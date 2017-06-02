@@ -567,6 +567,7 @@ exports.default = {
         btnOkClick: function btnOkClick() {
           console.log('confirm btnOkClick');
         },
+
         btnCancelText: 'cancel',
         btnCancelClick: function btnCancelClick() {
           console.log('confirm btnCancelClick');
