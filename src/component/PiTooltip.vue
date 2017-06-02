@@ -63,9 +63,9 @@
         };
       },
       _class() {
-        return [
-          { visible: this.visible }
-        ];
+        return {
+          visible: this.visible
+        };
       }
     },
     created() {

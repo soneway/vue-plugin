@@ -113,9 +113,9 @@
     },
     computed: {
       _class() {
-        return [
-          { visible: this.visible }
-        ];
+        return {
+          visible: this.visible
+        };
       },
       _boxStyle() {
         return {

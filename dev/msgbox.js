@@ -187,7 +187,9 @@ exports.default = {
 
   computed: {
     _class: function _class() {
-      return [{ visible: this.visible }];
+      return {
+        visible: this.visible
+      };
     },
     _boxStyle: function _boxStyle() {
       return {
@@ -368,7 +370,9 @@ exports.default = {
 
   computed: {
     _class: function _class() {
-      return [{ visible: this.visible }];
+      return {
+        visible: this.visible
+      };
     },
     _boxStyle: function _boxStyle() {
       return {
@@ -484,7 +488,9 @@ exports.default = {
       };
     },
     _class: function _class() {
-      return [{ visible: this.visible }];
+      return {
+        visible: this.visible
+      };
     }
   },
   created: function created() {

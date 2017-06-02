@@ -244,10 +244,10 @@
         }
       },
       _class() {
-        return [
-          { notrans: this.notrans },
-          { 'pi-loading': this.isShowLoading }
-        ];
+        return {
+          notrans: this.notrans,
+          'pi-loading': this.isShowLoading
+        };
       },
       _style() {
         return {

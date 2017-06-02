@@ -162,11 +162,11 @@
         return this.$slots.default.filter((item) => item.tag);
       },
       _class() {
-        return [
-          { notrans: this.notrans },
-          { 'pi-loading': this.isShowLoading },
-          { horizontal: this.isHorizontal }
-        ];
+        return {
+          notrans: this.notrans,
+          'pi-loading': this.isShowLoading,
+          horizontal: this.isHorizontal
+        };
       },
       _style() {
         return {
