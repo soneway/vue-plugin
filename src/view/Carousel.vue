@@ -4,7 +4,8 @@
             :isShowPager="true"
             :isLoop="true"
             :autoPlayTimeout="0"
-            :duration="400">
+            :duration="400"
+            :dataList="dataList">
         </pi-carousel>
     </div>
 </template>
@@ -29,25 +30,28 @@
     components: {
       PiCarousel
     },
+    data() {
+      return {
+        dataList: []
+      };
+    },
     mounted() {
       this.initImgs();
       this.initEvent();
     },
     methods: {
       async initImgs() {
-        const carousel = this.$refs.carousel;
         const imgs = await request.getImgs();
         if (!imgs) {
           return console.log('网络请求失败');
         }
-        carousel.dataList = imgs;
+        this.dataList = imgs;
       },
       initEvent() {
-        const carousel = this.$refs.carousel;
-        carousel.$on('slide', async (index, direction) => {
-          if (index === carousel.dataList.length - 1 && direction === -1) {
+        this.$refs.carousel.$on('slide', async (index, direction) => {
+          if (index === this.dataList.length - 1 && direction === -1) {
             const imgs = await request.getImgs();
-            imgs.length && carousel.dataList.push(...imgs);
+            imgs && this.dataList.push(...imgs);
           }
         });
       }

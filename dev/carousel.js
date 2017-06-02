@@ -59,7 +59,7 @@ var _PiCarousel = __webpack_require__(7);
 
 var _PiCarousel2 = _interopRequireDefault(_PiCarousel);
 
-var _request = __webpack_require__(34);
+var _request = __webpack_require__(35);
 
 var _request2 = _interopRequireDefault(_request);
 
@@ -90,10 +90,16 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 //
+//
 
 exports.default = {
   components: {
     PiCarousel: _PiCarousel2.default
+  },
+  data: function data() {
+    return {
+      dataList: []
+    };
   },
   mounted: function mounted() {
     this.initImgs();
@@ -103,29 +109,28 @@ exports.default = {
   methods: {
     initImgs: function () {
       var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-        var carousel, imgs;
+        var imgs;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                carousel = this.$refs.carousel;
-                _context.next = 3;
+                _context.next = 2;
                 return _request2.default.getImgs();
 
-              case 3:
+              case 2:
                 imgs = _context.sent;
 
                 if (imgs) {
-                  _context.next = 6;
+                  _context.next = 5;
                   break;
                 }
 
                 return _context.abrupt('return', console.log('网络请求失败'));
 
-              case 6:
-                carousel.dataList = imgs;
+              case 5:
+                this.dataList = imgs;
 
-              case 7:
+              case 6:
               case 'end':
                 return _context.stop();
             }
@@ -142,16 +147,15 @@ exports.default = {
     initEvent: function initEvent() {
       var _this = this;
 
-      var carousel = this.$refs.carousel;
-      carousel.$on('slide', function () {
+      this.$refs.carousel.$on('slide', function () {
         var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2(index, direction) {
-          var _carousel$dataList, imgs;
+          var _dataList, imgs;
 
           return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
               switch (_context2.prev = _context2.next) {
                 case 0:
-                  if (!(index === carousel.dataList.length - 1 && direction === -1)) {
+                  if (!(index === _this.dataList.length - 1 && direction === -1)) {
                     _context2.next = 5;
                     break;
                   }
@@ -162,7 +166,7 @@ exports.default = {
                 case 3:
                   imgs = _context2.sent;
 
-                  imgs.length && (_carousel$dataList = carousel.dataList).push.apply(_carousel$dataList, _toConsumableArray(imgs));
+                  imgs && (_dataList = _this.dataList).push.apply(_dataList, _toConsumableArray(imgs));
 
                 case 5:
                 case 'end':
@@ -209,7 +213,7 @@ exports.default = new _vue2.default(_Carousel2.default);
 
 /***/ }),
 
-/***/ 32:
+/***/ 33:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -448,7 +452,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 34:
+/***/ 35:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -500,7 +504,7 @@ var getImgs = function () {
   };
 }();
 
-var _jsonp = __webpack_require__(32);
+var _jsonp = __webpack_require__(33);
 
 var _jsonp2 = _interopRequireDefault(_jsonp);
 
@@ -535,7 +539,7 @@ function post(opts) {}exports.default = {
 
 /***/ }),
 
-/***/ 37:
+/***/ 38:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -1075,7 +1079,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "isShowPager": true,
       "isLoop": true,
       "autoPlayTimeout": 0,
-      "duration": 400
+      "duration": 400,
+      "dataList": _vm.dataList
     }
   })], 1)
 },staticRenderFns: []}
@@ -1110,7 +1115,7 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/*loading样式*/\n.loading:befo
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(37);
+var content = __webpack_require__(38);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
