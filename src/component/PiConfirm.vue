@@ -128,9 +128,6 @@
     data() {
       return {
         msg: '',
-        title: this.title,
-        btnOkText: this.btnOkText,
-        btnCancelText: this.btnCancelText,
         visible: false
       };
     },
@@ -146,17 +143,17 @@
         };
       }
     },
-    mounted() {
+    created() {
+      // 初始配置
+      this.defaults = Object.assign({}, this._props);
       this.isGlobal && (window.confirm = this.show);
     },
     methods: {
       show(opts) {
         // 配置项
         typeof opts === 'object' || (opts = { msg: opts });
-        // 读取默认配置
-        const { _props } = this;
         // 配置项合并
-        Object.assign(this, _props, opts);
+        Object.assign(this, this.defaults, opts);
         // 显示
         this.visible = true;
       },

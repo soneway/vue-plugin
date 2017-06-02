@@ -68,7 +68,7 @@
         ];
       }
     },
-    mounted() {
+    created() {
       this.isGlobal && (window.tooltip = this.show);
     },
     methods: {

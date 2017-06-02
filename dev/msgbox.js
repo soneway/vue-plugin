@@ -181,8 +181,6 @@ exports.default = {
   data: function data() {
     return {
       msg: '',
-      title: this.title,
-      btnOkText: this.btnOkText,
       visible: false
     };
   },
@@ -197,7 +195,9 @@ exports.default = {
       };
     }
   },
-  mounted: function mounted() {
+  created: function created() {
+    // 初始配置
+    this.defaults = Object.assign({}, this._props);
     this.isGlobal && (window.alert = this.show);
   },
 
@@ -205,11 +205,8 @@ exports.default = {
     show: function show(opts) {
       // 配置项
       (typeof opts === 'undefined' ? 'undefined' : _typeof(opts)) === 'object' || (opts = { msg: opts });
-      // 读取默认配置
-      var _props = this._props;
       // 配置项合并
-
-      Object.assign(this, _props, opts);
+      Object.assign(this, this.defaults, opts);
       // 显示
       this.visible = true;
     },
@@ -365,9 +362,6 @@ exports.default = {
   data: function data() {
     return {
       msg: '',
-      title: this.title,
-      btnOkText: this.btnOkText,
-      btnCancelText: this.btnCancelText,
       visible: false
     };
   },
@@ -382,7 +376,9 @@ exports.default = {
       };
     }
   },
-  mounted: function mounted() {
+  created: function created() {
+    // 初始配置
+    this.defaults = Object.assign({}, this._props);
     this.isGlobal && (window.confirm = this.show);
   },
 
@@ -390,11 +386,8 @@ exports.default = {
     show: function show(opts) {
       // 配置项
       (typeof opts === 'undefined' ? 'undefined' : _typeof(opts)) === 'object' || (opts = { msg: opts });
-      // 读取默认配置
-      var _props = this._props;
       // 配置项合并
-
-      Object.assign(this, _props, opts);
+      Object.assign(this, this.defaults, opts);
       // 显示
       this.visible = true;
     },
@@ -494,7 +487,7 @@ exports.default = {
       return [{ visible: this.visible }];
     }
   },
-  mounted: function mounted() {
+  created: function created() {
     this.isGlobal && (window.tooltip = this.show);
   },
 
