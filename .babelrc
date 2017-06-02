@@ -8,8 +8,7 @@
             "ios > 7",
             "android  >= 4"
           ]
-        },
-        "modules": false
+        }
       }
     ]
   ]

@@ -195,34 +195,35 @@ process.umask = function() { return 0; };
 /* 4 */,
 /* 5 */,
 /* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__js_object__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__js_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__js_object__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_es6_object__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_es6_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__lib_es6_object__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_promise_polyfill__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_promise_polyfill___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_promise_polyfill__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_regenerator_runtime_runtime__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_regenerator_runtime_runtime___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_regenerator_runtime_runtime__);
 
 
-// polyfill
+__webpack_require__(7);
 
+__webpack_require__(9);
 
+__webpack_require__(10);
 
+__webpack_require__(8);
 
 // pc触摸事件兼容
+// polyfill
 if (!('ontouchend' in document)) {
   var scriptEl = document.createElement('script');
   scriptEl.src = 'https://soneway.github.io/js/desktouch.js';
   document.head.appendChild(scriptEl);
 }
 
+// 扩展Object对象
+
 /***/ }),
 /* 7 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 // Object.assign
 if (!Object.assign) {
@@ -238,7 +239,10 @@ if (!Object.assign) {
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 // 根据path安全取对象属性函数
 Object.getVal = function (obj, path, defaultVal) {
@@ -1483,10 +1487,14 @@ exports.clearImmediate = clearImmediate;
 
 /***/ }),
 /* 13 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 //
 //
 //
@@ -1613,7 +1621,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var FORWARD = -1;
 var BACK = 1;
 
-/* harmony default export */ __webpack_exports__["default"] = ({
+exports.default = {
   props: {
     // 宽度
     width: {
@@ -1987,7 +1995,7 @@ var BACK = 1;
       return data && { backgroundImage: 'url(' + data + ')' };
     }
   }
-});
+};
 
 /***/ }),
 /* 14 */
@@ -2197,19 +2205,30 @@ module.exports = Component.exports
 /* 25 */,
 /* 26 */,
 /* 27 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_common__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__component_PiCarousel_vue__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__component_PiCarousel_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__component_PiCarousel_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_request__ = __webpack_require__(38);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+__webpack_require__(6);
+
+var _PiCarousel = __webpack_require__(15);
+
+var _PiCarousel2 = _interopRequireDefault(_PiCarousel);
+
+var _request = __webpack_require__(38);
+
+var _request2 = _interopRequireDefault(_request);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-//
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } //
 //
 //
 //
@@ -2233,14 +2252,9 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //
 //
 
-
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
+exports.default = {
   components: {
-    PiCarousel: __WEBPACK_IMPORTED_MODULE_1__component_PiCarousel_vue___default.a
+    PiCarousel: _PiCarousel2.default
   },
   mounted: function mounted() {
     this.initImgs();
@@ -2257,7 +2271,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
               case 0:
                 carousel = this.$refs.carousel;
                 _context.next = 3;
-                return __WEBPACK_IMPORTED_MODULE_2__lib_request__["a" /* default */].getImgs();
+                return _request2.default.getImgs();
 
               case 3:
                 imgs = _context.sent;
@@ -2304,7 +2318,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
                   }
 
                   _context2.next = 3;
-                  return __WEBPACK_IMPORTED_MODULE_2__lib_request__["a" /* default */].getImgs();
+                  return _request2.default.getImgs();
 
                 case 3:
                   imgs = _context2.sent;
@@ -2325,7 +2339,7 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
       }());
     }
   }
-});
+};
 
 /***/ }),
 /* 28 */,
@@ -2333,20 +2347,28 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 /* 30 */,
 /* 31 */,
 /* 32 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Carousel_vue__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Carousel_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__view_Carousel_vue__);
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-__WEBPACK_IMPORTED_MODULE_1__view_Carousel_vue___default.a.el = '#root';
+var _vue = __webpack_require__(4);
 
-/* harmony default export */ __webpack_exports__["default"] = (new __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min___default.a(__WEBPACK_IMPORTED_MODULE_1__view_Carousel_vue___default.a));
+var _vue2 = _interopRequireDefault(_vue);
+
+var _Carousel = __webpack_require__(18);
+
+var _Carousel2 = _interopRequireDefault(_Carousel);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_Carousel2.default.el = '#root';
+
+exports.default = new _vue2.default(_Carousel2.default);
 
 /***/ }),
 /* 33 */,
@@ -2354,9 +2376,15 @@ __WEBPACK_IMPORTED_MODULE_1__view_Carousel_vue___default.a.el = '#root';
 /* 35 */,
 /* 36 */,
 /* 37 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 // 获取uid函数
@@ -2575,22 +2603,25 @@ post.defaults = {
   method: 'POST'
 };
 
-/* harmony default export */ __webpack_exports__["a"] = ({
+exports.default = {
   // 加载js函数
   getScript: getScript,
   // get数据函数
   get: get,
   // post数据函数
   post: post
-});
+};
 
 /***/ }),
 /* 38 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__js_jsonp__ = __webpack_require__(37);
 
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
 // 获取图片数据
 var getImgs = function () {
@@ -2634,16 +2665,20 @@ var getImgs = function () {
   };
 }();
 
+var _jsonp = __webpack_require__(37);
+
+var _jsonp2 = _interopRequireDefault(_jsonp);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-
 
 var origin = 'https://m.uczzd.cn';
 
 // get请求函数,对应jsonp
 function get(pathname, data) {
   return new Promise(function (resolve) {
-    __WEBPACK_IMPORTED_MODULE_0__js_jsonp__["a" /* default */].get({
+    _jsonp2.default.get({
       url: origin + pathname,
       data: data,
       success: function success(rs) {
@@ -2657,13 +2692,11 @@ function get(pathname, data) {
 }
 
 // post请求函数
-function post(opts) {}
-
-/* harmony default export */ __webpack_exports__["a"] = ({
+function post(opts) {}exports.default = {
   get: get,
   post: post,
   getImgs: getImgs
-});
+};
 
 /***/ }),
 /* 39 */,

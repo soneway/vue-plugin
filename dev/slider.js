@@ -195,34 +195,35 @@ process.umask = function() { return 0; };
 /* 4 */,
 /* 5 */,
 /* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__js_object__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__js_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__js_object__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_es6_object__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_es6_object___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__lib_es6_object__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_promise_polyfill__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_promise_polyfill___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_promise_polyfill__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_regenerator_runtime_runtime__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_regenerator_runtime_runtime___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_regenerator_runtime_runtime__);
 
 
-// polyfill
+__webpack_require__(7);
 
+__webpack_require__(9);
 
+__webpack_require__(10);
 
+__webpack_require__(8);
 
 // pc触摸事件兼容
+// polyfill
 if (!('ontouchend' in document)) {
   var scriptEl = document.createElement('script');
   scriptEl.src = 'https://soneway.github.io/js/desktouch.js';
   document.head.appendChild(scriptEl);
 }
 
+// 扩展Object对象
+
 /***/ }),
 /* 7 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 // Object.assign
 if (!Object.assign) {
@@ -238,7 +239,10 @@ if (!Object.assign) {
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 
 // 根据path安全取对象属性函数
 Object.getVal = function (obj, path, defaultVal) {
@@ -1538,10 +1542,14 @@ module.exports = Component.exports
 /* 23 */,
 /* 24 */,
 /* 25 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 //
 //
 //
@@ -1641,7 +1649,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-/* harmony default export */ __webpack_exports__["default"] = ({
+exports.default = {
   props: {
     // 宽度
     width: {
@@ -1923,7 +1931,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       clearInterval(this.inter);
     }
   }
-});
+};
 
 /***/ }),
 /* 26 */,
@@ -1931,13 +1939,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 28 */,
 /* 29 */,
 /* 30 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_common__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__component_PiSlider_vue__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__component_PiSlider_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__component_PiSlider_vue__);
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+__webpack_require__(6);
+
+var _PiSlider = __webpack_require__(50);
+
+var _PiSlider2 = _interopRequireDefault(_PiSlider);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 //
 //
 //
@@ -1972,18 +1990,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 
-
-
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
+exports.default = {
   components: {
-    PiSlider: __WEBPACK_IMPORTED_MODULE_1__component_PiSlider_vue___default.a
+    PiSlider: _PiSlider2.default
   },
   mounted: function mounted() {},
 
   methods: {}
-});
+};
 
 /***/ }),
 /* 31 */,
@@ -1991,20 +2005,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* 33 */,
 /* 34 */,
 /* 35 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Slider_vue__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Slider_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__view_Slider_vue__);
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-__WEBPACK_IMPORTED_MODULE_1__view_Slider_vue___default.a.el = '#root';
+var _vue = __webpack_require__(4);
 
-/* harmony default export */ __webpack_exports__["default"] = (new __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min___default.a(__WEBPACK_IMPORTED_MODULE_1__view_Slider_vue___default.a));
+var _vue2 = _interopRequireDefault(_vue);
+
+var _Slider = __webpack_require__(21);
+
+var _Slider2 = _interopRequireDefault(_Slider);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_Slider2.default.el = '#root';
+
+exports.default = new _vue2.default(_Slider2.default);
 
 /***/ }),
 /* 36 */,

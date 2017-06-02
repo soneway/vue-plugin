@@ -1,4 +1,4 @@
-import Vue from '../lib/js/vue.runtime.min';
+import Vue from '../lib/js/vue.runtime';
 import View from '../view/Carousel.vue';
 
 View.el = '#root';

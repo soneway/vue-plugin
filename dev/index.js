@@ -46,10 +46,14 @@ module.exports = Component.exports
 /***/ }),
 
 /***/ 28:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 //
 //
 //
@@ -102,7 +106,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 var urls = ['carousel', 'uc-gallery', 'slider', 'msgbox'];
 
-/* harmony default export */ __webpack_exports__["default"] = ({
+exports.default = {
   data: {
     url: urls[0],
     urls: urls
@@ -112,25 +116,33 @@ var urls = ['carousel', 'uc-gallery', 'slider', 'msgbox'];
       this.url = url;
     }
   }
-});
+};
 
 /***/ }),
 
 /***/ 33:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Index_vue__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__view_Index_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__view_Index_vue__);
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-__WEBPACK_IMPORTED_MODULE_1__view_Index_vue___default.a.el = '#root';
+var _vue = __webpack_require__(4);
 
-/* harmony default export */ __webpack_exports__["default"] = (new __WEBPACK_IMPORTED_MODULE_0__lib_js_vue_runtime_min___default.a(__WEBPACK_IMPORTED_MODULE_1__view_Index_vue___default.a));
+var _vue2 = _interopRequireDefault(_vue);
+
+var _Index = __webpack_require__(19);
+
+var _Index2 = _interopRequireDefault(_Index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_Index2.default.el = '#root';
+
+exports.default = new _vue2.default(_Index2.default);
 
 /***/ }),
 
