@@ -1,6 +1,5 @@
 <template>
-    <pi-carousel ref="card"
-        class="pi-card"
+    <pi-carousel class="pi-card"
         :isShowPager="isShowPager"
         :width="width"
         :height="height"

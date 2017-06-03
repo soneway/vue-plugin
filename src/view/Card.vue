@@ -1,10 +1,6 @@
 <template>
     <div class="wrapper">
-        <pi-card ref="card"
-            :isLoop="true"
-            :autoPlayTimeout="0"
-            :duration="400"
-            :dataList="dataList">
+        <pi-card :dataList="dataList">
         </pi-card>
     </div>
 </template>
@@ -18,6 +14,7 @@
         right: 0;
         top: 0;
         bottom: 0;
+        overflow: hidden;
     }
 </style>
 
