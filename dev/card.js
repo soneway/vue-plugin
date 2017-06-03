@@ -1,4 +1,4 @@
-webpackJsonp([3],{
+webpackJsonp([4],{
 
 /***/ 10:
 /***/ (function(module, exports, __webpack_require__) {
@@ -100,19 +100,19 @@ if(false) {
 
 /***/ }),
 
-/***/ 19:
+/***/ 14:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(75)
+  __webpack_require__(72)
 }
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(29),
+  __webpack_require__(24),
   /* template */
-  __webpack_require__(65),
+  __webpack_require__(62),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -120,9 +120,9 @@ var Component = __webpack_require__(1)(
   /* moduleIdentifier (server only) */
   null
 )
-Component.options.__file = "/Users/soneway/Sites/github/vue-plugin/src/view/UcGallery.vue"
+Component.options.__file = "/Users/soneway/Sites/github/vue-plugin/src/view/Card.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] UcGallery.vue: functional components are not supported with templates, they should use render functions.")}
+if (Component.options.functional) {console.error("[vue-loader] Card.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
@@ -131,9 +131,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-fea266c8", Component.options)
+    hotAPI.createRecord("data-v-85d7aaf0", Component.options)
   } else {
-    hotAPI.reload("data-v-fea266c8", Component.options)
+    hotAPI.reload("data-v-85d7aaf0", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -145,7 +145,7 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 29:
+/***/ 24:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -155,237 +155,57 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _PiCarousel = __webpack_require__(9);
+var _PiCard = __webpack_require__(79);
 
-var _PiCarousel2 = _interopRequireDefault(_PiCarousel);
+var _PiCard2 = _interopRequireDefault(_PiCard);
+
+var _request = __webpack_require__(7);
+
+var _request2 = _interopRequireDefault(_request);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 exports.default = {
   components: {
-    PiCarousel: _PiCarousel2.default
-  },
-  created: function created() {
-    // 从html中拿到数据
-    var headerEl = document.querySelector('header');
-    var titleInfo = {
-      title: headerEl.querySelector('h1').textContent.trim(),
-      source: headerEl.querySelector('#source').textContent.trim(),
-      time: headerEl.querySelector('time').textContent.trim()
-    };
-    var figures = [].slice.call(document.querySelectorAll('.uc-gallery figure'));
-    var dataList = figures.map(function (item) {
-      return {
-        img: item.querySelector('img').getAttribute('alt-src'),
-        desc: item.querySelector('figcaption>p').textContent.trim()
-      };
-    });
-
-    // 将data中的数据覆盖
-    Object.assign(this, {
-      dataList: dataList,
-      titleInfo: titleInfo
-    });
+    PiCard: _PiCard2.default
   },
   data: function data() {
     return {
-      thumbIndex: 0,
-      dataList: [],
-      titleInfo: {}
+      dataList: ['https://soneway.github.io/jq/example/dist/img/1.jpg', 'https://soneway.github.io/jq/example/dist/img/2.jpg', 'https://soneway.github.io/jq/example/dist/img/3.jpg', 'https://soneway.github.io/jq/example/dist/img/4.jpg', 'https://soneway.github.io/jq/example/dist/img/5.jpg']
     };
   },
-  mounted: function mounted() {
-    var _this = this;
+  mounted: function mounted() {},
 
-    // carousel插件滚动事件
-    this.$refs.carousel.$on('slide', function (index) {
-      _this.thumbSlide(index);
-    });
-  },
-
-  methods: {
-    // 缩略图滚动
-    thumbSlide: function thumbSlide(index) {
-      if (index === this.thumbIndex) {
-        return;
-      }
-      this.thumbIndex = index;
-      this.$refs.carousel.slideToIndex(index);
-      this.center(index);
-    },
-    __thumbClick: function __thumbClick(index) {
-      this.thumbSlide(index);
-    },
-
-    // 缩略图居中
-    center: function center(index) {
-      var thumbWrap = this.$refs.thumbWrap;
-
-      var thumbEl = document.querySelector('.thumb:nth-of-type(' + (index + 1) + ')');
-      thumbWrap.scrollLeft = thumbEl.offsetLeft - (thumbWrap.offsetWidth - thumbEl.offsetWidth) / 2;
-    }
-  }
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+  methods: {}
+};
 
 /***/ }),
 
-/***/ 35:
+/***/ 30:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -401,18 +221,18 @@ var _vueRuntime = __webpack_require__(4);
 
 var _vueRuntime2 = _interopRequireDefault(_vueRuntime);
 
-var _UcGallery = __webpack_require__(19);
+var _Card = __webpack_require__(14);
 
-var _UcGallery2 = _interopRequireDefault(_UcGallery);
+var _Card2 = _interopRequireDefault(_Card);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_UcGallery2.default.el = '.uc-gallery'; // common.js
-exports.default = new _vueRuntime2.default(_UcGallery2.default);
+_Card2.default.el = '#root'; // common.js
+exports.default = new _vueRuntime2.default(_Card2.default);
 
 /***/ }),
 
-/***/ 48:
+/***/ 45:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -420,7 +240,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/*基础样式,作用类似reset*/\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\nbody {\n  overflow-x: hidden;\n  /*可继承*/\n  color: #333;\n  font-size: 14px;\n  font-family: helvetica, sans-serif;\n  -webkit-text-size-adjust: none;\n  /*禁止选中文本*/\n  -webkit-user-select: none;\n          user-select: none;\n  /*部分浏览器点选时会有淡蓝色框,这样可以去掉*/\n  -webkit-tap-highlight-color: transparent;\n  /*禁止保存图片*/\n  -webkit-touch-callout: none;\n  /*滚动平滑*/\n  -webkit-overflow-scrolling: touch;\n}\ninput, textarea, select {\n  /*表单元素字体大小可继承*/\n  font-size: inherit;\n}\ninput, textarea {\n  /*输入框可选中文本*/\n  -webkit-user-select: text;\n          user-select: text;\n}\nimg, input {\n  /*图片和输入元素垂直居中*/\n  vertical-align: middle;\n}\nimg {\n  /*图片无边框*/\n  border: none;\n}\na {\n  outline: none;\n  color: inherit;\n  text-decoration: none;\n  cursor: pointer;\n}\nli {\n  list-style: none;\n}\ni {\n  font-style: normal;\n}\n\n/*缩略图高度*/\n/*焦点图*/\n.carouselWrap {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 42px;\n}\n.carouselWrap .pi-carousel.pi-loading .pi-item:before {\n    top: 100px;\n}\n.imgWrap {\n  width: 100%;\n  height: 100%;\n  overflow: auto;\n  font-size: 15px;\n  color: #999;\n  line-height: 150%;\n  background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.05) 61%, #fff 0%);\n  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 61%, #fff 0%);\n  /*页码指示*/\n  /*标题*/\n  /*来源和日期*/\n  /*描述信息*/\n}\n.imgWrap .img {\n    display: block;\n    max-width: 100%;\n    max-height: 60%;\n    min-height: 200px;\n    margin: 0 auto;\n}\n.imgWrap .imgInfo {\n    padding: 15px;\n    background: #fff;\n    min-height: 40%;\n}\n.imgWrap .indicator {\n    font-weight: 100;\n}\n.imgWrap .indicator span {\n      font-size: 30px;\n      color: #333;\n}\n.imgWrap .title {\n    font-size: 20px;\n    padding: 15px 0;\n    color: #333;\n}\n.imgWrap .subTitle {\n    color: #bbb;\n    font-size: 14px;\n    line-height: 100%;\n}\n.imgWrap .subTitle > span {\n      display: inline-block;\n}\n.imgWrap .subTitle > span:not(:first-of-type) {\n        border-left: 1px solid #bbb;\n        margin-left: 12px;\n        padding: 0 12px;\n}\n.imgWrap .desc {\n    padding-top: 15px;\n    text-indent: 2em;\n}\n\n/*缩略图*/\n.thumbWrap {\n  position: absolute;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  height: 42px;\n  white-space: nowrap;\n  overflow-y: hidden;\n  overflow-x: auto;\n}\n.thumb {\n  width: 60px;\n  height: 100%;\n  background: center center;\n  background-size: cover;\n  display: inline-block;\n}\n.thumb:not(:last-of-type) {\n    border-left: 1px solid #fff;\n}\n.thumb.selected {\n    border: 2px solid #06f;\n}\n.thumb.selected + .thumb {\n      border: none;\n}\n", "", {"version":3,"sources":["/./src/view/UcGallery.vue"],"names":[],"mappings":";AAAA,iBAAiB;AACjB,kBAAkB;AAClB;EACE,UAAU;EACV,WAAW;EACX,uBAAuB;CAAE;AAE3B;EACE,mBAAmB;EACnB,OAAO;EACP,YAAY;EACZ,gBAAgB;EAChB,mCAAmC;EACnC,+BAA+B;EAC/B,UAAU;EACV,0BAAkB;UAAlB,kBAAkB;EAClB,yBAAyB;EACzB,yCAAyC;EACzC,UAAU;EACV,4BAA4B;EAC5B,QAAQ;EACR,kCAAkC;CAAE;AAEtC;EACE,eAAe;EACf,mBAAmB;CAAE;AAEvB;EACE,YAAY;EACZ,0BAAkB;UAAlB,kBAAkB;CAAE;AAEtB;EACE,eAAe;EACf,uBAAuB;CAAE;AAE3B;EACE,SAAS;EACT,aAAa;CAAE;AAEjB;EACE,cAAc;EACd,eAAe;EACf,sBAAsB;EACtB,gBAAgB;CAAE;AAEpB;EACE,iBAAiB;CAAE;AAErB;EACE,mBAAmB;CAAE;;AAEvB,SAAS;AACT,OAAO;AACP;EACE,mBAAmB;EACnB,QAAQ;EACR,SAAS;EACT,OAAO;EACP,aAAa;CAAE;AACf;IACE,WAAW;CAAE;AAEjB;EACE,YAAY;EACZ,aAAa;EACb,eAAe;EACf,gBAAgB;EAChB,YAAY;EACZ,kBAAkB;EAClB,iFAA+E;EAA/E,+EAA+E;EAC/E,QAAQ;EACR,MAAM;EACN,SAAS;EACT,QAAQ;CAAE;AACV;IACE,eAAe;IACf,gBAAgB;IAChB,gBAAgB;IAChB,kBAAkB;IAClB,eAAe;CAAE;AACnB;IACE,cAAc;IACd,iBAAiB;IACjB,gBAAgB;CAAE;AACpB;IACE,iBAAiB;CAAE;AACnB;MACE,gBAAgB;MAChB,YAAY;CAAE;AAClB;IACE,gBAAgB;IAChB,gBAAgB;IAChB,YAAY;CAAE;AAChB;IACE,YAAY;IACZ,gBAAgB;IAChB,kBAAkB;CAAE;AACpB;MACE,sBAAsB;CAAE;AACxB;QACE,4BAA4B;QAC5B,kBAAkB;QAClB,gBAAgB;CAAE;AACxB;IACE,kBAAkB;IAClB,iBAAiB;CAAE;;AAEvB,OAAO;AACP;EACE,mBAAmB;EACnB,QAAQ;EACR,SAAS;EACT,UAAU;EACV,aAAa;EACb,oBAAoB;EACpB,mBAAmB;EACnB,iBAAiB;CAAE;AAErB;EACE,YAAY;EACZ,aAAa;EACb,0BAA0B;EAC1B,uBAAuB;EACvB,sBAAsB;CAAE;AACxB;IACE,4BAA4B;CAAE;AAChC;IACE,uBAAuB;CAAE;AACzB;MACE,aAAa;CAAE","file":"UcGallery.vue","sourcesContent":["@charset \"UTF-8\";\n/*基础样式,作用类似reset*/\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nbody {\n  overflow-x: hidden;\n  /*可继承*/\n  color: #333;\n  font-size: 14px;\n  font-family: helvetica, sans-serif;\n  -webkit-text-size-adjust: none;\n  /*禁止选中文本*/\n  user-select: none;\n  /*部分浏览器点选时会有淡蓝色框,这样可以去掉*/\n  -webkit-tap-highlight-color: transparent;\n  /*禁止保存图片*/\n  -webkit-touch-callout: none;\n  /*滚动平滑*/\n  -webkit-overflow-scrolling: touch; }\n\ninput, textarea, select {\n  /*表单元素字体大小可继承*/\n  font-size: inherit; }\n\ninput, textarea {\n  /*输入框可选中文本*/\n  user-select: text; }\n\nimg, input {\n  /*图片和输入元素垂直居中*/\n  vertical-align: middle; }\n\nimg {\n  /*图片无边框*/\n  border: none; }\n\na {\n  outline: none;\n  color: inherit;\n  text-decoration: none;\n  cursor: pointer; }\n\nli {\n  list-style: none; }\n\ni {\n  font-style: normal; }\n\n/*缩略图高度*/\n/*焦点图*/\n.carouselWrap {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 42px; }\n  .carouselWrap .pi-carousel.pi-loading .pi-item:before {\n    top: 100px; }\n\n.imgWrap {\n  width: 100%;\n  height: 100%;\n  overflow: auto;\n  font-size: 15px;\n  color: #999;\n  line-height: 150%;\n  background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 61%, #fff 0%);\n  /*页码指示*/\n  /*标题*/\n  /*来源和日期*/\n  /*描述信息*/ }\n  .imgWrap .img {\n    display: block;\n    max-width: 100%;\n    max-height: 60%;\n    min-height: 200px;\n    margin: 0 auto; }\n  .imgWrap .imgInfo {\n    padding: 15px;\n    background: #fff;\n    min-height: 40%; }\n  .imgWrap .indicator {\n    font-weight: 100; }\n    .imgWrap .indicator span {\n      font-size: 30px;\n      color: #333; }\n  .imgWrap .title {\n    font-size: 20px;\n    padding: 15px 0;\n    color: #333; }\n  .imgWrap .subTitle {\n    color: #bbb;\n    font-size: 14px;\n    line-height: 100%; }\n    .imgWrap .subTitle > span {\n      display: inline-block; }\n      .imgWrap .subTitle > span:not(:first-of-type) {\n        border-left: 1px solid #bbb;\n        margin-left: 12px;\n        padding: 0 12px; }\n  .imgWrap .desc {\n    padding-top: 15px;\n    text-indent: 2em; }\n\n/*缩略图*/\n.thumbWrap {\n  position: absolute;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  height: 42px;\n  white-space: nowrap;\n  overflow-y: hidden;\n  overflow-x: auto; }\n\n.thumb {\n  width: 60px;\n  height: 100%;\n  background: center center;\n  background-size: cover;\n  display: inline-block; }\n  .thumb:not(:last-of-type) {\n    border-left: 1px solid #fff; }\n  .thumb.selected {\n    border: 2px solid #06f; }\n    .thumb.selected + .thumb {\n      border: none; }\n"],"sourceRoot":"webpack://"}]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n/*基础样式,作用类似reset*/\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\nbody {\n  overflow-x: hidden;\n  /*可继承*/\n  color: #333;\n  font-size: 14px;\n  font-family: helvetica, sans-serif;\n  -webkit-text-size-adjust: none;\n  /*禁止选中文本*/\n  -webkit-user-select: none;\n          user-select: none;\n  /*部分浏览器点选时会有淡蓝色框,这样可以去掉*/\n  -webkit-tap-highlight-color: transparent;\n  /*禁止保存图片*/\n  -webkit-touch-callout: none;\n  /*滚动平滑*/\n  -webkit-overflow-scrolling: touch;\n}\ninput, textarea, select {\n  /*表单元素字体大小可继承*/\n  font-size: inherit;\n}\ninput, textarea {\n  /*输入框可选中文本*/\n  -webkit-user-select: text;\n          user-select: text;\n}\nimg, input {\n  /*图片和输入元素垂直居中*/\n  vertical-align: middle;\n}\nimg {\n  /*图片无边框*/\n  border: none;\n}\na {\n  outline: none;\n  color: inherit;\n  text-decoration: none;\n  cursor: pointer;\n}\nli {\n  list-style: none;\n}\ni {\n  font-style: normal;\n}\n.wrapper {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n}\n", "", {"version":3,"sources":["/./src/view/Card.vue"],"names":[],"mappings":";AAAA,iBAAiB;AACjB,kBAAkB;AAClB;EACE,UAAU;EACV,WAAW;EACX,uBAAuB;CAAE;AAE3B;EACE,mBAAmB;EACnB,OAAO;EACP,YAAY;EACZ,gBAAgB;EAChB,mCAAmC;EACnC,+BAA+B;EAC/B,UAAU;EACV,0BAAkB;UAAlB,kBAAkB;EAClB,yBAAyB;EACzB,yCAAyC;EACzC,UAAU;EACV,4BAA4B;EAC5B,QAAQ;EACR,kCAAkC;CAAE;AAEtC;EACE,eAAe;EACf,mBAAmB;CAAE;AAEvB;EACE,YAAY;EACZ,0BAAkB;UAAlB,kBAAkB;CAAE;AAEtB;EACE,eAAe;EACf,uBAAuB;CAAE;AAE3B;EACE,SAAS;EACT,aAAa;CAAE;AAEjB;EACE,cAAc;EACd,eAAe;EACf,sBAAsB;EACtB,gBAAgB;CAAE;AAEpB;EACE,iBAAiB;CAAE;AAErB;EACE,mBAAmB;CAAE;AAEvB;EACE,mBAAmB;EACnB,QAAQ;EACR,SAAS;EACT,OAAO;EACP,UAAU;CAAE","file":"Card.vue","sourcesContent":["@charset \"UTF-8\";\n/*基础样式,作用类似reset*/\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box; }\n\nbody {\n  overflow-x: hidden;\n  /*可继承*/\n  color: #333;\n  font-size: 14px;\n  font-family: helvetica, sans-serif;\n  -webkit-text-size-adjust: none;\n  /*禁止选中文本*/\n  user-select: none;\n  /*部分浏览器点选时会有淡蓝色框,这样可以去掉*/\n  -webkit-tap-highlight-color: transparent;\n  /*禁止保存图片*/\n  -webkit-touch-callout: none;\n  /*滚动平滑*/\n  -webkit-overflow-scrolling: touch; }\n\ninput, textarea, select {\n  /*表单元素字体大小可继承*/\n  font-size: inherit; }\n\ninput, textarea {\n  /*输入框可选中文本*/\n  user-select: text; }\n\nimg, input {\n  /*图片和输入元素垂直居中*/\n  vertical-align: middle; }\n\nimg {\n  /*图片无边框*/\n  border: none; }\n\na {\n  outline: none;\n  color: inherit;\n  text-decoration: none;\n  cursor: pointer; }\n\nli {\n  list-style: none; }\n\ni {\n  font-style: normal; }\n\n.wrapper {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0; }\n"],"sourceRoot":"webpack://"}]);
 
 // exports
 
@@ -958,95 +778,375 @@ exports.default = {
 
 /***/ }),
 
-/***/ 65:
+/***/ 6:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+// 获取uid函数
+var getUid = function () {
+  var uid = 0;
+  return function () {
+    return ++uid;
+  };
+}();
+
+// 获取?或者&号
+function getSymbol(url) {
+  return url.indexOf('?') < 0 ? '?' : '&';
+}
+
+// 判断是否为function函数
+function isFunction(fn) {
+  return typeof fn === 'function';
+}
+
+// 加载js函数
+var getScript = function () {
+  var headEl = document.head;
+  var jsReg = /(\.js)$/;
+
+  return function (url, fn) {
+    var isJs = jsReg.test(url);
+    var scriptEl = document.createElement('script');
+
+    // type
+    scriptEl.type = 'text/javascript';
+
+    // onload
+    scriptEl.onload = function () {
+      isFunction(fn) && fn();
+      isJs || headEl.removeChild(scriptEl);
+    };
+
+    // onerror
+    scriptEl.onerror = function (err) {
+      isFunction(fn) && fn(err);
+    };
+
+    // 请求
+    scriptEl.src = url;
+    headEl.appendChild(scriptEl);
+  };
+}();
+
+// get数据函数
+function get(opts) {
+  // 配置项
+  opts = Object.assign({}, get.defaults, opts);
+  var _opts = opts,
+      url = _opts.url,
+      data = _opts.data;
+  // callback可用于统计
+
+  var _opts2 = opts,
+      success = _opts2.success,
+      error = _opts2.error,
+      callback = _opts2.callback;
+
+  // url判断
+
+  if (!url) {
+    return console.error('请求的url不能为空');
+  }
+
+  // 回调函数名
+  var cbName = 'jsonpcb' + getUid();
+
+  // 将回调函数添加到全局变量
+  window[cbName] = function (rs) {
+    // 回调
+    isFunction(success) && success(rs);
+    isFunction(callback) && callback(opts, rs);
+    // 释放回调函数
+    window[cbName] = null;
+  };
+
+  // url中添加callback
+  Object.assign(data || (data = {}), {
+    callback: cbName
+  });
+
+  // 拼接data
+  if (data) {
+    url += getSymbol(url) + Object.keys(data).map(function (item) {
+      return item + '=' + encodeURIComponent(data[item]);
+    }).join('&');
+  }
+
+  // 发起请求
+  getScript(url, function (err) {
+    // js加载出错
+    if (err) {
+      // 回调
+      isFunction(error) && error(err);
+      isFunction(callback) && callback(opts);
+      // 释放回调函数
+      window[cbName] = null;
+    }
+  });
+}
+// get数据默认配置项
+get.defaults = {};
+
+// post数据函数
+var post = function () {
+  // 回调函数对象
+  var msgcb = {};
+  var bodyEl = document.body;
+  // 临时元素
+  var tmpEl = document.createElement('div');
+
+  // 绑定消息事件
+  window.addEventListener('message', function (evt) {
+    var data = evt.data;
+
+    // data转对象
+
+    (typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object' || (data = JSON.parse(data || null) || {});
+
+    // 回调函数
+    var callback = msgcb[data.id];
+    isFunction(callback) && callback(data.rs);
+  });
+
+  return function (opts) {
+    // 配置项
+    opts = Object.assign({}, post.defaults, opts);
+    var _opts3 = opts,
+        success = _opts3.success,
+        error = _opts3.error,
+        callback = _opts3.callback,
+        formSelector = _opts3.formSelector,
+        url = _opts3.url,
+        method = _opts3.method,
+        data = _opts3.data,
+        enctype = _opts3.enctype;
+
+    // iframe元素
+
+    var ifrId = 'postifr' + getUid();
+    tmpEl.innerHTML = '<iframe name="' + ifrId + '" style="display: none;"></iframe>';
+    var ifrEl = tmpEl.childNodes[0];
+    bodyEl.appendChild(ifrEl);
+
+    // form元素
+    var formEl = void 0;
+    // 页面中已存在的form提交
+    if (formSelector) {
+      formEl = document.querySelector(formSelector);
+      // 请求url中添加callback信息
+      var _formEl = formEl,
+          action = _formEl.action;
+
+      formEl.action = action + getSymbol(action) + 'msgcb=' + ifrId;
+    }
+    // 动态生成的form提交
+    else {
+        // 请求url
+        var _action = url + getSymbol(url) + 'msgcb=' + ifrId;
+        // 数据添加到form的input
+        var inputHtml = data && Object.keys(data).map(function (key) {
+          return '<input type="hidden" name="' + key + '" value="' + data[key] + '"/>';
+        }).join('');
+        tmpEl.innerHTML = '<form style="display: none;" method="' + method + '" action="' + _action + '">' + inputHtml + '</form>';
+        formEl = tmpEl.childNodes[0];
+      }
+    // target
+    formEl.target = ifrId;
+    // enctype
+    enctype && (formEl.enctype = enctype);
+
+    // message事件响应函数
+    msgcb[ifrId] = function (rs) {
+      // 回调
+      isFunction(success) && success(rs);
+      isFunction(callback) && callback(opts, rs);
+      // 释放回调函数
+      msgcb[ifrId] = null;
+
+      // 删除节点
+      bodyEl.removeChild(ifrEl);
+      formSelector || bodyEl.removeChild(formEl);
+    };
+
+    // iframe onload事件,主要处理请求失败
+    ifrEl.onload = function () {
+      // 延迟运行
+      setTimeout(function () {
+        // 如果回调还在,说明没有成功回调,即发生错误
+        if (msgcb[ifrId]) {
+          // 回调
+          isFunction(error) && error();
+          isFunction(callback) && callback(opts);
+          // 释放回调函数
+          msgcb[ifrId] = null;
+
+          // 删除节点
+          bodyEl.removeChild(ifrEl);
+          formSelector || bodyEl.removeChild(formEl);
+        }
+      }, 100);
+    };
+
+    // 提交
+    formSelector || bodyEl.appendChild(formEl);
+    formEl.submit();
+  };
+}();
+// post数据默认配置项
+post.defaults = {
+  method: 'POST'
+};
+
+exports.default = {
+  // 加载js函数
+  getScript: getScript,
+  // get数据函数
+  get: get,
+  // post数据函数
+  post: post
+};
+
+/***/ }),
+
+/***/ 62:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "wrapper"
-  }, [_c('div', {
-    staticClass: "carouselWrap"
-  }, [_c('pi-carousel', {
-    ref: "carousel",
+  }, [_c('pi-card', {
+    ref: "card",
     attrs: {
-      "isShowPager": false,
-      "isLoop": false,
+      "isLoop": true,
+      "autoPlayTimeout": 0,
+      "duration": 400,
       "dataList": _vm.dataList
-    },
-    scopedSlots: _vm._u([{
-      key: "default",
-      fn: function(props) {
-        return [_c('div', {
-          staticClass: "imgWrap"
-        }, [_c('img', {
-          staticClass: "img",
-          attrs: {
-            "src": props.itemData.img
-          }
-        }), _vm._v(" "), _c('div', {
-          staticClass: "imgInfo"
-        }, [_c('p', {
-          staticClass: "indicator"
-        }, [_c('span', [_vm._v(_vm._s(props.index + 1))]), _vm._v("/" + _vm._s(_vm.dataList.length) + "\n                        ")]), _vm._v(" "), _c('p', {
-          staticClass: "title"
-        }, [_vm._v(_vm._s(_vm.titleInfo.title))]), _vm._v(" "), _c('p', {
-          staticClass: "subTitle"
-        }, [_c('span', {
-          staticClass: "source"
-        }, [_vm._v(_vm._s(_vm.titleInfo.source))]), _c('span', {
-          staticClass: "time"
-        }, [_vm._v(_vm._s(_vm.titleInfo.time))])]), _vm._v(" "), _c('p', {
-          staticClass: "desc"
-        }, [_vm._v(_vm._s(props.itemData.desc))])])])]
-      }
-    }])
-  })], 1), _vm._v(" "), _c('div', {
-    ref: "thumbWrap",
-    staticClass: "thumbWrap"
-  }, _vm._l((_vm.dataList), function(item, index) {
-    return _c('div', {
-      staticClass: "thumb",
-      class: {
-        selected: index === _vm.thumbIndex
-      },
-      style: ({
-        backgroundImage: ("url(" + (item.img) + ")")
-      }),
-      on: {
-        "click": function($event) {
-          _vm.__thumbClick(index)
-        }
-      }
-    })
-  }))])
+    }
+  })], 1)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-fea266c8", module.exports)
+     require("vue-hot-reload-api").rerender("data-v-85d7aaf0", module.exports)
   }
 }
 
 /***/ }),
 
-/***/ 75:
+/***/ 7:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+// 获取图片数据
+var getImgs = function () {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+    var rs, articles;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return get('/iflow/api/v1/channel/100?method=new');
+
+          case 2:
+            rs = _context.sent;
+
+            if (rs) {
+              _context.next = 5;
+              break;
+            }
+
+            return _context.abrupt('return');
+
+          case 5:
+            articles = Object.getValByPath(rs, 'data.articles', {});
+            return _context.abrupt('return', Object.keys(articles).map(function (key) {
+              return Object.getValByPath(articles, key + '.images.0.url');
+            }).filter(function (item) {
+              return item;
+            }));
+
+          case 7:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function getImgs() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+var _jsonp = __webpack_require__(6);
+
+var _jsonp2 = _interopRequireDefault(_jsonp);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+var origin = 'https://m.uczzd.cn';
+
+// get请求函数,对应jsonp
+function get(pathname, data) {
+  return new Promise(function (resolve) {
+    _jsonp2.default.get({
+      url: origin + pathname,
+      data: data,
+      success: function success(rs) {
+        resolve(rs);
+      },
+      error: function error() {
+        resolve();
+      }
+    });
+  });
+}
+
+// post请求函数
+function post(opts) {}exports.default = {
+  get: get,
+  post: post,
+  getImgs: getImgs
+};
+
+/***/ }),
+
+/***/ 72:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(48);
+var content = __webpack_require__(45);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
-var update = __webpack_require__(2)("4180f080", content, false);
+var update = __webpack_require__(2)("3d0a1e96", content, false);
 // Hot Module Replacement
 if(false) {
  // When the styles change, update the <style> tags
  if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fea266c8\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UcGallery.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-fea266c8\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./UcGallery.vue");
+   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-85d7aaf0\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Card.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-85d7aaf0\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Card.vue");
      if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
      update(newContent);
    });
@@ -1054,6 +1154,191 @@ if(false) {
  // When the module is disposed, remove the <style> tags
  module.hot.dispose(function() { update(); });
 }
+
+/***/ }),
+
+/***/ 77:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _PiCarousel = __webpack_require__(9);
+
+var _PiCarousel2 = _interopRequireDefault(_PiCarousel);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  components: {
+    PiCarousel: _PiCarousel2.default
+  },
+  props: {
+    // 宽度
+    width: {
+      default: '100%'
+    },
+    // 高度
+    height: {
+      default: '100%'
+    },
+    // 列表数据
+    dataList: {
+      default: []
+    },
+    // 滑动距离阈值
+    swipSpanThreshold: {
+      default: 6
+    },
+    // 滑动阈值
+    swipThreshold: {
+      default: 50
+    },
+    // 动画时长
+    duration: {
+      default: 400
+    },
+    // first和last拉不动的比率
+    pullRatio: {
+      default: 2
+    },
+    // 是否循环滚动
+    isLoop: {
+      default: true
+    },
+    // 默认滚动索引
+    index: {
+      default: 0
+    },
+    // 是否显示页脚
+    isShowPager: {
+      default: false
+    },
+    // 是否显示loading
+    isShowLoading: {
+      default: true
+    },
+    // 自动播放间隔
+    autoPlayTimeout: {
+      // 默认为0,表示禁用自动播放
+      default: 0
+    }
+  }
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/***/ }),
+
+/***/ 78:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, "\n@charset \"UTF-8\";\n.pi-card {\n  -webkit-transform: scale3d(0.8, 0.8, 1);\n          transform: scale3d(0.8, 0.8, 1);\n  /*样式覆盖*/\n  /*动画状态*/\n}\n.pi-card.pi-card {\n    overflow: visible;\n}\n.pi-card.pi-animating .pi-item {\n    -webkit-transition: all ease 0.4s;\n    transition: all ease 0.4s;\n    /*动画中的当前元素缩小小*/\n}\n.pi-card.pi-animating .pi-item:nth-of-type(2) {\n      -webkit-transform: scale3d(0.8, 0.8, 1);\n              transform: scale3d(0.8, 0.8, 1);\n}\n.pi-card .pi-item {\n    /*非当前元素*/\n}\n.pi-card .pi-item:nth-of-type(1), .pi-card .pi-item:nth-of-type(3) {\n      /*非临时当前元素缩小*/\n}\n.pi-card .pi-item:nth-of-type(1):not(.temp-current), .pi-card .pi-item:nth-of-type(3):not(.temp-current) {\n        -webkit-transform: scale3d(0.8, 0.8, 1);\n                transform: scale3d(0.8, 0.8, 1);\n}\n", "", {"version":3,"sources":["/./src/component/PiCard.vue"],"names":[],"mappings":";AAAA,iBAAiB;AACjB;EACE,wCAAgC;UAAhC,gCAAgC;EAChC,QAAQ;EACR,QAAQ;CAAE;AACV;IACE,kBAAkB;CAAE;AACtB;IACE,kCAA0B;IAA1B,0BAA0B;IAC1B,eAAe;CAAE;AACjB;MACE,wCAAgC;cAAhC,gCAAgC;CAAE;AACtC;IACE,SAAS;CAAE;AACX;MACE,aAAa;CAAE;AACf;QACE,wCAAgC;gBAAhC,gCAAgC;CAAE","file":"PiCard.vue","sourcesContent":["@charset \"UTF-8\";\n.pi-card {\n  transform: scale3d(0.8, 0.8, 1);\n  /*样式覆盖*/\n  /*动画状态*/ }\n  .pi-card.pi-card {\n    overflow: visible; }\n  .pi-card.pi-animating .pi-item {\n    transition: all ease 0.4s;\n    /*动画中的当前元素缩小小*/ }\n    .pi-card.pi-animating .pi-item:nth-of-type(2) {\n      transform: scale3d(0.8, 0.8, 1); }\n  .pi-card .pi-item {\n    /*非当前元素*/ }\n    .pi-card .pi-item:nth-of-type(1), .pi-card .pi-item:nth-of-type(3) {\n      /*非临时当前元素缩小*/ }\n      .pi-card .pi-item:nth-of-type(1):not(.temp-current), .pi-card .pi-item:nth-of-type(3):not(.temp-current) {\n        transform: scale3d(0.8, 0.8, 1); }\n"],"sourceRoot":"webpack://"}]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 79:
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(81)
+}
+var Component = __webpack_require__(1)(
+  /* script */
+  __webpack_require__(77),
+  /* template */
+  __webpack_require__(80),
+  /* styles */
+  injectStyle,
+  /* scopeId */
+  null,
+  /* moduleIdentifier (server only) */
+  null
+)
+Component.options.__file = "/Users/soneway/Sites/github/vue-plugin/src/component/PiCard.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key !== "__esModule"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] PiCard.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-016309dd", Component.options)
+  } else {
+    hotAPI.reload("data-v-016309dd", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
 
 /***/ }),
 
@@ -1069,6 +1354,66 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/*loading样式*/\n.loading:befo
 
 // exports
 
+
+/***/ }),
+
+/***/ 80:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('pi-carousel', {
+    ref: "card",
+    staticClass: "pi-card",
+    attrs: {
+      "isShowPager": _vm.isShowPager,
+      "width": _vm.width,
+      "height": _vm.height,
+      "dataList": _vm.dataList,
+      "swipSpanThreshold": _vm.swipSpanThreshold,
+      "swipThreshold": _vm.swipThreshold,
+      "duration": _vm.duration,
+      "pullRatio": _vm.pullRatio,
+      "isLoop": _vm.isLoop,
+      "index": _vm.index,
+      "isShowLoading": _vm.isShowLoading,
+      "autoPlayTimeout": _vm.autoPlayTimeout
+    }
+  })
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-016309dd", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 81:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(78);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("77195cc9", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-016309dd\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCard.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-016309dd\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCard.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
 
 /***/ }),
 
@@ -1117,5 +1462,5 @@ module.exports = Component.exports
 
 /***/ })
 
-},[35]);
-//# sourceMappingURL=uc-gallery.js.map
+},[30]);
+//# sourceMappingURL=card.js.map
