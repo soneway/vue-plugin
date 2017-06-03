@@ -61,6 +61,8 @@
     .pi-carousel {
         overflow: hidden;
         position: relative;
+        /*可有效减缓闪烁*/
+        backface-visibility: hidden;
         /*loading*/
         &.pi-loading {
             .pi-item {
