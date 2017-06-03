@@ -1,10 +1,6 @@
 <template>
     <div class="wrapper">
         <pi-carousel ref="carousel"
-            :isShowPager="true"
-            :isLoop="true"
-            :autoPlayTimeout="0"
-            :duration="400"
             :dataList="dataList">
         </pi-carousel>
     </div>

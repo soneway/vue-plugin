@@ -10,7 +10,8 @@
         <div class="pi-wrap"
             :style="_wrapStyle"
             @click="__wrapClick">
-            <div class="pi-item">
+            <div class="pi-item"
+                :class="_prevClass">
                 <slot v-if="prevData"
                     :itemData="prevData"
                     :index="currentIndex - 1">
@@ -28,7 +29,8 @@
                     </div>
                 </slot>
             </div>
-            <div class="pi-item">
+            <div class="pi-item"
+                :class="_nextClass">
                 <slot v-if="nextData"
                     :itemData="nextData"
                     :index="currentIndex + 1">
@@ -59,15 +61,6 @@
     .pi-carousel {
         overflow: hidden;
         position: relative;
-        /*优化滚动效果*/
-        backface-visibility: hidden;
-
-        /*没有动画*/
-        &.notrans {
-            .pi-wrap {
-                transition: none;
-            }
-        }
         /*loading*/
         &.pi-loading {
             .pi-item {
@@ -75,11 +68,17 @@
             }
         }
 
+        /*正在动画*/
+        &.pi-animating {
+            .pi-wrap {
+                transition: transform ease 0.4s;
+            }
+        }
+
         .pi-wrap {
             width: 300%;
             height: 100%;
             margin-left: -100%;
-            transition: transform ease;
             display: flex;
             /*虽然是默认值,但不能省略,以确保auto-prefixer插件准确生成兼容安卓4.0的代码*/
             flex-direction: row;
@@ -146,7 +145,7 @@
       swipThreshold: {
         default: 50
       },
-      // 动画时长
+      // 动画时长(该时长,需要和动画时长相同)
       duration: {
         default: 400
       },
@@ -178,8 +177,10 @@
     },
     data() {
       return {
-        // 禁用动画
-        notrans: false,
+        // 方向状态
+        direction: 0,
+        // 是否正在动画
+        isAnimating: false,
         // 滚动索引
         currentIndex: this.index,
         // 滑动值
@@ -245,8 +246,8 @@
       },
       _class() {
         return {
-          notrans: this.notrans,
-          'pi-loading': this.isShowLoading
+          'pi-loading': this.isShowLoading,
+          'pi-animating': this.isAnimating
         };
       },
       _style() {
@@ -257,8 +258,17 @@
       },
       _wrapStyle() {
         return {
-          transform: `translate3d(${this.currentTranslate},0,0)`,
-          transitionDuration: `${this.duration / 1000}s`
+          transform: `translate3d(${this.currentTranslate},0,0)`
+        };
+      },
+      _prevClass() {
+        return {
+          'temp-current': this.isAnimating && this.direction === 1
+        };
+      },
+      _nextClass() {
+        return {
+          'temp-current': this.isAnimating && this.direction === -1
         };
       }
     },
@@ -382,29 +392,25 @@
 
       // 滚动
       slide(direction, index) {
-        // 开启动画
-        this.notrans = false;
+        // 正在动画
+        this.isAnimating = true;
+
         // 判断滚动方向
         switch (direction) {
           // 向左
           case FORWARD:
           // 向右
           case BACK: {
-            // 动画状态
-            this.isAnimating = true;
+            // 方向状态
+            this.direction = direction;
             // 作动画
             this.currentTranslate = `${this.$el.offsetWidth * direction}px`;
 
             // index值为undefined
             index === undefined && (index = this.currentIndex - direction);
 
-            // 复位
-            setTimeout(() => {
-              // 复位(更新内容)
-              this.reset(index);
-              // 触发slide事件
-              this.$emit('slide', index, direction);
-            }, this.duration);
+            // 触发slide事件
+            this.$emit('slide', index, direction);
             break;
           }
           // 没有direction值(说明滑动没有超过swipSpanThreshold)
@@ -412,11 +418,23 @@
             this.currentTranslate = 0;
           }
         }
+
+        // 复位
+        setTimeout(() => {
+          // 复位(更新内容)
+          this.reset(index);
+        }, this.duration);
       },
       // 复位
       reset(index) {
-        // 禁用动画
-        this.notrans = true;
+        // 重置动画状态
+        this.isAnimating = false;
+
+        // 如无index
+        if (index === undefined) {
+          return;
+        }
+
         // 复位
         this.currentTranslate = 0;
 
@@ -430,9 +448,6 @@
         }
         // 更新index(更新内容)
         this.currentIndex = index;
-
-        // 重置isAnimating
-        this.isAnimating = false;
       },
       // 滑动到第几帧
       slideToIndex(index) {
