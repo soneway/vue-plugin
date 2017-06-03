@@ -104,7 +104,7 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 
-var urls = ['carousel', 'uc-gallery', 'slider', 'msgbox'];
+var urls = ['card', 'carousel', 'uc-gallery', 'slider', 'msgbox'];
 
 exports.default = {
   data: function data() {

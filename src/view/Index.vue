@@ -48,7 +48,7 @@
 </style>
 
 <script>
-  const urls = ['carousel', 'uc-gallery', 'slider', 'msgbox'];
+  const urls = ['card', 'carousel', 'uc-gallery', 'slider', 'msgbox'];
 
   export default {
     data() {

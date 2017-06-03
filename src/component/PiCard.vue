@@ -18,7 +18,9 @@
 
 <style lang="scss">
     .pi-card {
-        transform: scale3d(0.8, 0.8, 1);
+        $scale: 0.68;
+
+        transform: scale3d($scale, $scale, 1);
 
         /*样式覆盖*/
         &.pi-card {
@@ -32,7 +34,7 @@
 
                 /*动画中的当前元素缩小小*/
                 &:nth-of-type(2) {
-                    transform: scale3d(0.8, 0.8, 1);
+                    transform: scale3d($scale, $scale, 1);
                 }
             }
         }
@@ -42,7 +44,7 @@
             &:nth-of-type(1), &:nth-of-type(3) {
                 /*非临时当前元素缩小*/
                 &:not(.temp-current) {
-                    transform: scale3d(0.8, 0.8, 1);
+                    transform: scale3d($scale, $scale, 1);
                 }
             }
         }
