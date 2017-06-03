@@ -170,7 +170,7 @@
         source: headerEl.querySelector('#source').textContent.trim(),
         time: headerEl.querySelector('time').textContent.trim()
       };
-      const figures = [...document.querySelectorAll('.uc-gallery figure')];
+      const figures = [].slice.call(document.querySelectorAll('.uc-gallery figure'));
       const dataList = figures.map((item) => {
         return {
           img: item.querySelector('img').getAttribute('alt-src'),
