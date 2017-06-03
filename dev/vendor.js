@@ -768,7 +768,7 @@ if (!('ontouchend' in document)) {
 // Object.assign
 if (!Object.assign) {
   Object.assign = function (obj) {
-    [].slice.call(arguments, 1).forEach(function (item) {
+    [].concat(Array.prototype.slice.call(arguments)).slice(1).forEach(function (item) {
       Object.keys(item).forEach(function (key) {
         obj[key] = item[key];
       });
