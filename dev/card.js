@@ -1216,7 +1216,7 @@ exports.default = {
     },
     // 是否显示页脚
     isShowPager: {
-      default: false
+      default: true
     },
     // 是否显示loading
     isShowLoading: {
