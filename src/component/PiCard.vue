@@ -26,8 +26,8 @@
             overflow: visible;
         }
 
-        /*动画状态*/
-        &.pi-animating {
+        /*动画状态,非左右切换动画*/
+        &.pi-animating:not([data-direction="0"]) {
             .pi-item {
                 transition: all ease 0.4s;
 

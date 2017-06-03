@@ -8,6 +8,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "pi-carousel",
     class: _vm._class,
     style: (_vm._style),
+    attrs: {
+      "data-direction": _vm.direction
+    },
     on: {
       "touchstart": _vm.__touchstart,
       "touchmove": _vm.__touchmove,
@@ -559,6 +562,7 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
 
 var FORWARD = -1;
 var BACK = 1;
@@ -711,12 +715,12 @@ exports.default = {
     },
     _prevClass: function _prevClass() {
       return {
-        'temp-current': this.isAnimating && this.direction === 1
+        'temp-current': this.isAnimating && this.direction === BACK
       };
     },
     _nextClass: function _nextClass() {
       return {
-        'temp-current': this.isAnimating && this.direction === -1
+        'temp-current': this.isAnimating && this.direction === FORWARD
       };
     }
   },
@@ -872,6 +876,7 @@ exports.default = {
         default:
           {
             this.currentTranslate = 0;
+            this.direction = 0;
           }
       }
 

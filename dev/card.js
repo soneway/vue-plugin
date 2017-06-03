@@ -8,6 +8,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "pi-carousel",
     class: _vm._class,
     style: (_vm._style),
+    attrs: {
+      "data-direction": _vm.direction
+    },
     on: {
       "touchstart": _vm.__touchstart,
       "touchmove": _vm.__touchmove,
@@ -376,6 +379,7 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
 
 var FORWARD = -1;
 var BACK = 1;
@@ -528,12 +532,12 @@ exports.default = {
     },
     _prevClass: function _prevClass() {
       return {
-        'temp-current': this.isAnimating && this.direction === 1
+        'temp-current': this.isAnimating && this.direction === BACK
       };
     },
     _nextClass: function _nextClass() {
       return {
-        'temp-current': this.isAnimating && this.direction === -1
+        'temp-current': this.isAnimating && this.direction === FORWARD
       };
     }
   },
@@ -689,6 +693,7 @@ exports.default = {
         default:
           {
             this.currentTranslate = 0;
+            this.direction = 0;
           }
       }
 
@@ -1286,7 +1291,7 @@ exports = module.exports = __webpack_require__(0)();
 
 
 // module
-exports.push([module.i, "\n@charset \"UTF-8\";\n.pi-card {\n  -webkit-transform: scale3d(0.68, 0.68, 1);\n          transform: scale3d(0.68, 0.68, 1);\n  /*样式覆盖*/\n  /*动画状态*/\n}\n.pi-card.pi-card {\n    overflow: visible;\n}\n.pi-card.pi-animating .pi-item {\n    -webkit-transition: all ease 0.4s;\n    transition: all ease 0.4s;\n    /*动画中的当前元素缩小小*/\n}\n.pi-card.pi-animating .pi-item:nth-of-type(2) {\n      -webkit-transform: scale3d(0.68, 0.68, 1);\n              transform: scale3d(0.68, 0.68, 1);\n}\n.pi-card .pi-item {\n    /*非当前元素*/\n}\n.pi-card .pi-item:nth-of-type(1), .pi-card .pi-item:nth-of-type(3) {\n      /*非临时当前元素缩小*/\n}\n.pi-card .pi-item:nth-of-type(1):not(.temp-current), .pi-card .pi-item:nth-of-type(3):not(.temp-current) {\n        -webkit-transform: scale3d(0.68, 0.68, 1);\n                transform: scale3d(0.68, 0.68, 1);\n}\n", "", {"version":3,"sources":["/./src/component/PiCard.vue"],"names":[],"mappings":";AAAA,iBAAiB;AACjB;EACE,0CAAkC;UAAlC,kCAAkC;EAClC,QAAQ;EACR,QAAQ;CAAE;AACV;IACE,kBAAkB;CAAE;AACtB;IACE,kCAA0B;IAA1B,0BAA0B;IAC1B,eAAe;CAAE;AACjB;MACE,0CAAkC;cAAlC,kCAAkC;CAAE;AACxC;IACE,SAAS;CAAE;AACX;MACE,aAAa;CAAE;AACf;QACE,0CAAkC;gBAAlC,kCAAkC;CAAE","file":"PiCard.vue","sourcesContent":["@charset \"UTF-8\";\n.pi-card {\n  transform: scale3d(0.68, 0.68, 1);\n  /*样式覆盖*/\n  /*动画状态*/ }\n  .pi-card.pi-card {\n    overflow: visible; }\n  .pi-card.pi-animating .pi-item {\n    transition: all ease 0.4s;\n    /*动画中的当前元素缩小小*/ }\n    .pi-card.pi-animating .pi-item:nth-of-type(2) {\n      transform: scale3d(0.68, 0.68, 1); }\n  .pi-card .pi-item {\n    /*非当前元素*/ }\n    .pi-card .pi-item:nth-of-type(1), .pi-card .pi-item:nth-of-type(3) {\n      /*非临时当前元素缩小*/ }\n      .pi-card .pi-item:nth-of-type(1):not(.temp-current), .pi-card .pi-item:nth-of-type(3):not(.temp-current) {\n        transform: scale3d(0.68, 0.68, 1); }\n"],"sourceRoot":"webpack://"}]);
+exports.push([module.i, "\n@charset \"UTF-8\";\n.pi-card {\n  -webkit-transform: scale3d(0.68, 0.68, 1);\n          transform: scale3d(0.68, 0.68, 1);\n  /*样式覆盖*/\n  /*动画状态,非左右切换动画*/\n}\n.pi-card.pi-card {\n    overflow: visible;\n}\n.pi-card.pi-animating:not([data-direction=\"0\"]) .pi-item {\n    -webkit-transition: all ease 0.4s;\n    transition: all ease 0.4s;\n    /*动画中的当前元素缩小小*/\n}\n.pi-card.pi-animating:not([data-direction=\"0\"]) .pi-item:nth-of-type(2) {\n      -webkit-transform: scale3d(0.68, 0.68, 1);\n              transform: scale3d(0.68, 0.68, 1);\n}\n.pi-card .pi-item {\n    /*非当前元素*/\n}\n.pi-card .pi-item:nth-of-type(1), .pi-card .pi-item:nth-of-type(3) {\n      /*非临时当前元素缩小*/\n}\n.pi-card .pi-item:nth-of-type(1):not(.temp-current), .pi-card .pi-item:nth-of-type(3):not(.temp-current) {\n        -webkit-transform: scale3d(0.68, 0.68, 1);\n                transform: scale3d(0.68, 0.68, 1);\n}\n", "", {"version":3,"sources":["/./src/component/PiCard.vue"],"names":[],"mappings":";AAAA,iBAAiB;AACjB;EACE,0CAAkC;UAAlC,kCAAkC;EAClC,QAAQ;EACR,gBAAgB;CAAE;AAClB;IACE,kBAAkB;CAAE;AACtB;IACE,kCAA0B;IAA1B,0BAA0B;IAC1B,eAAe;CAAE;AACjB;MACE,0CAAkC;cAAlC,kCAAkC;CAAE;AACxC;IACE,SAAS;CAAE;AACX;MACE,aAAa;CAAE;AACf;QACE,0CAAkC;gBAAlC,kCAAkC;CAAE","file":"PiCard.vue","sourcesContent":["@charset \"UTF-8\";\n.pi-card {\n  transform: scale3d(0.68, 0.68, 1);\n  /*样式覆盖*/\n  /*动画状态,非左右切换动画*/ }\n  .pi-card.pi-card {\n    overflow: visible; }\n  .pi-card.pi-animating:not([data-direction=\"0\"]) .pi-item {\n    transition: all ease 0.4s;\n    /*动画中的当前元素缩小小*/ }\n    .pi-card.pi-animating:not([data-direction=\"0\"]) .pi-item:nth-of-type(2) {\n      transform: scale3d(0.68, 0.68, 1); }\n  .pi-card .pi-item {\n    /*非当前元素*/ }\n    .pi-card .pi-item:nth-of-type(1), .pi-card .pi-item:nth-of-type(3) {\n      /*非临时当前元素缩小*/ }\n      .pi-card .pi-item:nth-of-type(1):not(.temp-current), .pi-card .pi-item:nth-of-type(3):not(.temp-current) {\n        transform: scale3d(0.68, 0.68, 1); }\n"],"sourceRoot":"webpack://"}]);
 
 // exports
 

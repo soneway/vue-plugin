@@ -2,6 +2,7 @@
     <div class="pi-carousel"
         :class="_class"
         :style="_style"
+        :data-direction="direction"
         @touchstart="__touchstart"
         @touchmove="__touchmove"
         @touchend="__touchend">
@@ -265,12 +266,12 @@
       },
       _prevClass() {
         return {
-          'temp-current': this.isAnimating && this.direction === 1
+          'temp-current': this.isAnimating && this.direction === BACK
         };
       },
       _nextClass() {
         return {
-          'temp-current': this.isAnimating && this.direction === -1
+          'temp-current': this.isAnimating && this.direction === FORWARD
         };
       }
     },
@@ -418,6 +419,7 @@
           // 没有direction值(说明滑动没有超过swipSpanThreshold)
           default: {
             this.currentTranslate = 0;
+            this.direction = 0;
           }
         }
 
