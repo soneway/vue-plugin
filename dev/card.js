@@ -1,105 +1,328 @@
-webpackJsonp([4],{
+webpackJsonp([1],{
 
 /***/ 10:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "pi-carousel",
-    class: _vm._class,
-    style: (_vm._style),
-    attrs: {
-      "data-direction": _vm.direction
-    },
-    on: {
-      "touchstart": _vm.__touchstart,
-      "touchmove": _vm.__touchmove,
-      "touchend": _vm.__touchend
-    }
-  }, [_c('div', {
-    staticClass: "pi-wrap",
-    style: (_vm._wrapStyle),
-    on: {
-      "click": _vm.__wrapClick
-    }
-  }, [_c('div', {
-    staticClass: "pi-item",
-    class: _vm._prevClass
-  }, [(_vm.prevData) ? _vm._t("default", [_c('div', {
-    staticClass: "pi-img",
-    style: (_vm.imgStyle(_vm.prevData))
-  })], {
-    itemData: _vm.prevData,
-    index: _vm.currentIndex - 1
-  }) : _vm._e()], 2), _vm._v(" "), _c('div', {
-    ref: "currentItem",
-    staticClass: "pi-item"
-  }, [(_vm.currentData) ? _vm._t("default", [_c('div', {
-    staticClass: "pi-img",
-    style: (_vm.imgStyle(_vm.currentData))
-  })], {
-    itemData: _vm.currentData,
-    index: _vm.currentIndex
-  }) : _vm._e()], 2), _vm._v(" "), _c('div', {
-    staticClass: "pi-item",
-    class: _vm._nextClass
-  }, [(_vm.nextData) ? _vm._t("default", [_c('div', {
-    staticClass: "pi-img",
-    style: (_vm.imgStyle(_vm.nextData))
-  })], {
-    itemData: _vm.nextData,
-    index: _vm.currentIndex + 1
-  }) : _vm._e()], 2)]), _vm._v(" "), (_vm.isShowPager) ? _c('div', {
-    staticClass: "pi-pager"
-  }, [_vm._t("pager", _vm._l((_vm.dataList), function(_, index) {
-    return _c('span', {
-      class: {
-        selected: index === _vm.currentIndex
-      },
-      on: {
-        "click": function($event) {
-          _vm.__pagerClick(index)
-        }
-      }
-    })
-  }), {
-    dataList: _vm.dataList
-  })], 2) : _vm._e()])
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-d083b4a6", module.exports)
-  }
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+// 获取uid函数
+var getUid = function () {
+  var uid = 0;
+  return function () {
+    return ++uid;
+  };
+}();
+
+// 获取?或者&号
+function getSymbol(url) {
+  return url.indexOf('?') < 0 ? '?' : '&';
 }
+
+// 判断是否为function函数
+function isFunction(fn) {
+  return typeof fn === 'function';
+}
+
+// 加载js函数
+var getScript = function () {
+  var headEl = document.head;
+  var jsReg = /(\.js)$/;
+
+  return function (url, fn) {
+    var isJs = jsReg.test(url);
+    var scriptEl = document.createElement('script');
+
+    // type
+    scriptEl.type = 'text/javascript';
+
+    // onload
+    scriptEl.onload = function () {
+      isFunction(fn) && fn();
+      isJs || headEl.removeChild(scriptEl);
+    };
+
+    // onerror
+    scriptEl.onerror = function (err) {
+      isFunction(fn) && fn(err);
+    };
+
+    // 请求
+    scriptEl.src = url;
+    headEl.appendChild(scriptEl);
+  };
+}();
+
+// get数据函数
+function get(opts) {
+  // 配置项
+  opts = Object.assign({}, get.defaults, opts);
+  var _opts = opts,
+      url = _opts.url,
+      data = _opts.data;
+  // callback可用于统计
+
+  var _opts2 = opts,
+      success = _opts2.success,
+      error = _opts2.error,
+      callback = _opts2.callback;
+
+  // url判断
+
+  if (!url) {
+    return console.error('请求的url不能为空');
+  }
+
+  // 回调函数名
+  var cbName = 'jsonpcb' + getUid();
+
+  // 将回调函数添加到全局变量
+  window[cbName] = function (rs) {
+    // 回调
+    isFunction(success) && success(rs);
+    isFunction(callback) && callback(opts, rs);
+    // 释放回调函数
+    window[cbName] = null;
+  };
+
+  // url中添加callback
+  Object.assign(data || (data = {}), {
+    callback: cbName
+  });
+
+  // 拼接data
+  if (data) {
+    url += getSymbol(url) + Object.keys(data).map(function (item) {
+      return item + '=' + encodeURIComponent(data[item]);
+    }).join('&');
+  }
+
+  // 发起请求
+  getScript(url, function (err) {
+    // js加载出错
+    if (err) {
+      // 回调
+      isFunction(error) && error(err);
+      isFunction(callback) && callback(opts);
+      // 释放回调函数
+      window[cbName] = null;
+    }
+  });
+}
+// get数据默认配置项
+get.defaults = {};
+
+// post数据函数
+var post = function () {
+  // 回调函数对象
+  var msgcb = {};
+  var bodyEl = document.body;
+  // 临时元素
+  var tmpEl = document.createElement('div');
+
+  // 绑定消息事件
+  window.addEventListener('message', function (evt) {
+    var data = evt.data;
+
+    // data转对象
+
+    (typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object' || (data = JSON.parse(data || null) || {});
+
+    // 回调函数
+    var callback = msgcb[data.id];
+    isFunction(callback) && callback(data.rs);
+  });
+
+  return function (opts) {
+    // 配置项
+    opts = Object.assign({}, post.defaults, opts);
+    var _opts3 = opts,
+        success = _opts3.success,
+        error = _opts3.error,
+        callback = _opts3.callback,
+        formSelector = _opts3.formSelector,
+        url = _opts3.url,
+        method = _opts3.method,
+        data = _opts3.data,
+        enctype = _opts3.enctype;
+
+    // iframe元素
+
+    var ifrId = 'postifr' + getUid();
+    tmpEl.innerHTML = '<iframe name="' + ifrId + '" style="display: none;"></iframe>';
+    var ifrEl = tmpEl.childNodes[0];
+    bodyEl.appendChild(ifrEl);
+
+    // form元素
+    var formEl = void 0;
+    // 页面中已存在的form提交
+    if (formSelector) {
+      formEl = document.querySelector(formSelector);
+      // 请求url中添加callback信息
+      var _formEl = formEl,
+          action = _formEl.action;
+
+      formEl.action = action + getSymbol(action) + 'msgcb=' + ifrId;
+    }
+    // 动态生成的form提交
+    else {
+        // 请求url
+        var _action = url + getSymbol(url) + 'msgcb=' + ifrId;
+        // 数据添加到form的input
+        var inputHtml = data && Object.keys(data).map(function (key) {
+          return '<input type="hidden" name="' + key + '" value="' + data[key] + '"/>';
+        }).join('');
+        tmpEl.innerHTML = '<form style="display: none;" method="' + method + '" action="' + _action + '">' + inputHtml + '</form>';
+        formEl = tmpEl.childNodes[0];
+      }
+    // target
+    formEl.target = ifrId;
+    // enctype
+    enctype && (formEl.enctype = enctype);
+
+    // message事件响应函数
+    msgcb[ifrId] = function (rs) {
+      // 回调
+      isFunction(success) && success(rs);
+      isFunction(callback) && callback(opts, rs);
+      // 释放回调函数
+      msgcb[ifrId] = null;
+
+      // 删除节点
+      bodyEl.removeChild(ifrEl);
+      formSelector || bodyEl.removeChild(formEl);
+    };
+
+    // iframe onload事件,主要处理请求失败
+    ifrEl.onload = function () {
+      // 延迟运行
+      setTimeout(function () {
+        // 如果回调还在,说明没有成功回调,即发生错误
+        if (msgcb[ifrId]) {
+          // 回调
+          isFunction(error) && error();
+          isFunction(callback) && callback(opts);
+          // 释放回调函数
+          msgcb[ifrId] = null;
+
+          // 删除节点
+          bodyEl.removeChild(ifrEl);
+          formSelector || bodyEl.removeChild(formEl);
+        }
+      }, 100);
+    };
+
+    // 提交
+    formSelector || bodyEl.appendChild(formEl);
+    formEl.submit();
+  };
+}();
+// post数据默认配置项
+post.defaults = {
+  method: 'POST'
+};
+
+exports.default = {
+  // 加载js函数
+  getScript: getScript,
+  // get数据函数
+  get: get,
+  // post数据函数
+  post: post
+};
 
 /***/ }),
 
 /***/ 11:
 /***/ (function(module, exports, __webpack_require__) {
 
-// style-loader: Adds some css to the DOM by adding a <style> tag
+"use strict";
 
-// load the styles
-var content = __webpack_require__(8);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("10ca1f40", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d083b4a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCarousel.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d083b4a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCarousel.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+// 获取图片数据
+var getImgs = function () {
+  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+    var rs, articles;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return get('/iflow/api/v1/channel/100?method=new');
+
+          case 2:
+            rs = _context.sent;
+
+            if (rs) {
+              _context.next = 5;
+              break;
+            }
+
+            return _context.abrupt('return');
+
+          case 5:
+            articles = Object.getValByPath(rs, 'data.articles', {});
+            return _context.abrupt('return', Object.keys(articles).map(function (key) {
+              return Object.getValByPath(articles, key + '.images.0.url');
+            }).filter(function (item) {
+              return item;
+            }));
+
+          case 7:
+          case 'end':
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function getImgs() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+var _jsonp = __webpack_require__(10);
+
+var _jsonp2 = _interopRequireDefault(_jsonp);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+var origin = 'https://m.uczzd.cn';
+
+// get请求函数,对应jsonp
+function get(pathname, data) {
+  return new Promise(function (resolve) {
+    _jsonp2.default.get({
+      url: origin + pathname,
+      data: data,
+      success: function success(rs) {
+        resolve(rs);
+      },
+      error: function error() {
+        resolve();
+      }
+    });
+  });
 }
+
+// post请求函数
+function post(opts) {}exports.default = {
+  get: get,
+  post: post,
+  getImgs: getImgs
+};
 
 /***/ }),
 
@@ -109,13 +332,13 @@ if(false) {
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(72)
+  __webpack_require__(77)
 }
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(24),
+  __webpack_require__(25),
   /* template */
-  __webpack_require__(62),
+  __webpack_require__(66),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -148,7 +371,7 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 24:
+/***/ 21:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -158,11 +381,87 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _PiCard = __webpack_require__(79);
+var _PiCarousel = __webpack_require__(7);
+
+var _PiCarousel2 = _interopRequireDefault(_PiCarousel);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = {
+  components: {
+    PiCarousel: _PiCarousel2.default
+  },
+  props: Object.assign({}, _PiCarousel2.default.props)
+}; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/***/ }),
+
+/***/ 25:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _PiCard = __webpack_require__(55);
 
 var _PiCard2 = _interopRequireDefault(_PiCard);
 
-var _request = __webpack_require__(7);
+var _request = __webpack_require__(11);
 
 var _request2 = _interopRequireDefault(_request);
 
@@ -205,7 +504,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 30:
+/***/ 31:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -232,7 +531,22 @@ exports.default = new _vueRuntime2.default(_Card2.default);
 
 /***/ }),
 
-/***/ 45:
+/***/ 40:
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)();
+// imports
+
+
+// module
+exports.push([module.i, "\n@charset \"UTF-8\";\n.pi-card {\n  -webkit-transform: scale3d(0.68, 0.68, 1);\n          transform: scale3d(0.68, 0.68, 1);\n  /*样式覆盖*/\n  /*动画状态,且左右切换*/\n}\n.pi-card.pi-card {\n    overflow: visible;\n}\n.pi-card.pi-animating:not([data-direction=\"0\"]) .pi-item {\n    -webkit-transition: all ease 0.4s;\n    transition: all ease 0.4s;\n    /*动画中的当前元素缩小小*/\n}\n.pi-card.pi-animating:not([data-direction=\"0\"]) .pi-item:nth-of-type(2) {\n      -webkit-transform: scale3d(0.68, 0.68, 1);\n              transform: scale3d(0.68, 0.68, 1);\n}\n.pi-card .pi-item {\n    /*非当前元素*/\n}\n.pi-card .pi-item:nth-of-type(1), .pi-card .pi-item:nth-of-type(3) {\n      /*非临时当前元素缩小*/\n}\n.pi-card .pi-item:nth-of-type(1):not(.temp-current), .pi-card .pi-item:nth-of-type(3):not(.temp-current) {\n        -webkit-transform: scale3d(0.68, 0.68, 1);\n                transform: scale3d(0.68, 0.68, 1);\n}\n", "", {"version":3,"sources":["/./src/component/PiCard.vue"],"names":[],"mappings":";AAAA,iBAAiB;AACjB;EACE,0CAAkC;UAAlC,kCAAkC;EAClC,QAAQ;EACR,cAAc;CAAE;AAChB;IACE,kBAAkB;CAAE;AACtB;IACE,kCAA0B;IAA1B,0BAA0B;IAC1B,eAAe;CAAE;AACjB;MACE,0CAAkC;cAAlC,kCAAkC;CAAE;AACxC;IACE,SAAS;CAAE;AACX;MACE,aAAa;CAAE;AACf;QACE,0CAAkC;gBAAlC,kCAAkC;CAAE","file":"PiCard.vue","sourcesContent":["@charset \"UTF-8\";\n.pi-card {\n  transform: scale3d(0.68, 0.68, 1);\n  /*样式覆盖*/\n  /*动画状态,且左右切换*/ }\n  .pi-card.pi-card {\n    overflow: visible; }\n  .pi-card.pi-animating:not([data-direction=\"0\"]) .pi-item {\n    transition: all ease 0.4s;\n    /*动画中的当前元素缩小小*/ }\n    .pi-card.pi-animating:not([data-direction=\"0\"]) .pi-item:nth-of-type(2) {\n      transform: scale3d(0.68, 0.68, 1); }\n  .pi-card .pi-item {\n    /*非当前元素*/ }\n    .pi-card .pi-item:nth-of-type(1), .pi-card .pi-item:nth-of-type(3) {\n      /*非临时当前元素缩小*/ }\n      .pi-card .pi-item:nth-of-type(1):not(.temp-current), .pi-card .pi-item:nth-of-type(3):not(.temp-current) {\n        transform: scale3d(0.68, 0.68, 1); }\n"],"sourceRoot":"webpack://"}]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 47:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -782,535 +1096,19 @@ exports.default = {
 
 /***/ }),
 
-/***/ 6:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-// 获取uid函数
-var getUid = function () {
-  var uid = 0;
-  return function () {
-    return ++uid;
-  };
-}();
-
-// 获取?或者&号
-function getSymbol(url) {
-  return url.indexOf('?') < 0 ? '?' : '&';
-}
-
-// 判断是否为function函数
-function isFunction(fn) {
-  return typeof fn === 'function';
-}
-
-// 加载js函数
-var getScript = function () {
-  var headEl = document.head;
-  var jsReg = /(\.js)$/;
-
-  return function (url, fn) {
-    var isJs = jsReg.test(url);
-    var scriptEl = document.createElement('script');
-
-    // type
-    scriptEl.type = 'text/javascript';
-
-    // onload
-    scriptEl.onload = function () {
-      isFunction(fn) && fn();
-      isJs || headEl.removeChild(scriptEl);
-    };
-
-    // onerror
-    scriptEl.onerror = function (err) {
-      isFunction(fn) && fn(err);
-    };
-
-    // 请求
-    scriptEl.src = url;
-    headEl.appendChild(scriptEl);
-  };
-}();
-
-// get数据函数
-function get(opts) {
-  // 配置项
-  opts = Object.assign({}, get.defaults, opts);
-  var _opts = opts,
-      url = _opts.url,
-      data = _opts.data;
-  // callback可用于统计
-
-  var _opts2 = opts,
-      success = _opts2.success,
-      error = _opts2.error,
-      callback = _opts2.callback;
-
-  // url判断
-
-  if (!url) {
-    return console.error('请求的url不能为空');
-  }
-
-  // 回调函数名
-  var cbName = 'jsonpcb' + getUid();
-
-  // 将回调函数添加到全局变量
-  window[cbName] = function (rs) {
-    // 回调
-    isFunction(success) && success(rs);
-    isFunction(callback) && callback(opts, rs);
-    // 释放回调函数
-    window[cbName] = null;
-  };
-
-  // url中添加callback
-  Object.assign(data || (data = {}), {
-    callback: cbName
-  });
-
-  // 拼接data
-  if (data) {
-    url += getSymbol(url) + Object.keys(data).map(function (item) {
-      return item + '=' + encodeURIComponent(data[item]);
-    }).join('&');
-  }
-
-  // 发起请求
-  getScript(url, function (err) {
-    // js加载出错
-    if (err) {
-      // 回调
-      isFunction(error) && error(err);
-      isFunction(callback) && callback(opts);
-      // 释放回调函数
-      window[cbName] = null;
-    }
-  });
-}
-// get数据默认配置项
-get.defaults = {};
-
-// post数据函数
-var post = function () {
-  // 回调函数对象
-  var msgcb = {};
-  var bodyEl = document.body;
-  // 临时元素
-  var tmpEl = document.createElement('div');
-
-  // 绑定消息事件
-  window.addEventListener('message', function (evt) {
-    var data = evt.data;
-
-    // data转对象
-
-    (typeof data === 'undefined' ? 'undefined' : _typeof(data)) === 'object' || (data = JSON.parse(data || null) || {});
-
-    // 回调函数
-    var callback = msgcb[data.id];
-    isFunction(callback) && callback(data.rs);
-  });
-
-  return function (opts) {
-    // 配置项
-    opts = Object.assign({}, post.defaults, opts);
-    var _opts3 = opts,
-        success = _opts3.success,
-        error = _opts3.error,
-        callback = _opts3.callback,
-        formSelector = _opts3.formSelector,
-        url = _opts3.url,
-        method = _opts3.method,
-        data = _opts3.data,
-        enctype = _opts3.enctype;
-
-    // iframe元素
-
-    var ifrId = 'postifr' + getUid();
-    tmpEl.innerHTML = '<iframe name="' + ifrId + '" style="display: none;"></iframe>';
-    var ifrEl = tmpEl.childNodes[0];
-    bodyEl.appendChild(ifrEl);
-
-    // form元素
-    var formEl = void 0;
-    // 页面中已存在的form提交
-    if (formSelector) {
-      formEl = document.querySelector(formSelector);
-      // 请求url中添加callback信息
-      var _formEl = formEl,
-          action = _formEl.action;
-
-      formEl.action = action + getSymbol(action) + 'msgcb=' + ifrId;
-    }
-    // 动态生成的form提交
-    else {
-        // 请求url
-        var _action = url + getSymbol(url) + 'msgcb=' + ifrId;
-        // 数据添加到form的input
-        var inputHtml = data && Object.keys(data).map(function (key) {
-          return '<input type="hidden" name="' + key + '" value="' + data[key] + '"/>';
-        }).join('');
-        tmpEl.innerHTML = '<form style="display: none;" method="' + method + '" action="' + _action + '">' + inputHtml + '</form>';
-        formEl = tmpEl.childNodes[0];
-      }
-    // target
-    formEl.target = ifrId;
-    // enctype
-    enctype && (formEl.enctype = enctype);
-
-    // message事件响应函数
-    msgcb[ifrId] = function (rs) {
-      // 回调
-      isFunction(success) && success(rs);
-      isFunction(callback) && callback(opts, rs);
-      // 释放回调函数
-      msgcb[ifrId] = null;
-
-      // 删除节点
-      bodyEl.removeChild(ifrEl);
-      formSelector || bodyEl.removeChild(formEl);
-    };
-
-    // iframe onload事件,主要处理请求失败
-    ifrEl.onload = function () {
-      // 延迟运行
-      setTimeout(function () {
-        // 如果回调还在,说明没有成功回调,即发生错误
-        if (msgcb[ifrId]) {
-          // 回调
-          isFunction(error) && error();
-          isFunction(callback) && callback(opts);
-          // 释放回调函数
-          msgcb[ifrId] = null;
-
-          // 删除节点
-          bodyEl.removeChild(ifrEl);
-          formSelector || bodyEl.removeChild(formEl);
-        }
-      }, 100);
-    };
-
-    // 提交
-    formSelector || bodyEl.appendChild(formEl);
-    formEl.submit();
-  };
-}();
-// post数据默认配置项
-post.defaults = {
-  method: 'POST'
-};
-
-exports.default = {
-  // 加载js函数
-  getScript: getScript,
-  // get数据函数
-  get: get,
-  // post数据函数
-  post: post
-};
-
-/***/ }),
-
-/***/ 62:
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', {
-    staticClass: "wrapper"
-  }, [_c('pi-card', {
-    attrs: {
-      "dataList": _vm.dataList
-    }
-  })], 1)
-},staticRenderFns: []}
-module.exports.render._withStripped = true
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-85d7aaf0", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ 7:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-// 获取图片数据
-var getImgs = function () {
-  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
-    var rs, articles;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return get('/iflow/api/v1/channel/100?method=new');
-
-          case 2:
-            rs = _context.sent;
-
-            if (rs) {
-              _context.next = 5;
-              break;
-            }
-
-            return _context.abrupt('return');
-
-          case 5:
-            articles = Object.getValByPath(rs, 'data.articles', {});
-            return _context.abrupt('return', Object.keys(articles).map(function (key) {
-              return Object.getValByPath(articles, key + '.images.0.url');
-            }).filter(function (item) {
-              return item;
-            }));
-
-          case 7:
-          case 'end':
-            return _context.stop();
-        }
-      }
-    }, _callee, this);
-  }));
-
-  return function getImgs() {
-    return _ref.apply(this, arguments);
-  };
-}();
-
-var _jsonp = __webpack_require__(6);
-
-var _jsonp2 = _interopRequireDefault(_jsonp);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-var origin = 'https://m.uczzd.cn';
-
-// get请求函数,对应jsonp
-function get(pathname, data) {
-  return new Promise(function (resolve) {
-    _jsonp2.default.get({
-      url: origin + pathname,
-      data: data,
-      success: function success(rs) {
-        resolve(rs);
-      },
-      error: function error() {
-        resolve();
-      }
-    });
-  });
-}
-
-// post请求函数
-function post(opts) {}exports.default = {
-  get: get,
-  post: post,
-  getImgs: getImgs
-};
-
-/***/ }),
-
-/***/ 72:
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(45);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("3d0a1e96", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-85d7aaf0\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Card.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-85d7aaf0\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Card.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-
-/***/ 77:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _PiCarousel = __webpack_require__(9);
-
-var _PiCarousel2 = _interopRequireDefault(_PiCarousel);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = {
-  components: {
-    PiCarousel: _PiCarousel2.default
-  },
-  props: {
-    // 宽度
-    width: {
-      default: '100%'
-    },
-    // 高度
-    height: {
-      default: '100%'
-    },
-    // 列表数据
-    dataList: {
-      default: []
-    },
-    // 滑动距离阈值
-    swipSpanThreshold: {
-      default: 6
-    },
-    // 滑动阈值
-    swipThreshold: {
-      default: 50
-    },
-    // 动画时长
-    duration: {
-      default: 400
-    },
-    // first和last拉不动的比率
-    pullRatio: {
-      default: 2
-    },
-    // 是否循环滚动
-    isLoop: {
-      default: true
-    },
-    // 默认滚动索引
-    index: {
-      default: 0
-    },
-    // 是否显示页脚
-    isShowPager: {
-      default: true
-    },
-    // 是否显示loading
-    isShowLoading: {
-      default: true
-    },
-    // 自动播放间隔
-    autoPlayTimeout: {
-      // 默认为0,表示禁用自动播放
-      default: 0
-    }
-  }
-}; //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/***/ }),
-
-/***/ 78:
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, "\n@charset \"UTF-8\";\n.pi-card {\n  -webkit-transform: scale3d(0.68, 0.68, 1);\n          transform: scale3d(0.68, 0.68, 1);\n  /*样式覆盖*/\n  /*动画状态,且左右切换*/\n}\n.pi-card.pi-card {\n    overflow: visible;\n}\n.pi-card.pi-animating:not([data-direction=\"0\"]) .pi-item {\n    -webkit-transition: all ease 0.4s;\n    transition: all ease 0.4s;\n    /*动画中的当前元素缩小小*/\n}\n.pi-card.pi-animating:not([data-direction=\"0\"]) .pi-item:nth-of-type(2) {\n      -webkit-transform: scale3d(0.68, 0.68, 1);\n              transform: scale3d(0.68, 0.68, 1);\n}\n.pi-card .pi-item {\n    /*非当前元素*/\n}\n.pi-card .pi-item:nth-of-type(1), .pi-card .pi-item:nth-of-type(3) {\n      /*非临时当前元素缩小*/\n}\n.pi-card .pi-item:nth-of-type(1):not(.temp-current), .pi-card .pi-item:nth-of-type(3):not(.temp-current) {\n        -webkit-transform: scale3d(0.68, 0.68, 1);\n                transform: scale3d(0.68, 0.68, 1);\n}\n", "", {"version":3,"sources":["/./src/component/PiCard.vue"],"names":[],"mappings":";AAAA,iBAAiB;AACjB;EACE,0CAAkC;UAAlC,kCAAkC;EAClC,QAAQ;EACR,cAAc;CAAE;AAChB;IACE,kBAAkB;CAAE;AACtB;IACE,kCAA0B;IAA1B,0BAA0B;IAC1B,eAAe;CAAE;AACjB;MACE,0CAAkC;cAAlC,kCAAkC;CAAE;AACxC;IACE,SAAS;CAAE;AACX;MACE,aAAa;CAAE;AACf;QACE,0CAAkC;gBAAlC,kCAAkC;CAAE","file":"PiCard.vue","sourcesContent":["@charset \"UTF-8\";\n.pi-card {\n  transform: scale3d(0.68, 0.68, 1);\n  /*样式覆盖*/\n  /*动画状态,且左右切换*/ }\n  .pi-card.pi-card {\n    overflow: visible; }\n  .pi-card.pi-animating:not([data-direction=\"0\"]) .pi-item {\n    transition: all ease 0.4s;\n    /*动画中的当前元素缩小小*/ }\n    .pi-card.pi-animating:not([data-direction=\"0\"]) .pi-item:nth-of-type(2) {\n      transform: scale3d(0.68, 0.68, 1); }\n  .pi-card .pi-item {\n    /*非当前元素*/ }\n    .pi-card .pi-item:nth-of-type(1), .pi-card .pi-item:nth-of-type(3) {\n      /*非临时当前元素缩小*/ }\n      .pi-card .pi-item:nth-of-type(1):not(.temp-current), .pi-card .pi-item:nth-of-type(3):not(.temp-current) {\n        transform: scale3d(0.68, 0.68, 1); }\n"],"sourceRoot":"webpack://"}]);
-
-// exports
-
-
-/***/ }),
-
-/***/ 79:
+/***/ 55:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(81)
+  __webpack_require__(70)
 }
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(77),
+  __webpack_require__(21),
   /* template */
-  __webpack_require__(80),
+  __webpack_require__(59),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -1343,22 +1141,7 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 8:
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)();
-// imports
-
-
-// module
-exports.push([module.i, "\n@charset \"UTF-8\";\n/*loading样式*/\n.loading:before, .pi-carousel.pi-loading .pi-item:before {\n  content: '';\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  width: 40px;\n  height: 40px;\n  margin-left: -20px;\n  margin-top: -20px;\n  border-radius: 40px;\n  /*如.loading元素中还有transform,:before内容将挡不住*/\n  z-index: -1;\n  /*圆环用border生成*/\n  border: 3px solid rgba(136, 136, 136, 0.2);\n  border-left: 3px solid #888888;\n  /*动画*/\n  -webkit-animation: ani_circle 0.8s linear infinite;\n          animation: ani_circle 0.8s linear infinite;\n}\n\n/*旋转动画*/\n@-webkit-keyframes ani_circle {\n0% {\n    -webkit-transform: rotateZ(0deg);\n            transform: rotateZ(0deg);\n}\n100% {\n    -webkit-transform: rotateZ(360deg);\n            transform: rotateZ(360deg);\n}\n}\n@keyframes ani_circle {\n0% {\n    -webkit-transform: rotateZ(0deg);\n            transform: rotateZ(0deg);\n}\n100% {\n    -webkit-transform: rotateZ(360deg);\n            transform: rotateZ(360deg);\n}\n}\n.pi-carousel {\n  overflow: hidden;\n  position: relative;\n  /*可有效减缓闪烁*/\n  -webkit-backface-visibility: hidden;\n          backface-visibility: hidden;\n  /*loading*/\n  /*正在动画*/\n}\n.pi-carousel.pi-animating .pi-wrap {\n    -webkit-transition: -webkit-transform ease 0.4s;\n    transition: -webkit-transform ease 0.4s;\n    transition: transform ease 0.4s;\n    transition: transform ease 0.4s, -webkit-transform ease 0.4s;\n}\n.pi-carousel .pi-wrap {\n    width: 300%;\n    height: 100%;\n    margin-left: -100%;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: flex;\n    /*虽然是默认值,但不能省略,以确保auto-prefixer插件准确生成兼容安卓4.0的代码*/\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n            flex-direction: row;\n}\n.pi-carousel .pi-item {\n    height: 100%;\n    -webkit-box-flex: 1;\n    -webkit-flex: 1;\n            flex: 1;\n    overflow: hidden;\n}\n.pi-carousel .pi-item .pi-img {\n      background: center center no-repeat;\n      background-size: contain;\n      width: 100%;\n      height: 100%;\n}\n.pi-carousel .pi-pager {\n    position: absolute;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    text-align: center;\n    font-size: 0;\n    line-height: 20px;\n}\n.pi-carousel .pi-pager > span {\n      border: 3px solid #bbb;\n      border-radius: 50%;\n      margin: 0 2px;\n}\n.pi-carousel .pi-pager > span.selected {\n        border-color: #555;\n}\n", "", {"version":3,"sources":["/./src/component/PiCarousel.vue"],"names":[],"mappings":";AAAA,iBAAiB;AACjB,aAAa;AACb;EACE,YAAY;EACZ,mBAAmB;EACnB,UAAU;EACV,SAAS;EACT,YAAY;EACZ,aAAa;EACb,mBAAmB;EACnB,kBAAkB;EAClB,oBAAoB;EACpB,yCAAyC;EACzC,YAAY;EACZ,eAAe;EACf,2CAA2C;EAC3C,+BAA+B;EAC/B,MAAM;EACN,mDAA2C;UAA3C,2CAA2C;CAAE;;AAE/C,QAAQ;AACR;AACE;IACE,iCAAyB;YAAzB,yBAAyB;CAAE;AAC7B;IACE,mCAA2B;YAA3B,2BAA2B;CAAE;CAAE;AAJnC;AACE;IACE,iCAAyB;YAAzB,yBAAyB;CAAE;AAC7B;IACE,mCAA2B;YAA3B,2BAA2B;CAAE;CAAE;AAEnC;EACE,iBAAiB;EACjB,mBAAmB;EACnB,WAAW;EACX,oCAA4B;UAA5B,4BAA4B;EAC5B,WAAW;EACX,QAAQ;CAAE;AACV;IACE,gDAAgC;IAAhC,wCAAgC;IAAhC,gCAAgC;IAAhC,6DAAgC;CAAE;AACpC;IACE,YAAY;IACZ,aAAa;IACb,mBAAmB;IACnB,qBAAc;IAAd,sBAAc;IAAd,cAAc;IACd,iDAAiD;IACjD,+BAAoB;IAApB,8BAAoB;IAApB,4BAAoB;YAApB,oBAAoB;CAAE;AACxB;IACE,aAAa;IACb,oBAAQ;IAAR,gBAAQ;YAAR,QAAQ;IACR,iBAAiB;CAAE;AACnB;MACE,oCAAoC;MACpC,yBAAyB;MACzB,YAAY;MACZ,aAAa;CAAE;AACnB;IACE,mBAAmB;IACnB,QAAQ;IACR,SAAS;IACT,UAAU;IACV,mBAAmB;IACnB,aAAa;IACb,kBAAkB;CAAE;AACpB;MACE,uBAAuB;MACvB,mBAAmB;MACnB,cAAc;CAAE;AAChB;QACE,mBAAmB;CAAE","file":"PiCarousel.vue","sourcesContent":["@charset \"UTF-8\";\n/*loading样式*/\n.loading:before, .pi-carousel.pi-loading .pi-item:before {\n  content: '';\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  width: 40px;\n  height: 40px;\n  margin-left: -20px;\n  margin-top: -20px;\n  border-radius: 40px;\n  /*如.loading元素中还有transform,:before内容将挡不住*/\n  z-index: -1;\n  /*圆环用border生成*/\n  border: 3px solid rgba(136, 136, 136, 0.2);\n  border-left: 3px solid #888888;\n  /*动画*/\n  animation: ani_circle 0.8s linear infinite; }\n\n/*旋转动画*/\n@keyframes ani_circle {\n  0% {\n    transform: rotateZ(0deg); }\n  100% {\n    transform: rotateZ(360deg); } }\n\n.pi-carousel {\n  overflow: hidden;\n  position: relative;\n  /*可有效减缓闪烁*/\n  backface-visibility: hidden;\n  /*loading*/\n  /*正在动画*/ }\n  .pi-carousel.pi-animating .pi-wrap {\n    transition: transform ease 0.4s; }\n  .pi-carousel .pi-wrap {\n    width: 300%;\n    height: 100%;\n    margin-left: -100%;\n    display: flex;\n    /*虽然是默认值,但不能省略,以确保auto-prefixer插件准确生成兼容安卓4.0的代码*/\n    flex-direction: row; }\n  .pi-carousel .pi-item {\n    height: 100%;\n    flex: 1;\n    overflow: hidden; }\n    .pi-carousel .pi-item .pi-img {\n      background: center center no-repeat;\n      background-size: contain;\n      width: 100%;\n      height: 100%; }\n  .pi-carousel .pi-pager {\n    position: absolute;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    text-align: center;\n    font-size: 0;\n    line-height: 20px; }\n    .pi-carousel .pi-pager > span {\n      border: 3px solid #bbb;\n      border-radius: 50%;\n      margin: 0 2px; }\n      .pi-carousel .pi-pager > span.selected {\n        border-color: #555; }\n"],"sourceRoot":"webpack://"}]);
-
-// exports
-
-
-/***/ }),
-
-/***/ 80:
+/***/ 59:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -1390,46 +1173,56 @@ if (false) {
 
 /***/ }),
 
-/***/ 81:
+/***/ 6:
 /***/ (function(module, exports, __webpack_require__) {
 
-// style-loader: Adds some css to the DOM by adding a <style> tag
+exports = module.exports = __webpack_require__(0)();
+// imports
 
-// load the styles
-var content = __webpack_require__(78);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(2)("77195cc9", content, false);
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-016309dd\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCard.vue", function() {
-     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-016309dd\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCard.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
+
+// module
+exports.push([module.i, "\n@charset \"UTF-8\";\n/*loading样式*/\n.loading:before, .pi-carousel.pi-loading .pi-item:before {\n  content: '';\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  width: 40px;\n  height: 40px;\n  margin-left: -20px;\n  margin-top: -20px;\n  border-radius: 40px;\n  /*如.loading元素中还有transform,:before内容将挡不住*/\n  z-index: -1;\n  /*圆环用border生成*/\n  border: 3px solid rgba(136, 136, 136, 0.2);\n  border-left: 3px solid #888888;\n  /*动画*/\n  -webkit-animation: ani_circle 0.8s linear infinite;\n          animation: ani_circle 0.8s linear infinite;\n}\n\n/*旋转动画*/\n@-webkit-keyframes ani_circle {\n0% {\n    -webkit-transform: rotateZ(0deg);\n            transform: rotateZ(0deg);\n}\n100% {\n    -webkit-transform: rotateZ(360deg);\n            transform: rotateZ(360deg);\n}\n}\n@keyframes ani_circle {\n0% {\n    -webkit-transform: rotateZ(0deg);\n            transform: rotateZ(0deg);\n}\n100% {\n    -webkit-transform: rotateZ(360deg);\n            transform: rotateZ(360deg);\n}\n}\n.pi-carousel {\n  overflow: hidden;\n  position: relative;\n  /*可有效减缓闪烁*/\n  -webkit-backface-visibility: hidden;\n          backface-visibility: hidden;\n  /*loading*/\n  /*正在动画*/\n}\n.pi-carousel.pi-animating .pi-wrap {\n    -webkit-transition: -webkit-transform ease 0.4s;\n    transition: -webkit-transform ease 0.4s;\n    transition: transform ease 0.4s;\n    transition: transform ease 0.4s, -webkit-transform ease 0.4s;\n}\n.pi-carousel .pi-wrap {\n    width: 300%;\n    height: 100%;\n    margin-left: -100%;\n    display: -webkit-box;\n    display: -webkit-flex;\n    display: flex;\n    /*虽然是默认值,但不能省略,以确保auto-prefixer插件准确生成兼容安卓4.0的代码*/\n    -webkit-box-orient: horizontal;\n    -webkit-box-direction: normal;\n    -webkit-flex-direction: row;\n            flex-direction: row;\n}\n.pi-carousel .pi-item {\n    height: 100%;\n    -webkit-box-flex: 1;\n    -webkit-flex: 1;\n            flex: 1;\n    overflow: hidden;\n}\n.pi-carousel .pi-item .pi-img {\n      background: center center no-repeat;\n      background-size: contain;\n      width: 100%;\n      height: 100%;\n}\n.pi-carousel .pi-pager {\n    position: absolute;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    text-align: center;\n    font-size: 0;\n    line-height: 20px;\n}\n.pi-carousel .pi-pager > span {\n      border: 3px solid #bbb;\n      border-radius: 50%;\n      margin: 0 2px;\n}\n.pi-carousel .pi-pager > span.selected {\n        border-color: #555;\n}\n", "", {"version":3,"sources":["/./src/component/PiCarousel.vue"],"names":[],"mappings":";AAAA,iBAAiB;AACjB,aAAa;AACb;EACE,YAAY;EACZ,mBAAmB;EACnB,UAAU;EACV,SAAS;EACT,YAAY;EACZ,aAAa;EACb,mBAAmB;EACnB,kBAAkB;EAClB,oBAAoB;EACpB,yCAAyC;EACzC,YAAY;EACZ,eAAe;EACf,2CAA2C;EAC3C,+BAA+B;EAC/B,MAAM;EACN,mDAA2C;UAA3C,2CAA2C;CAAE;;AAE/C,QAAQ;AACR;AACE;IACE,iCAAyB;YAAzB,yBAAyB;CAAE;AAC7B;IACE,mCAA2B;YAA3B,2BAA2B;CAAE;CAAE;AAJnC;AACE;IACE,iCAAyB;YAAzB,yBAAyB;CAAE;AAC7B;IACE,mCAA2B;YAA3B,2BAA2B;CAAE;CAAE;AAEnC;EACE,iBAAiB;EACjB,mBAAmB;EACnB,WAAW;EACX,oCAA4B;UAA5B,4BAA4B;EAC5B,WAAW;EACX,QAAQ;CAAE;AACV;IACE,gDAAgC;IAAhC,wCAAgC;IAAhC,gCAAgC;IAAhC,6DAAgC;CAAE;AACpC;IACE,YAAY;IACZ,aAAa;IACb,mBAAmB;IACnB,qBAAc;IAAd,sBAAc;IAAd,cAAc;IACd,iDAAiD;IACjD,+BAAoB;IAApB,8BAAoB;IAApB,4BAAoB;YAApB,oBAAoB;CAAE;AACxB;IACE,aAAa;IACb,oBAAQ;IAAR,gBAAQ;YAAR,QAAQ;IACR,iBAAiB;CAAE;AACnB;MACE,oCAAoC;MACpC,yBAAyB;MACzB,YAAY;MACZ,aAAa;CAAE;AACnB;IACE,mBAAmB;IACnB,QAAQ;IACR,SAAS;IACT,UAAU;IACV,mBAAmB;IACnB,aAAa;IACb,kBAAkB;CAAE;AACpB;MACE,uBAAuB;MACvB,mBAAmB;MACnB,cAAc;CAAE;AAChB;QACE,mBAAmB;CAAE","file":"PiCarousel.vue","sourcesContent":["@charset \"UTF-8\";\n/*loading样式*/\n.loading:before, .pi-carousel.pi-loading .pi-item:before {\n  content: '';\n  position: absolute;\n  left: 50%;\n  top: 50%;\n  width: 40px;\n  height: 40px;\n  margin-left: -20px;\n  margin-top: -20px;\n  border-radius: 40px;\n  /*如.loading元素中还有transform,:before内容将挡不住*/\n  z-index: -1;\n  /*圆环用border生成*/\n  border: 3px solid rgba(136, 136, 136, 0.2);\n  border-left: 3px solid #888888;\n  /*动画*/\n  animation: ani_circle 0.8s linear infinite; }\n\n/*旋转动画*/\n@keyframes ani_circle {\n  0% {\n    transform: rotateZ(0deg); }\n  100% {\n    transform: rotateZ(360deg); } }\n\n.pi-carousel {\n  overflow: hidden;\n  position: relative;\n  /*可有效减缓闪烁*/\n  backface-visibility: hidden;\n  /*loading*/\n  /*正在动画*/ }\n  .pi-carousel.pi-animating .pi-wrap {\n    transition: transform ease 0.4s; }\n  .pi-carousel .pi-wrap {\n    width: 300%;\n    height: 100%;\n    margin-left: -100%;\n    display: flex;\n    /*虽然是默认值,但不能省略,以确保auto-prefixer插件准确生成兼容安卓4.0的代码*/\n    flex-direction: row; }\n  .pi-carousel .pi-item {\n    height: 100%;\n    flex: 1;\n    overflow: hidden; }\n    .pi-carousel .pi-item .pi-img {\n      background: center center no-repeat;\n      background-size: contain;\n      width: 100%;\n      height: 100%; }\n  .pi-carousel .pi-pager {\n    position: absolute;\n    left: 0;\n    right: 0;\n    bottom: 0;\n    text-align: center;\n    font-size: 0;\n    line-height: 20px; }\n    .pi-carousel .pi-pager > span {\n      border: 3px solid #bbb;\n      border-radius: 50%;\n      margin: 0 2px; }\n      .pi-carousel .pi-pager > span.selected {\n        border-color: #555; }\n"],"sourceRoot":"webpack://"}]);
+
+// exports
+
+
+/***/ }),
+
+/***/ 66:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "wrapper"
+  }, [_c('pi-card', {
+    attrs: {
+      "dataList": _vm.dataList
+    }
+  })], 1)
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-85d7aaf0", module.exports)
+  }
 }
 
 /***/ }),
 
-/***/ 9:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(11)
+  __webpack_require__(9)
 }
 var Component = __webpack_require__(1)(
   /* script */
   __webpack_require__(5),
   /* template */
-  __webpack_require__(10),
+  __webpack_require__(8),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -1460,7 +1253,164 @@ if (false) {(function () {
 module.exports = Component.exports
 
 
+/***/ }),
+
+/***/ 70:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(40);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("77195cc9", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-016309dd\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCard.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-016309dd\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCard.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 77:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(47);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("3d0a1e96", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-85d7aaf0\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Card.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-85d7aaf0\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Card.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+
+/***/ 8:
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "pi-carousel",
+    class: _vm._class,
+    style: (_vm._style),
+    attrs: {
+      "data-direction": _vm.direction
+    },
+    on: {
+      "touchstart": _vm.__touchstart,
+      "touchmove": _vm.__touchmove,
+      "touchend": _vm.__touchend
+    }
+  }, [_c('div', {
+    staticClass: "pi-wrap",
+    style: (_vm._wrapStyle),
+    on: {
+      "click": _vm.__wrapClick
+    }
+  }, [_c('div', {
+    staticClass: "pi-item",
+    class: _vm._prevClass
+  }, [(_vm.prevData) ? _vm._t("default", [_c('div', {
+    staticClass: "pi-img",
+    style: (_vm.imgStyle(_vm.prevData))
+  })], {
+    itemData: _vm.prevData,
+    index: _vm.currentIndex - 1
+  }) : _vm._e()], 2), _vm._v(" "), _c('div', {
+    ref: "currentItem",
+    staticClass: "pi-item"
+  }, [(_vm.currentData) ? _vm._t("default", [_c('div', {
+    staticClass: "pi-img",
+    style: (_vm.imgStyle(_vm.currentData))
+  })], {
+    itemData: _vm.currentData,
+    index: _vm.currentIndex
+  }) : _vm._e()], 2), _vm._v(" "), _c('div', {
+    staticClass: "pi-item",
+    class: _vm._nextClass
+  }, [(_vm.nextData) ? _vm._t("default", [_c('div', {
+    staticClass: "pi-img",
+    style: (_vm.imgStyle(_vm.nextData))
+  })], {
+    itemData: _vm.nextData,
+    index: _vm.currentIndex + 1
+  }) : _vm._e()], 2)]), _vm._v(" "), (_vm.isShowPager) ? _c('div', {
+    staticClass: "pi-pager"
+  }, [_vm._t("pager", _vm._l((_vm.dataList), function(_, index) {
+    return _c('span', {
+      class: {
+        selected: index === _vm.currentIndex
+      },
+      on: {
+        "click": function($event) {
+          _vm.__pagerClick(index)
+        }
+      }
+    })
+  }), {
+    dataList: _vm.dataList
+  })], 2) : _vm._e()])
+},staticRenderFns: []}
+module.exports.render._withStripped = true
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+     require("vue-hot-reload-api").rerender("data-v-d083b4a6", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ 9:
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(6);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("10ca1f40", content, false);
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d083b4a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCarousel.vue", function() {
+     var newContent = require("!!../../node_modules/css-loader/index.js?sourceMap!../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-d083b4a6\",\"scoped\":false,\"hasInlineConfig\":true}!../../node_modules/sass-loader/lib/loader.js!../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./PiCarousel.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
 /***/ })
 
-},[30]);
+},[31]);
 //# sourceMappingURL=card.js.map
