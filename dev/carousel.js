@@ -1054,7 +1054,7 @@ exports.default = {
     },
 
     // 获取图片样式
-    imgStyle: function imgStyle(data) {
+    getImgStyle: function getImgStyle(data) {
       return data && { backgroundImage: 'url(' + data + ')' };
     }
   }
@@ -1199,16 +1199,16 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     class: _vm._prevClass
   }, [(_vm.prevData) ? _vm._t("default", [_c('div', {
     staticClass: "pi-img",
-    style: (_vm.imgStyle(_vm.prevData))
+    style: (_vm.getImgStyle(_vm.prevData))
   })], {
     itemData: _vm.prevData,
-    index: _vm.currentIndex - 1
+    index: _vm.prevIndex
   }) : _vm._e()], 2), _vm._v(" "), _c('div', {
     ref: "currentItem",
     staticClass: "pi-item"
   }, [(_vm.currentData) ? _vm._t("default", [_c('div', {
     staticClass: "pi-img",
-    style: (_vm.imgStyle(_vm.currentData))
+    style: (_vm.getImgStyle(_vm.currentData))
   })], {
     itemData: _vm.currentData,
     index: _vm.currentIndex
@@ -1217,10 +1217,10 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     class: _vm._nextClass
   }, [(_vm.nextData) ? _vm._t("default", [_c('div', {
     staticClass: "pi-img",
-    style: (_vm.imgStyle(_vm.nextData))
+    style: (_vm.getImgStyle(_vm.nextData))
   })], {
     itemData: _vm.nextData,
-    index: _vm.currentIndex + 1
+    index: _vm.nextIndex
   }) : _vm._e()], 2)]), _vm._v(" "), (_vm.isShowPager) ? _c('div', {
     staticClass: "pi-pager"
   }, [_vm._t("pager", _vm._l((_vm.dataList), function(_, index) {

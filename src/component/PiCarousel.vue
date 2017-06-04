@@ -15,9 +15,9 @@
                 :class="_prevClass">
                 <slot v-if="prevData"
                     :itemData="prevData"
-                    :index="currentIndex - 1">
+                    :index="prevIndex">
                     <div class="pi-img"
-                        :style="imgStyle(prevData)">
+                        :style="getImgStyle(prevData)">
                     </div>
                 </slot>
             </div>
@@ -26,7 +26,7 @@
                     :itemData="currentData"
                     :index="currentIndex">
                     <div class="pi-img"
-                        :style="imgStyle(currentData)">
+                        :style="getImgStyle(currentData)">
                     </div>
                 </slot>
             </div>
@@ -34,9 +34,9 @@
                 :class="_nextClass">
                 <slot v-if="nextData"
                     :itemData="nextData"
-                    :index="currentIndex + 1">
+                    :index="nextIndex">
                     <div class="pi-img"
-                        :style="imgStyle(nextData)">
+                        :style="getImgStyle(nextData)">
                     </div>
                 </slot>
             </div>
@@ -472,7 +472,7 @@
         clearInterval(this.inter);
       },
       // 获取图片样式
-      imgStyle(data) {
+      getImgStyle(data) {
         return data && { backgroundImage: `url(${data})` };
       }
     }
