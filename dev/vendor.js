@@ -530,7 +530,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
   ) }
 }
 
-var listToStyles = __webpack_require__(76)
+var listToStyles = __webpack_require__(81)
 
 /*
 type StyleObject = {
@@ -739,13 +739,13 @@ function applyToTag (styleElement, obj) {
 "use strict";
 
 
-__webpack_require__(36);
-
 __webpack_require__(37);
 
-__webpack_require__(49);
-
 __webpack_require__(38);
+
+__webpack_require__(51);
+
+__webpack_require__(39);
 
 // pc触摸事件兼容
 // polyfill
@@ -759,7 +759,7 @@ if (!('ontouchend' in document)) {
 
 /***/ }),
 
-/***/ 36:
+/***/ 37:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -779,7 +779,7 @@ if (!Object.assign) {
 
 /***/ }),
 
-/***/ 37:
+/***/ 38:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1020,11 +1020,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
   window.Promise = Promise;
 })(window);
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(51).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(53).setImmediate))
 
 /***/ }),
 
-/***/ 38:
+/***/ 39:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2652,7 +2652,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 /***/ }),
 
-/***/ 49:
+/***/ 51:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {/**
@@ -3383,7 +3383,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 /***/ }),
 
-/***/ 50:
+/***/ 52:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -3577,7 +3577,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 /***/ }),
 
-/***/ 51:
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -3630,14 +3630,14 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(50);
+__webpack_require__(52);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 
 
 /***/ }),
 
-/***/ 76:
+/***/ 81:
 /***/ (function(module, exports) {
 
 /**
