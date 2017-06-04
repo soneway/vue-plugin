@@ -184,68 +184,45 @@
         direction: 0,
         // 是否正在动画
         isAnimating: false,
+        prevIndex: this.index - 1,
         // 滚动索引
         currentIndex: this.index,
+        nextIndex: this.index + 1,
         // 滑动值
-        currentTranslate: 0,
-        // 缓存数据
-        prevData$: null,
-        nextData$: null
+        currentTranslate: 0
       };
     },
     computed: {
-      prevData: {
-        set(data) {
-          this.prevData$ = data;
-        },
-        get() {
-          const { dataList, prevData$, currentIndex } = this;
+      prevData() {
+        const { dataList } = this;
+        let { prevIndex } = this;
 
-          // 是否有缓存数据
-          if (prevData$) {
-            this.prevData$ = null;
-            return prevData$;
+        // 第一帧前面
+        if (prevIndex < 0) {
+          // 不能循环滚动
+          if (!this.isLoop) {
+            return;
           }
-
-          let index = currentIndex - 1;
-          // 第一帧前面
-          if (index < 0) {
-            // 不能循环滚动
-            if (!this.isLoop) {
-              return;
-            }
-            index = dataList.length - 1;
-          }
-          return dataList[index];
+          prevIndex = dataList.length - 1;
         }
+        return dataList[prevIndex];
       },
       currentData() {
         return this.dataList[this.currentIndex];
       },
-      nextData: {
-        set(data) {
-          this.nextData$ = data;
-        },
-        get() {
-          const { dataList, nextData$, currentIndex } = this;
+      nextData() {
+        const { dataList } = this;
+        let { nextIndex } = this;
 
-          // 是否有缓存数据
-          if (nextData$) {
-            this.nextData$ = null;
-            return nextData$;
+        // 最后一帧后面
+        if (nextIndex === dataList.length) {
+          // 不能循环滚动
+          if (!this.isLoop) {
+            return;
           }
-
-          let index = currentIndex + 1;
-          // 最后一帧后面
-          if (index === dataList.length) {
-            // 不能循环滚动
-            if (!this.isLoop) {
-              return;
-            }
-            index = 0;
-          }
-          return dataList[index];
+          nextIndex = 0;
         }
+        return dataList[nextIndex];
       },
       _class() {
         return {
@@ -283,6 +260,11 @@
           const wrapEl = currentItem.firstElementChild;
           wrapEl && (wrapEl.scrollTop = 0);
         }
+      },
+      currentIndex() {
+        const { currentIndex } = this;
+        this.prevIndex = currentIndex - 1;
+        this.nextIndex = currentIndex + 1;
       }
     },
     mounted() {
@@ -455,9 +437,9 @@
       },
       // 滑动到第几帧
       slideToIndex(index) {
-        const { dataList, currentIndex } = this;
+        const { currentIndex } = this;
         // index不符合条件
-        if (typeof index !== 'number' || index < 0 || index >= dataList.length || index === currentIndex) {
+        if (typeof index !== 'number' || index < 0 || index >= this.dataList.length || index === currentIndex) {
           return;
         }
 
@@ -466,12 +448,12 @@
         // 向左
         if (index > currentIndex) {
           direction = FORWARD;
-          this.nextData = dataList[index];
+          this.nextIndex = index;
         }
         // 向右
         else {
           direction = BACK;
-          this.prevData = dataList[index];
+          this.prevIndex = index;
         }
         // 滑动操作
         this.slide(direction, index);
