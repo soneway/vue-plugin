@@ -10,14 +10,14 @@
         <div class="pi-wrap"
             :style="_wrapStyle"
             @click="__wrapClick">
-            <slot></slot>
+            <slot :self="this"></slot>
         </div>
         <!--滚动容器 end-->
 
         <!--页脚-->
         <div class="pi-pager"
             v-if="isShowPager">
-            <slot name="pager" :items="items">
+            <slot name="pager" :self="this">
                 <span v-for="(_, index) in items"
                     @click="__pagerClick(index)"
                     :class="{selected: index === currentIndex}"></span>

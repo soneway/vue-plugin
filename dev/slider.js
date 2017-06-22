@@ -499,6 +499,11 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
 
 /***/ }),
 
@@ -617,7 +622,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "autoPlayTimeout": 0,
       "index": 0,
       "isShowPager": true
-    }
+    },
+    scopedSlots: _vm._u([{
+      key: "pager",
+      fn: function(props) {
+        return _vm._l((props.self.items), function(_, index) {
+          return _c('span', {
+            class: {
+              selected: index === props.self.currentIndex
+            }
+          })
+        })
+      }
+    }])
   }, [_c('div', {
     staticClass: "img",
     staticStyle: {
@@ -674,7 +691,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.__wrapClick
     }
-  }, [_vm._t("default")], 2), _vm._v(" "), (_vm.isShowPager) ? _c('div', {
+  }, [_vm._t("default", null, {
+    self: this
+  })], 2), _vm._v(" "), (_vm.isShowPager) ? _c('div', {
     staticClass: "pi-pager"
   }, [_vm._t("pager", _vm._l((_vm.items), function(_, index) {
     return _c('span', {
@@ -688,7 +707,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     })
   }), {
-    items: _vm.items
+    self: this
   })], 2) : _vm._e()])
 },staticRenderFns: []}
 module.exports.render._withStripped = true

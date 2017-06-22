@@ -1235,7 +1235,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       }
     })
   }), {
-    dataList: _vm.dataList
+    self: this
   })], 2) : _vm._e()])
 },staticRenderFns: []}
 module.exports.render._withStripped = true

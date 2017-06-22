@@ -10,6 +10,11 @@
             <div class="img" style="background-image: url(https://soneway.github.io/jq/example/dist/img/3.jpg)"></div>
             <div class="img" style="background-image: url(https://soneway.github.io/jq/example/dist/img/4.jpg)"></div>
             <div class="img" style="background-image: url(https://soneway.github.io/jq/example/dist/img/5.jpg)"></div>
+
+            <template slot="pager" scope="props">
+                <span v-for="(_,index) in props.self.items"
+                    :class="{selected: index === props.self.currentIndex}"></span>
+            </template>
         </pi-slider>
     </div>
 </template>

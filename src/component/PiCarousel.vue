@@ -46,7 +46,7 @@
         <!--页脚-->
         <div class="pi-pager"
             v-if="isShowPager">
-            <slot name="pager" :dataList="dataList">
+            <slot name="pager" :self="this">
                 <span v-for="(_, index) in dataList"
                     @click="__pagerClick(index)"
                     :class="{selected: index === currentIndex}"></span>
