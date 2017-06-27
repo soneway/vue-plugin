@@ -1,18 +1,18 @@
 webpackJsonp([3],{
 
-/***/ 18:
+/***/ 19:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(71)
+  __webpack_require__(80)
 }
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(29),
+  __webpack_require__(32),
   /* template */
-  __webpack_require__(60),
+  __webpack_require__(67),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -45,7 +45,7 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 23:
+/***/ 25:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -443,7 +443,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 29:
+/***/ 32:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -453,7 +453,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _PiSlider = __webpack_require__(57);
+var _PiSlider = __webpack_require__(64);
 
 var _PiSlider2 = _interopRequireDefault(_PiSlider);
 
@@ -507,7 +507,7 @@ exports.default = {
 
 /***/ }),
 
-/***/ 35:
+/***/ 39:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -523,7 +523,7 @@ var _vueRuntime = __webpack_require__(4);
 
 var _vueRuntime2 = _interopRequireDefault(_vueRuntime);
 
-var _Slider = __webpack_require__(18);
+var _Slider = __webpack_require__(19);
 
 var _Slider2 = _interopRequireDefault(_Slider);
 
@@ -534,7 +534,7 @@ exports.default = new _vueRuntime2.default(_Slider2.default);
 
 /***/ }),
 
-/***/ 41:
+/***/ 45:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -549,7 +549,7 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/*基础样式,作用类似reset
 
 /***/ }),
 
-/***/ 48:
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(0)();
@@ -564,19 +564,19 @@ exports.push([module.i, "\n@charset \"UTF-8\";\n/*loading样式*/\n.loading:befo
 
 /***/ }),
 
-/***/ 57:
+/***/ 64:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(78)
+  __webpack_require__(89)
 }
 var Component = __webpack_require__(1)(
   /* script */
-  __webpack_require__(23),
+  __webpack_require__(25),
   /* template */
-  __webpack_require__(67),
+  __webpack_require__(76),
   /* styles */
   injectStyle,
   /* scopeId */
@@ -609,7 +609,7 @@ module.exports = Component.exports
 
 /***/ }),
 
-/***/ 60:
+/***/ 67:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -672,7 +672,7 @@ if (false) {
 
 /***/ }),
 
-/***/ 67:
+/***/ 76:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
@@ -720,13 +720,13 @@ if (false) {
 
 /***/ }),
 
-/***/ 71:
+/***/ 80:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(41);
+var content = __webpack_require__(45);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -747,13 +747,13 @@ if(false) {
 
 /***/ }),
 
-/***/ 78:
+/***/ 89:
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(48);
+var content = __webpack_require__(54);
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
 // add the styles to the DOM
@@ -774,5 +774,5 @@ if(false) {
 
 /***/ })
 
-},[35]);
+},[39]);
 //# sourceMappingURL=slider.js.map
