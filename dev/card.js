@@ -516,9 +516,9 @@ Object.defineProperty(exports, "__esModule", {
 
 __webpack_require__(3);
 
-var _vueRuntime = __webpack_require__(4);
+var _vue = __webpack_require__(4);
 
-var _vueRuntime2 = _interopRequireDefault(_vueRuntime);
+var _vue2 = _interopRequireDefault(_vue);
 
 var _Card = __webpack_require__(14);
 
@@ -527,7 +527,7 @@ var _Card2 = _interopRequireDefault(_Card);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _Card2.default.el = '#root'; // common.js
-exports.default = new _vueRuntime2.default(_Card2.default);
+exports.default = new _vue2.default(_Card2.default);
 
 /***/ }),
 

@@ -7,7 +7,7 @@
 </template>
 
 <style lang="scss">
-    @import "../lib/common";
+    @import "../style/common";
 
     .wrapper {
         position: absolute;
@@ -20,7 +20,7 @@
 
 <script>
   import PiCarousel from '../component/PiCarousel.vue';
-  import request from '../lib/request';
+  import request from '../script/request';
 
   export default {
     components: {

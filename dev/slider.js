@@ -519,9 +519,9 @@ Object.defineProperty(exports, "__esModule", {
 
 __webpack_require__(3);
 
-var _vueRuntime = __webpack_require__(4);
+var _vue = __webpack_require__(4);
 
-var _vueRuntime2 = _interopRequireDefault(_vueRuntime);
+var _vue2 = _interopRequireDefault(_vue);
 
 var _Slider = __webpack_require__(19);
 
@@ -530,7 +530,7 @@ var _Slider2 = _interopRequireDefault(_Slider);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _Slider2.default.el = '#root'; // common.js
-exports.default = new _vueRuntime2.default(_Slider2.default);
+exports.default = new _vue2.default(_Slider2.default);
 
 /***/ }),
 

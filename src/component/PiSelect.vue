@@ -39,8 +39,8 @@
       _style() {
         const { width, height } = this;
         return {
-          width,
-          height
+//          width,
+//          height
         };
       },
       _class() {

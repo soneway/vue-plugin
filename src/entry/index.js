@@ -1,7 +1,7 @@
 // common.js
-import '../lib/common';
+import '../script/common';
 
-import Vue from '../lib/js/vue.runtime.min';
+import Vue from 'vue';
 import View from '../view/Index.vue';
 
 View.el = '#root';

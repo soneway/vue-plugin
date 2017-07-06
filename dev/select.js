@@ -98,8 +98,8 @@ exports.default = {
           height = this.height;
 
       return {
-        width: width,
-        height: height
+        //          width,
+        //          height
       };
     },
     _class: function _class() {
@@ -193,9 +193,9 @@ Object.defineProperty(exports, "__esModule", {
 
 __webpack_require__(3);
 
-var _vueRuntime = __webpack_require__(4);
+var _vue = __webpack_require__(4);
 
-var _vueRuntime2 = _interopRequireDefault(_vueRuntime);
+var _vue2 = _interopRequireDefault(_vue);
 
 var _Select = __webpack_require__(18);
 
@@ -204,7 +204,7 @@ var _Select2 = _interopRequireDefault(_Select);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _Select2.default.el = '#root'; // common.js
-exports.default = new _vueRuntime2.default(_Select2.default);
+exports.default = new _vue2.default(_Select2.default);
 
 /***/ }),
 
@@ -320,6 +320,9 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
   return _c('div', {
     staticClass: "wrapper"
   }, [_c('pi-select', {
+    staticStyle: {
+      "width": "200px"
+    },
     attrs: {
       "dataList": _vm.dataList
     }

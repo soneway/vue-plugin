@@ -2,8 +2,11 @@ const entryHelper = require('./util/entry');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 
-module.exports = {
-  entry: entryHelper.getEntry(),
+// 入口js
+const entry = entryHelper.getEntry();
+// 配置
+const config = {
+  entry,
   module: {
     loaders: [
       {
@@ -25,8 +28,12 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    // 公共库
-    new webpack.optimize.CommonsChunkPlugin({ names: ['vendor'] })
-  ]
+  plugins: []
 };
+
+if (Object.keys(entry).length > 0) {
+  // 公共库
+  config.plugins.push(new webpack.optimize.CommonsChunkPlugin({ names: ['vendor'] }));
+}
+
+module.exports = config;

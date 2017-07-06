@@ -25,6 +25,12 @@ module.exports = merge(baseConf, {
     path: path.join(__dirname, '../prod'),
     filename: '[name].[chunkhash].js'
   },
+  resolve: {
+    // 别名配置
+    alias: {
+      vue: 'vue/dist/vue.runtime.min.js'
+    }
+  },
   module: {
     loaders: [
       // 图片处理
@@ -38,6 +44,19 @@ module.exports = merge(baseConf, {
               name: 'img/[name].[hash:20].[ext]',
               // 小于2k的图片base64 inline
               limit: 2000
+            }
+          },
+          // 图片压缩
+          {
+            loader: 'image-webpack-loader',
+            query: {
+              progressive: true,
+              optimizationLevel: 7,
+              interlaced: false,
+              pngquant: {
+                quality: '65-90',
+                speed: 4
+              }
             }
           }
         ]

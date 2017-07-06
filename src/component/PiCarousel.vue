@@ -57,7 +57,7 @@
 </template>
 
 <style lang="scss">
-    @import "../lib/css/loading";
+    @import "../style/lib/loading";
 
     .pi-carousel {
         overflow: hidden;

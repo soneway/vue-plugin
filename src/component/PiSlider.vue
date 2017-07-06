@@ -28,7 +28,7 @@
 </template>
 
 <style lang="scss">
-    @import "../lib/css/loading";
+    @import "../style/lib/loading";
 
     .pi-slider {
         overflow: hidden;

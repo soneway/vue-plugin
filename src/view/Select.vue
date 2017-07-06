@@ -1,12 +1,12 @@
 <template>
     <div class="wrapper">
-        <pi-select :dataList="dataList">
+        <pi-select :dataList="dataList" style="width:200px;">
         </pi-select>
     </div>
 </template>
 
 <style lang="scss">
-    @import "../lib/common";
+    @import "../style/common";
 
     .wrapper {
         position: absolute;
